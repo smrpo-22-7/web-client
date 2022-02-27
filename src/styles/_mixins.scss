@@ -1,0 +1,19 @@
+@mixin shadow($round: 0) {
+    box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.50);
+    -webkit-box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.50);
+    -moz-box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.50);
+
+    @if $round != 0 {
+        border-radius: $round;
+    }
+}
+
+@mixin de-linkify {
+    text-decoration: none;
+}
+
+@mixin long-text-dots {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

@@ -1,6 +1,7 @@
 export interface BaseType {
     id: string;
-    timestamp: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface RestParams {

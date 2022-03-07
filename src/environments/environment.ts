@@ -8,7 +8,9 @@ export const environment: AppEnvironment = {
     production: false,
     service: {
         apiUrl: "http://localhost:8080/v1",
+        // apiUrl: "http://188.34.196.239/v1",
         authUrl: "http://localhost:8080",
+        // authUrl: "http://188.34.196.239:8080",
     }
 };
 

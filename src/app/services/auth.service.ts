@@ -45,6 +45,7 @@ export class AuthService {
             sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
             window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
                 prompt: "none",
+                redirect_uri: window.location.origin,
                 code_challenge: code_challenge,
                 code_challenge_method: code_challenge_method
             });
@@ -59,6 +60,7 @@ export class AuthService {
             sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
             
             window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
+                redirect_uri: window.location.origin,
                 code_challenge: code_challenge,
                 code_challenge_method: code_challenge_method
             });

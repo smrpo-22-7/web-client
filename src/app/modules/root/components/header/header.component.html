@@ -1,0 +1,17 @@
+<header style="display: flex;padding: 0 25px; justify-content: space-between;">
+    <a [routerLink]="['/']">
+        Scrum
+    </a>
+
+    <ng-container *ngIf="auth$ | async as auth; else noAuth">
+        <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
+            <span>
+                <span style="margin-right: 15px">{{auth.parsedAccessToken.username}}</span>
+                <button (click)="logout()">Logout</button>
+            </span>
+        </ng-container>
+    </ng-container>
+    <ng-template #noAuth>
+        <button (click)="login()">Log in</button>
+    </ng-template>
+</header>

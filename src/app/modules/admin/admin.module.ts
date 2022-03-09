@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { AdminRoutingModule } from "./admin-routing.module";
 import { RouterModule } from "@angular/router";
+import { UserFormPageComponent } from './pages/user-form-page/user-form-page.component';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { RouterModule } from "@angular/router";
     ],
     declarations: [
       AdminPanelPageComponent,
-      UsersListPageComponent
+      UsersListPageComponent,
+      UserFormPageComponent
     ]
 })
 export class AdminModule {

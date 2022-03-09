@@ -1,0 +1,52 @@
+<h1>User profile</h1>
+
+<div>
+    <ng-container *ngIf="userProfile$ | async as userProfile">
+        <div>
+            Username: {{userProfile.username}}
+        </div>
+        <div>
+            Name: {{userProfile.firstName}} {{userProfile.lastName}}
+        </div>
+        <div>
+            Email: {{userProfile.email}}
+        </div>
+        <div>
+            Phone: {{userProfile.phoneNumber}}
+        </div>
+    </ng-container>
+</div>
+
+<div>
+    <form [formGroup]="passwordForm" (ngSubmit)="updatePasswords()">
+
+        <div>
+            <label>Current password:</label>
+            <input type="password" formControlName="password" />
+        </div>
+
+        <div>
+            <label>New password:</label>
+            <input type="password" formControlName="newPassword" />
+        </div>
+
+        <div>
+            <label>Confirm new password:</label>
+            <input type="password" formControlName="confirmNewPassword" />
+        </div>
+
+        <div>
+            {{passwordCtrl.errors | json}}
+        </div>
+        <div>
+            {{newPasswordCtrl.errors | json}}
+        </div>
+        <div>
+            {{passwordForm.errors | json}}
+        </div>
+
+        <div>
+            <button type="submit">Change password</button>
+        </div>
+    </form>
+</div>

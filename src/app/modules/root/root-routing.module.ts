@@ -12,6 +12,10 @@ const routes: Routes = [
             { path: "admin", loadChildren: () => import("../admin/admin.module").then(m => m.AdminModule) },
             { path: "projects", loadChildren: () => import("../projects/projects.module").then(m => m.ProjectsModule) },
             { path: "sprints", loadChildren: () => import("../sprints/sprints.module").then(m => m.SprintsModule) },
+            {
+                path: "user-profile",
+                loadChildren: () => import("../user-profile/user-profile.module").then(m => m.UserProfileModule)
+            },
             { path: "error/:status", component: ErrorPageComponent },
         ]
     },

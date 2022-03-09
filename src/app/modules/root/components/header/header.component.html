@@ -6,7 +6,7 @@
     <ng-container *ngIf="auth$ | async as auth; else noAuth">
         <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
             <span>
-                <span style="margin-right: 15px">{{auth.parsedAccessToken.username}}</span>
+                <a routerLink="/user-profile" style="margin-right: 15px">{{auth.parsedAccessToken.username}}</a>
                 <button (click)="logout()">Logout</button>
             </span>
         </ng-container>

@@ -31,6 +31,26 @@ export class AuthService {
         this.auth.onNoSession();
     }
     
+    public handleAuthorizationCode() {
+        const queryParams = new URLSearchParams(window.location.search);
+        const code = queryParams.get("code");
+        const error = queryParams.get("error");
+        if (code != null) {
+            this.exchangeAuthorizationCode(code).pipe(take(1))
+                .subscribe({
+                    error: err => {
+                        console.error("Error retrieving authorization code!", err);
+                    },
+                });
+        } else if (error != null) {
+            if (error === "login_required") {
+                this.onNoSessionError();
+            } else {
+                console.warn("OIDC error: ", error);
+            }
+        }
+    }
+    
     public silentLogin() {
         this.auth.getAuthState().pipe(
             filter((state: AuthState) => {
@@ -45,7 +65,7 @@ export class AuthService {
             sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
             window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
                 prompt: "none",
-                redirect_uri: window.location.origin,
+                redirect_uri: window.location.origin + window.location.pathname,
                 code_challenge: code_challenge,
                 code_challenge_method: code_challenge_method
             });
@@ -60,7 +80,7 @@ export class AuthService {
             sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
             
             window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
-                redirect_uri: window.location.origin,
+                redirect_uri: window.location.origin + window.location.pathname,
                 code_challenge: code_challenge,
                 code_challenge_method: code_challenge_method
             });
@@ -69,11 +89,8 @@ export class AuthService {
     
     public logout(): void {
         this.auth.onLogout();
-        /*this.provider.getWellKnownConfig().pipe(
-            take(1)
-        ).subscribe((config: WellKnownConfig) => {
-            window.location.href = config.end_session_endpoint + "?post_logout_redirect_uri=" + window.location.href;
-        });*/
+        window.location.href = this.authConfig.endSessionUrl +
+            "?post_logout_redirect_uri=" + window.location.origin;
     }
     
     public getAuthState(): Observable<AuthState> {

@@ -11,6 +11,7 @@ export const AUTH_CONFIG = new InjectionToken<AuthConfig>("authConfig", {
             issuer: authUrl,
             authorizationUrl: authUrl + "/protocol/oidc/auth",
             tokenUrl: authUrl + "/protocol/oidc/token",
+            endSessionUrl: authUrl + "/protocol/oidc/logout",
             sessionIframeUrl: authUrl + "/session-iframe",
             refreshTokenSecondsBefore: environment.options?.refreshTokenSecondsBefore || 10,
             checkSessionEverySeconds: environment.options?.checkSessionEverySeconds || 5,

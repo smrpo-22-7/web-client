@@ -40,7 +40,11 @@ export class SessionCheckComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.auth.silentLogin();
+        const queryParams = new URLSearchParams(window.location.search);
+        const code = queryParams.get("code");
+        if (code === null) {
+            this.auth.silentLogin();
+        }
     }
     
     ngAfterViewInit() {

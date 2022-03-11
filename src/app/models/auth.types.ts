@@ -32,6 +32,7 @@ export interface AuthConfig {
     authorizationUrl: string;
     tokenUrl: string;
     sessionIframeUrl: string;
+    endSessionUrl: string;
     refreshTokenSecondsBefore: number;
     checkSessionEverySeconds: number;
 }

@@ -1,17 +1,44 @@
-<header style="display: flex;padding: 0 25px; justify-content: space-between;">
-    <a [routerLink]="['/']">
-        Scrum
-    </a>
+<header>
+    <div class="first-links">
 
-    <ng-container *ngIf="auth$ | async as auth; else noAuth">
-        <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
-            <span>
-                <a routerLink="/user-profile" style="margin-right: 15px">{{auth.parsedAccessToken.username}}</a>
-                <button (click)="logout()">Logout</button>
-            </span>
+        <div class="brand-link">
+            <a routerLink="/">
+                SCRUM
+            </a>
+        </div>
+
+        <ng-container *ngIf="nav$ | async as nav">
+
+            <div>
+                <sc-project-picker></sc-project-picker>
+            </div>
+
+            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                <div class="nav-link">
+                    <a [routerLink]="['/projects', nav.projectId, 'stories']">
+                        Stories
+                    </a>
+                </div>
+            </ng-container>
+
         </ng-container>
-    </ng-container>
-    <ng-template #noAuth>
-        <button (click)="login()">Log in</button>
-    </ng-template>
+    </div>
+    <div class="second-links">
+
+        <ng-container *ngIf="auth$ | async as auth; else noAuth">
+            <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
+                <div class="nav-link">
+                    <a routerLink="/user-profile" style="margin-right: 15px">{{auth.parsedAccessToken.username}}</a>
+                    <button (click)="logout()">Logout</button>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-template #noAuth>
+            <div class="nav-link">
+                <button (click)="login()">Log in</button>
+            </div>
+        </ng-template>
+
+
+    </div>
 </header>

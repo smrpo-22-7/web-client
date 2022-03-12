@@ -17,7 +17,7 @@ import { AuthContext } from "@context";
 })
 export class AuthService {
     
-    public static readonly PKCE_KEY = "krv.auth.pkce_challenge";
+    public static readonly PKCE_KEY = "scrum.auth.pkce_challenge";
     
     private http: HttpClient;
     

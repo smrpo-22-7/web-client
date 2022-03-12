@@ -11,6 +11,7 @@ import { RootRoutingModule } from "./root-routing.module";
 import { SessionCheckComponent } from "./components/session-check/session-check.component";
 import { OidcCallbackPageComponent } from "./pages/oidc-callback-page/oidc-callback-page.component";
 import { HeaderComponent } from './components/header/header.component';
+import { ProjectPickerComponent } from './components/project-picker/project-picker.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { HeaderComponent } from './components/header/header.component';
         SessionCheckComponent,
         OidcCallbackPageComponent,
         HeaderComponent,
+        ProjectPickerComponent,
     ],
     exports: [
         RouterModule,

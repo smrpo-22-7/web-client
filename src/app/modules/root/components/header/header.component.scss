@@ -1,0 +1,52 @@
+@import "src/styles/variables";
+
+$header-height: 50px;
+
+header {
+    display: flex;
+    padding: 0 25px;
+    justify-content: space-between;
+    align-items: center;
+
+    height: $header-height;
+    background-color: $secondary-color;
+
+
+    .first-links {
+        display: flex;
+        align-items: center;
+
+        .brand-link {
+            margin-right: 20px;
+            a {
+                text-decoration: none;
+                font-size: 1.1rem;
+                color: $white;
+            }
+        }
+        .nav-link {
+            margin-left: 15px;
+
+            a {
+                text-decoration: none;
+                font-size: 1rem;
+                color: $white;
+            }
+        }
+    }
+    .second-links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .nav-link {
+            margin-left: 15px;
+
+            a {
+                text-decoration: none;
+                font-size: 1rem;
+                color: $white;
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+@import "src/styles/variables";
+
+.error {
+    border: 1px solid $danger-color;
+}

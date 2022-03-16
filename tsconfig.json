@@ -41,6 +41,9 @@
             ],
             "@injectables": [
                 "src/app/injectables.ts"
+            ],
+            "@shared/*": [
+                "src/app/modules/shared/*"
             ]
         }
     },

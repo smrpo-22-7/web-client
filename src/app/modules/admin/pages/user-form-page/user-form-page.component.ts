@@ -4,13 +4,15 @@ import { Observable, Subject, take, takeUntil } from "rxjs";
 import { isUserRegisterRequest, SysRole } from "@lib";
 import { RoleService, UserService } from "@services";
 import { validateUniqueUsername, validateUserForm, validateUserRoles } from "./validators";
+import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+
 
 @Component({
     selector: "sc-user-form-page",
     templateUrl: "./user-form-page.component.html",
     styleUrls: ["./user-form-page.component.scss"]
 })
-export class UserFormPageComponent implements OnInit, OnDestroy {
+export class UserFormPageComponent extends FormBaseComponent implements OnInit, OnDestroy {
     
     public roles$: Observable<SysRole[]>;
     public userForm: FormGroup;
@@ -19,6 +21,7 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
     constructor(private fb: FormBuilder,
                 private roleService: RoleService,
                 private userService: UserService) {
+        super();
     }
     
     ngOnInit(): void {

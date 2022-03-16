@@ -3,6 +3,14 @@
 
 @import "src/styles/variables";
 
+$primary: $primary-color;
+$secondary: $secondary-color;
+$danger: $danger-color;
+$warning: $warning-color;
+
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~ngx-toastr/toastr";
+
 body {
     margin: 0;
 }
@@ -11,6 +19,4 @@ body {
     font-family: $font-roboto;
 }
 
-.error {
-    border: 1px solid red;
-}
+@import "src/styles/predefines";

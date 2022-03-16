@@ -1,15 +1,17 @@
 <div>
     <ng-container *ngIf="roles$ | async as roles">
         <form [formGroup]="userForm" (ngSubmit)="createUser()">
-            <div>
+            <div class="form-group">
                 <label>Username</label>
-                <input formControlName="username" />
-                <sc-validation-error [control]="userForm.get('username')" errorCode="required">
-                    <p>Username is required!</p>
-                </sc-validation-error>
-                <sc-validation-error [control]="userForm.get('username')" errorCode="usernameExists">
-                    <p>Username already exists!</p>
-                </sc-validation-error>
+                <input class="form-control" formControlName="username"
+                    [class.is-invalid]="hasError(userForm.get('username'))"
+                />
+                <div class="invalid-feedback" *ngIf="hasError(userForm.get('username'), 'required')">
+                    Username is required!
+                </div>
+                <div class="invalid-feedback" *ngIf="hasError(userForm.get('username'), 'usernameExists')">
+                    Username already exists!
+                </div>
             </div>
 
             <div>

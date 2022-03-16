@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from "./app.component";
 import { RootModule } from "./modules/root/root.module";
-import { ApiInterceptor, AuthInterceptor } from "@services";
+import { ApiInterceptor, AuthInterceptor, AuthService } from "@services";
 import { AppConfigFactory } from "./factories";
 import { NavContext } from "@context";
 
@@ -18,7 +18,7 @@ import { NavContext } from "@context";
         HttpClientModule,
     ],
     providers: [
-        { provide: APP_INITIALIZER, useFactory: AppConfigFactory, deps: [NavContext], multi: true },
+        { provide: APP_INITIALIZER, useFactory: AppConfigFactory, deps: [NavContext, AuthService], multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ],

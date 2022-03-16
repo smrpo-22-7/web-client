@@ -9,7 +9,6 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { RootRoutingModule } from "./root-routing.module";
 import { SessionCheckComponent } from "./components/session-check/session-check.component";
-import { OidcCallbackPageComponent } from "./pages/oidc-callback-page/oidc-callback-page.component";
 import { HeaderComponent } from './components/header/header.component';
 import { ProjectPickerComponent } from './components/project-picker/project-picker.component';
 
@@ -27,7 +26,6 @@ import { ProjectPickerComponent } from './components/project-picker/project-pick
         LandingPageComponent,
         ErrorPageComponent,
         SessionCheckComponent,
-        OidcCallbackPageComponent,
         HeaderComponent,
         ProjectPickerComponent,
     ],

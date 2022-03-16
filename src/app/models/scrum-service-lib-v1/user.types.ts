@@ -1,4 +1,5 @@
 import { BaseType } from "@lib";
+import { validateFields } from "./common.types";
 
 export interface User extends BaseType {
     username: string;
@@ -34,4 +35,22 @@ export interface UserRegisterRequest {
     lastName: string;
     email: string;
     grantedRoles: string[];
+}
+
+export function isUserRegisterRequest(request: unknown): request is UserRegisterRequest {
+    if (request instanceof Object) {
+        const obj = request as any;
+        if (validateFields(obj,
+            { field: "username", type: "string" },
+            { field: "password", type: "string" },
+            { field: "firstName", type: "string" },
+            { field: "lastName", type: "string" },
+            { field: "email", type: "string" },
+        )) {
+            if (obj.hasOwnProperty("grantedRoles") && Array.isArray(obj["grantedRoles"])) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

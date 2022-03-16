@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { catchError, Observable, switchMap } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { AuthService } from "@services";
 
 @Injectable({
@@ -22,9 +22,6 @@ export class AuthInterceptor implements HttpInterceptor {
                         headers
                     }));
                 }
-                return next.handle(req);
-            }),
-            catchError(() => {
                 return next.handle(req);
             })
         );

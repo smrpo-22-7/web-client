@@ -6,3 +6,4 @@ export {
     UsernameCheckRequest,
     UserRegisterRequest,
 } from "./user.types";
+export { SysRole } from "./role.types";

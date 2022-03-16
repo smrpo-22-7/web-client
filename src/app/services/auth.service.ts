@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { HttpBackend, HttpClient } from "@angular/common/http";
-import { filter, map, Observable, of, switchMap, take, tap, throwError } from "rxjs";
+import { Router } from "@angular/router";
+import { catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from "rxjs";
 import {
     AuthConfig,
     AuthState,
@@ -8,7 +9,7 @@ import {
     PKCEChallenge,
     TokenResponse,
 } from "@lib";
-import { createPKCEChallenge, parseTokenPayload } from "@utils";
+import { createPKCEChallenge, mapToType, mapToVoid, parseTokenPayload } from "@utils";
 import { AUTH_CONFIG } from "@injectables";
 import { AuthContext } from "@context";
 
@@ -23,7 +24,8 @@ export class AuthService {
     
     constructor(@Inject(AUTH_CONFIG) private authConfig: AuthConfig,
                 private auth: AuthContext,
-                httpBackend: HttpBackend) {
+                httpBackend: HttpBackend,
+                private router: Router) {
         this.http = new HttpClient(httpBackend);
     }
     
@@ -31,24 +33,33 @@ export class AuthService {
         this.auth.onNoSession();
     }
     
-    public handleAuthorizationCode() {
+    public initialize(): Observable<void> {
         const queryParams = new URLSearchParams(window.location.search);
         const code = queryParams.get("code");
         const error = queryParams.get("error");
-        if (code != null) {
-            this.exchangeAuthorizationCode(code).pipe(take(1))
-                .subscribe({
-                    error: err => {
-                        console.error("Error retrieving authorization code!", err);
-                    },
-                });
-        } else if (error != null) {
+        
+        if (code !== null) {
+            return this.exchangeAuthorizationCode(code).pipe(
+                mapToVoid(),
+                tap(() => {
+                    console.log(this.router.url);
+                    this.router.navigate([window.location.pathname], { queryParams: {} });
+                }),
+                catchError((err) => {
+                    console.error("Error exchanging authorization code!", err);
+                    return of(void 0);
+                }),
+            );
+        } else if (error !== null) {
             if (error === "login_required") {
                 this.onNoSessionError();
             } else {
-                console.warn("OIDC error: ", error);
+                console.error("Unknown authentication error with code: " + error);
             }
+        } else {
+            this.silentLogin();
         }
+        return of(void 0);
     }
     
     public silentLogin() {
@@ -60,30 +71,34 @@ export class AuthService {
                 return createPKCEChallenge(PKCEChallenge.PKCEMethod.S256);
             }),
             take(1)
-        ).subscribe((request: PKCEChallenge) => {
-            const { code_challenge_method, code_verifier, code_challenge } = request;
-            sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
-            window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
-                prompt: "none",
-                redirect_uri: window.location.origin + window.location.pathname,
-                code_challenge: code_challenge,
-                code_challenge_method: code_challenge_method
-            });
+        ).subscribe({
+            next: (request: PKCEChallenge) => {
+                const { code_challenge_method, code_verifier, code_challenge } = request;
+                sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
+                window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
+                    prompt: "none",
+                    redirect_uri: window.location.origin + window.location.pathname,
+                    code_challenge: code_challenge,
+                    code_challenge_method: code_challenge_method
+                });
+            },
         });
     }
     
     public login() {
         createPKCEChallenge(PKCEChallenge.PKCEMethod.S256).pipe(
             take(1)
-        ).subscribe(request => {
-            const { code_challenge_method, code_challenge, code_verifier } = request;
-            sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
-            
-            window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
-                redirect_uri: window.location.origin + window.location.pathname,
-                code_challenge: code_challenge,
-                code_challenge_method: code_challenge_method
-            });
+        ).subscribe({
+            next: request => {
+                const { code_challenge_method, code_challenge, code_verifier } = request;
+                sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
+                
+                window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
+                    redirect_uri: window.location.origin + window.location.pathname,
+                    code_challenge: code_challenge,
+                    code_challenge_method: code_challenge_method
+                });
+            },
         });
     }
     
@@ -97,7 +112,7 @@ export class AuthService {
         return this.auth.getAuthState();
     }
     
-    public exchangeAuthorizationCode(code: string): Observable<any> {
+    public exchangeAuthorizationCode(code: string): Observable<TokenResponse> {
         const url = this.authConfig.tokenUrl;
         const formData = new URLSearchParams();
         formData.set("code", code);
@@ -115,7 +130,7 @@ export class AuthService {
                 "accept": "application/json"
             }
         }).pipe(
-            map(res => res as TokenResponse),
+            mapToType<TokenResponse>(),
             tap((tokens: TokenResponse) => {
                 this.auth.onAuthentication(tokens);
             })

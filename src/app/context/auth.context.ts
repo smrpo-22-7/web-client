@@ -25,6 +25,7 @@ export class AuthContext {
             idToken: tokens.id_token,
             parsedAccessToken: parsedToken,
             sessionState: parsedToken.sessionState,
+            roles: parsedToken.roles,
         });
     }
     

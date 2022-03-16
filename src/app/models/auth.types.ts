@@ -11,6 +11,7 @@ export interface TokenInfo {
     expiresAt: Date;
     email: string;
     sessionState: string;
+    roles: string[];
 }
 
 type AuthenticatedState = {
@@ -20,6 +21,7 @@ type AuthenticatedState = {
     idToken: string;
     parsedAccessToken: TokenInfo;
     sessionState: string;
+    roles: string[];
 }
 
 export type AuthState =

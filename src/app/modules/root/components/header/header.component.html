@@ -24,9 +24,18 @@
         </ng-container>
     </div>
     <div class="second-links">
-
         <ng-container *ngIf="auth$ | async as auth; else noAuth">
             <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
+
+                <ng-container *ngIf="auth.parsedAccessToken.roles.includes('admin')">
+                    <div class="nav-link">
+                        <a routerLink="/admin">
+                            <img src="/assets/images/cog_icon.svg"/>
+                        </a>
+                    </div>
+                </ng-container>
+
+
                 <div class="nav-link">
                     <a routerLink="/user-profile" style="margin-right: 15px">{{auth.parsedAccessToken.username}}</a>
                     <button (click)="logout()">Logout</button>

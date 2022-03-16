@@ -1,36 +1,55 @@
 <div>
     <ng-container *ngIf="roles$ | async as roles">
-
-        <form>
-
+        <form [formGroup]="userForm" (ngSubmit)="createUser()">
             <div>
                 <label>Username</label>
-                <input />
+                <input formControlName="username" />
+                <sc-validation-error [control]="userForm.get('username')" errorCode="required">
+                    <p>Username is required!</p>
+                </sc-validation-error>
+                <sc-validation-error [control]="userForm.get('username')" errorCode="usernameExists">
+                    <p>Username already exists!</p>
+                </sc-validation-error>
             </div>
 
             <div>
                 <label>Password</label>
-                <input />
+                <input formControlName="password"/>
+                <sc-validation-error [control]="userForm.get('password')" errorCode="required">
+                    <p>Password is required!</p>
+                </sc-validation-error>
             </div>
 
             <div>
                 <label>Confirm password</label>
-                <input />
+                <input formControlName="confirmPassword"/>
+                <sc-validation-error [control]="userForm" errorCode="password">
+                    <p>Passwords must match!</p>
+                </sc-validation-error>
             </div>
 
             <div>
                 <label>First name</label>
-                <input />
+                <input formControlName="firstName"/>
+                <sc-validation-error [control]="userForm.get('firstName')" errorCode="required">
+                    <p>First name is required!</p>
+                </sc-validation-error>
             </div>
 
             <div>
                 <label>Last name</label>
-                <input />
+                <input formControlName="lastName"/>
+                <sc-validation-error [control]="userForm.get('lastName')" errorCode="required">
+                    <p>Last name is required!</p>
+                </sc-validation-error>
             </div>
 
             <div>
                 <label>Email</label>
-                <input />
+                <input formControlName="email"/>
+                <sc-validation-error [control]="userForm.get('email')" errorCode="required">
+                    <p>Email name is required!</p>
+                </sc-validation-error>
             </div>
 
             <div>
@@ -38,12 +57,20 @@
                 <div>
                     <div *ngFor="let role of roles; let i = index">
                         <label>
+                            <input type="checkbox" [value]="role.roleId" (change)="onRoleSelect($event)"/>
                             {{role.name}}
-                            <input type="checkbox" [value]="role.roleId"/>
                         </label>
                     </div>
                 </div>
+                <sc-validation-error [control]="userForm.get('grantedRoles')" errorCode="sysRolesRequired">
+                    <p>At least one role must be granted!</p>
+                </sc-validation-error>
+                <sc-validation-error [control]="userForm.get('grantedRoles')" errorCode="sysRolesAdmin">
+                    <p>Admin role must be granted on top of user role!</p>
+                </sc-validation-error>
             </div>
+
+            <button type="submit">Create</button>
         </form>
     </ng-container>
 </div>

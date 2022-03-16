@@ -4,7 +4,7 @@ import { catchError, map, Observable, of, throwError } from "rxjs";
 import { BaseError } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
-import { ChangePasswordRequest, ConflictError, UsernameCheckRequest, UserProfile } from "@lib";
+import { ChangePasswordRequest, ConflictError, UsernameCheckRequest, UserProfile, UserRegisterRequest } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
 
@@ -25,17 +25,22 @@ export class UserService {
         );
     }
     
+    /**
+     * Checks if there already exists user with given username
+     * @param username
+     * @return <code>true</code> if username already exists (409 Conflict), <code>false</code> otherwise.
+     */
     public checkUsernameExists(username: string): Observable<boolean> {
         const url = `${this.apiUrl}/users/username-check`;
         const payload: UsernameCheckRequest = {
             username,
         };
         return this.http.post(url, payload).pipe(
-            map(() => true),
+            map(() => false),
             catchHttpError(),
             catchError((err: BaseError) => {
                 if (err instanceof ConflictError) {
-                    return of(false);
+                    return of(true);
                 }
                 return throwError(() => err);
             }),
@@ -49,6 +54,14 @@ export class UserService {
             newPassword,
         }
         return this.http.post(url, payload).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public createUser(request: UserRegisterRequest): Observable<void> {
+        const url = `${this.apiUrl}/users`;
+        return this.http.post(url, request).pipe(
             mapToVoid(),
             catchHttpError(),
         );

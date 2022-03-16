@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Observable, Subject, takeUntil } from "rxjs";
-import { SysRole } from "@lib";
-import { RoleService } from "@services";
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable, Subject, take, takeUntil } from "rxjs";
+import { isUserRegisterRequest, SysRole } from "@lib";
+import { RoleService, UserService } from "@services";
+import { validateUniqueUsername, validateUserForm, validateUserRoles } from "./validators";
 
 @Component({
     selector: "sc-user-form-page",
@@ -16,26 +17,64 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<boolean>();
     
     constructor(private fb: FormBuilder,
-                private roleService: RoleService) {
+                private roleService: RoleService,
+                private userService: UserService) {
     }
     
     ngOnInit(): void {
         this.userForm = this.fb.group({
-            username: this.fb.control(""),
-            password: this.fb.control(""),
-            confirmPassword: this.fb.control(""),
-            firstName: this.fb.control(""),
-            lastName: this.fb.control(""),
-            email: this.fb.control(""),
-            sysRoles: this.fb.array([]),
-        });
+            username: this.fb.control("", [Validators.required], [validateUniqueUsername(this.userService)]),
+            password: this.fb.control("", [Validators.required]),
+            confirmPassword: this.fb.control("", [Validators.required]),
+            firstName: this.fb.control("", [Validators.required]),
+            lastName: this.fb.control("", [Validators.required]),
+            email: this.fb.control("", [Validators.required]),
+            grantedRoles: this.fb.array([], [validateUserRoles]),
+        }, { validators: [validateUserForm] });
         
         this.roles$ = this.roleService.getAllSysRoles().pipe(
             takeUntil(this.destroy$)
         );
     }
     
+    public onRoleSelect($event: Event): void {
+        const checkboxElement = $event.target as HTMLInputElement;
+        if (checkboxElement.checked) {
+            this.sysRolesCtrl.push(this.fb.control(checkboxElement.value));
+        } else {
+            this.sysRolesCtrl.controls.forEach((ctrl: AbstractControl, i: number) => {
+                if (ctrl.value === checkboxElement.value) {
+                    this.sysRolesCtrl.removeAt(i);
+                    return;
+                }
+            });
+        }
+    }
+    
+    public createUser() {
+        const formValue = this.userForm.getRawValue();
+        delete formValue["confirmPassword"];
+        if (isUserRegisterRequest(formValue)) {
+            this.userService.createUser(formValue).pipe(take(1)).subscribe({
+                next: () => {
+                    console.log("created!");
+                    this.userForm.reset();
+                },
+                error: err => {
+                    console.error(err);
+                }
+            })
+        } else {
+            throw new TypeError("Form does not match the required format!");
+        }
+    }
+    
     ngOnDestroy() {
         this.destroy$.next(true);
     }
+    
+    public get sysRolesCtrl(): FormArray {
+        return this.userForm.controls["grantedRoles"] as FormArray;
+    }
+    
 }

@@ -6,6 +6,7 @@ export enum AuthStateStatus {
 
 export interface TokenInfo {
     subject: string;
+    issuedAt: Date;
     username: string;
     name: string;
     expiresAt: Date;

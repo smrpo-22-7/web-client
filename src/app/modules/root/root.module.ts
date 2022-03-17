@@ -11,6 +11,7 @@ import { RootRoutingModule } from "./root-routing.module";
 import { SessionCheckComponent } from "./components/session-check/session-check.component";
 import { HeaderComponent } from './components/header/header.component';
 import { ProjectPickerComponent } from './components/project-picker/project-picker.component';
+import { UserIconComponent } from './components/header/user-icon/user-icon.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ProjectPickerComponent } from './components/project-picker/project-pick
         SessionCheckComponent,
         HeaderComponent,
         ProjectPickerComponent,
+        UserIconComponent,
     ],
     exports: [
         RouterModule,

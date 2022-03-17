@@ -28,23 +28,23 @@
             <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
 
                 <ng-container *ngIf="auth.parsedAccessToken.roles.includes('admin')">
-                    <div class="nav-link">
-                        <a routerLink="/admin">
-                            <img src="/assets/images/cog_icon.svg"/>
+                    <div class="nav-link" tooltip="Admin dashboard" tooltipPlacement="bottom">
+                        <a routerLink="/admin" class="admin-btn">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
                         </a>
                     </div>
                 </ng-container>
 
-
-                <div class="nav-link">
-                    <a routerLink="/user-profile" style="margin-right: 15px">{{auth.parsedAccessToken.username}}</a>
-                    <button (click)="logout()">Logout</button>
+                <div class="nav-link userinfo-link">
+                    <sc-user-icon [info]="auth.parsedAccessToken" (whenLogoutClicked)="logout()"></sc-user-icon>
                 </div>
             </ng-container>
         </ng-container>
         <ng-template #noAuth>
             <div class="nav-link">
-                <button (click)="login()">Log in</button>
+                <div (click)="login()" class="login-btn" tooltip="Log in" [tooltipPlacement]="'bottom'">
+                    <fa-icon [icon]="['fas', 'arrow-right-to-bracket']"></fa-icon>
+                </div>
             </div>
         </ng-template>
 

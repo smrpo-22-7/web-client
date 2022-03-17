@@ -106,7 +106,7 @@ export class AuthService {
     public logout(): void {
         this.auth.onLogout();
         window.location.href = this.authConfig.endSessionUrl +
-            "?post_logout_redirect_uri=" + window.location.origin;
+            "?post_logout_redirect_uri=" + window.location.origin + window.location.pathname;
     }
     
     public getAuthState(): Observable<AuthState> {

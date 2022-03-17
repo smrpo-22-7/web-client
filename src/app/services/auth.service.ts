@@ -53,6 +53,7 @@ export class AuthService {
         } else if (error !== null) {
             if (error === "login_required") {
                 this.onNoSessionError();
+                this.router.navigate([window.location.pathname], { queryParams: {} });
             } else {
                 console.error("Unknown authentication error with code: " + error);
             }

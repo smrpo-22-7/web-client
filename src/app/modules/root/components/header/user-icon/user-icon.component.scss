@@ -1,0 +1,56 @@
+@import "src/styles/variables";
+
+.user-icon-container {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+
+    .user-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $white;
+        font-weight: 600;
+        background-color: $primary-color;
+    }
+    img {
+        margin-left: 4px;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.dropdown-menu {
+    left: -80px;
+    min-width: 160px;
+    background-color: white;
+
+    .dropdown-item {
+        fa-icon {
+            margin-right: 5px;
+        }
+
+        &.username-text:hover {
+            background-color: white;
+            color: $black;
+        }
+        &.user-login-text {
+            font-style: italic;
+            font-size: 90%;
+            &:hover {
+                background-color: white;
+                color: $black;
+            }
+        }
+
+        &.logout-btn:hover {
+            cursor: pointer;
+        }
+    }
+}

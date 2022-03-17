@@ -91,6 +91,7 @@ export function parseTokenPayload(token: string): TokenInfo {
         
         return {
             subject: parsedPayload["sub"],
+            issuedAt: new Date(parsedPayload["iat"] * 1000),
             username: parsedPayload["preferred_username"],
             email: parsedPayload["email"],
             name: parsedPayload["name"],

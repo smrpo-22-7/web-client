@@ -16,11 +16,12 @@ import {
     faTrashAlt,
     faFileImport,
     faExclamationTriangle,
+    faArrowRightToBracket,
     
     faArrowLeft,
     faChevronRight,
     faDatabase,
-    faSlidersH,
+    faSlidersH, faPowerOff, faUser, faCog,
 } from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
@@ -44,17 +45,20 @@ export class IconsModule {
             faFlag,
             faThLarge,
             faCogs,
+            faCog,
             faSearch,
             faPencilAlt,
             faCheck,
             faTrashAlt,
             faFileImport,
             faExclamationTriangle,
-        
+            faArrowRightToBracket,
             faArrowLeft,
             faChevronRight,
             faDatabase,
             faSlidersH,
+            faPowerOff,
+            faUser,
         );
     }
 }

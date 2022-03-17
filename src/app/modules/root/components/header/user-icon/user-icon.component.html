@@ -1,0 +1,35 @@
+<div dropdown #dropdown="bs-dropdown" container="body" [insideClick]="true">
+    <button class="user-icon-container no-select"
+        dropdownToggle type="button"
+        id="userinfo-dropdown"
+        aria-controls="user-dropdown-trigger"
+    >
+        <div class="user-icon no-select">
+            <span>{{initials}}</span>
+        </div>
+        <img src="/assets/images/caret_down.svg" alt="Menu toggler button"/>
+    </button>
+    <ul id="user-dropdown-trigger" *dropdownMenu class="dropdown-menu"
+        role="menu" aria-labelledby="userinfo-dropdown"
+    >
+        <li role="menuitem">
+            <span class="dropdown-item username-text">{{info.name}}</span>
+        </li>
+        <li role="menuitem">
+            <span class="dropdown-item user-login-text">{{info.issuedAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>
+        </li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem">
+            <a class="dropdown-item" routerLink="/user-profile" (click)="dropdown.hide()">
+                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                User profile
+            </a>
+        </li>
+        <li role="menuitem">
+            <span class="dropdown-item logout-btn" (click)="logout()">
+                <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
+                Logout
+            </span>
+        </li>
+    </ul>
+</div>

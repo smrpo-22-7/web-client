@@ -66,4 +66,12 @@ export class UserService {
             catchHttpError(),
         );
     }
+    
+    public updateUserProfile(userProfile: UserProfile): Observable<void> {
+        const url = `${this.apiUrl}/users/profile`;
+        return this.http.patch(url, userProfile).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
 }

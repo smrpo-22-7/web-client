@@ -9,6 +9,7 @@ export {
     ValidationError,
     ForbiddenError,
     ConflictError,
+    PageError,
 } from "./error.models";
 
 export {

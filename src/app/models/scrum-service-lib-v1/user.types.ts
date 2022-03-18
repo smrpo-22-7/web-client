@@ -54,3 +54,19 @@ export function isUserRegisterRequest(request: unknown): request is UserRegister
     }
     return false;
 }
+
+export function isUserProfile(profile: unknown): profile is UserProfile {
+    if (profile instanceof Object) {
+        const obj = profile as any;
+        if (validateFields(obj,
+            { field: "username", type: "string" },
+            { field: "firstName", type: "string" },
+            { field: "lastName", type: "string" },
+            { field: "email", type: "string" },
+            { field: "phoneNumber", type: "string" },
+        )) {
+            return true;
+        }
+    }
+    return false;
+}

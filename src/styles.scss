@@ -25,3 +25,9 @@ body {
 }
 
 @import "src/styles/predefines";
+
+.btn-primary, .btn-outline-primary {
+    &:hover {
+        color: $white;
+    }
+}

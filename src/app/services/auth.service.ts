@@ -42,7 +42,6 @@ export class AuthService {
             return this.exchangeAuthorizationCode(code).pipe(
                 mapToVoid(),
                 tap(() => {
-                    console.log(this.router.url);
                     this.router.navigate([window.location.pathname], { queryParams: {} });
                 }),
                 catchError((err) => {

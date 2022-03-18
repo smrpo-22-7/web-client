@@ -10,7 +10,14 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
     imports: [
         AlertModule.forRoot(),
         ModalModule.forRoot(),
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+            timeOut: 3000,
+            closeButton: true,
+            maxOpened: 3,
+            newestOnTop: true,
+            tapToDismiss: true,
+            positionClass: "toast-bottom-right",
+        }),
         PaginationModule.forRoot(),
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),

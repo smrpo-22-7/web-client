@@ -16,7 +16,10 @@
             <span class="dropdown-item username-text">{{info.name}}</span>
         </li>
         <li role="menuitem">
-            <span class="dropdown-item user-login-text">{{info.issuedAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>
+            <span class="dropdown-item user-login-text">
+                Last login at:<br/>
+                {{info.issuedAt | date: "dd.MM.yyyy HH:mm:ss"}}
+            </span>
         </li>
         <li class="divider dropdown-divider"></li>
         <li role="menuitem">

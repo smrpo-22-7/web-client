@@ -41,3 +41,9 @@ export class ForbiddenError extends BaseError {
         super(message, ForbiddenError, cause);
     }
 }
+
+export interface PageError {
+    status: string;
+    title: string;
+    description: string;
+}

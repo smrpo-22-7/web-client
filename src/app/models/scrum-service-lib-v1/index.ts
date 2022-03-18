@@ -6,5 +6,6 @@ export {
     UsernameCheckRequest,
     UserRegisterRequest,
     isUserRegisterRequest,
+    isUserProfile,
 } from "./user.types";
 export { SysRole } from "./role.types";

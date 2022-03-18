@@ -33,6 +33,9 @@
             "@context": [
                 "src/app/context/index.ts"
             ],
+            "@config/*": [
+                "src/app/config/*.ts"
+            ],
             "@utils": [
                 "src/app/utils/index.ts"
             ],

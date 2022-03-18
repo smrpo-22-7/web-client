@@ -5,7 +5,7 @@ export function validatePasswords(formGroup: FormGroup): ValidationErrors | null
     const confirmNewPassword: string = formGroup.controls["confirmNewPassword"].value;
     
     if (newPassword !== null && confirmNewPassword !== null) {
-        if (newPassword.length > 0 && confirmNewPassword.length > 0) {
+        if (newPassword.length > 0 || confirmNewPassword.length > 0) {
             if (newPassword !== confirmNewPassword) {
                 return {
                     passwordMismatch: true,

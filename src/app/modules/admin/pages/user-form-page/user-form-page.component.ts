@@ -3,7 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "
 import { Observable, Subject, take, takeUntil } from "rxjs";
 import { isUserRegisterRequest, SysRole } from "@lib";
 import { RoleService, UserService } from "@services";
-import { validateUniqueUsername, validateUserForm, validateUserRoles } from "./validators";
+import { validateUniqueUsername } from "@utils";
+import { validateUserForm, validateUserRoles } from "./validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 
 

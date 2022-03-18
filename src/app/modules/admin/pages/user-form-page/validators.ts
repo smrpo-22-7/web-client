@@ -1,6 +1,4 @@
-import { AbstractControl, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
-import { UserService } from "@services";
-import { map, Observable } from "rxjs";
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { SysRole } from "@lib";
 
 export function validateUserForm(formGroup: FormGroup): ValidationErrors | null {
@@ -40,14 +38,4 @@ export function validateUserRoles(formControl: AbstractControl): ValidationError
     }
     
     return hasErrors ? errors : null;
-}
-
-export function validateUniqueUsername(userService: UserService): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-        return userService.checkUsernameExists(control.value).pipe(
-            map((result: boolean) => {
-                return result ? { usernameExists: true } : null;
-            })
-        );
-    };
 }

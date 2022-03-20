@@ -5,6 +5,7 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
 import { ToastrModule } from "ngx-toastr";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
         PaginationModule.forRoot(),
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
+        TypeaheadModule.forRoot(),
     ],
     exports: [
         AlertModule,
@@ -29,6 +31,7 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
         PaginationModule,
         TooltipModule,
         BsDropdownModule,
+        TypeaheadModule,
     ]
 })
 export class BootstrapModule {

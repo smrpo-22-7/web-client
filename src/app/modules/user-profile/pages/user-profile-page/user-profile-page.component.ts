@@ -45,7 +45,7 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
         
         this.userProfile$ = this.userService.getUserProfile().pipe(
             tap((profile: UserProfile) => {
-                this.profileForm.patchValue(profile, {emitEvent: false});
+                this.profileForm.patchValue(profile, { emitEvent: false } );
             }),
             take(1),
         );
@@ -71,8 +71,8 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
                         console.error(err);
                         this.toastrService.error("Server error!", "Error!");
                     }
-                }
-            })
+                },
+            });
         } else {
             throw new TypeError("Not a user profile type!");
         }

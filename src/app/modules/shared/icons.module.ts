@@ -17,7 +17,7 @@ import {
     faFileImport,
     faExclamationTriangle,
     faArrowRightToBracket,
-    
+
     faArrowLeft,
     faChevronRight,
     faDatabase,

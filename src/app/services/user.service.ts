@@ -44,7 +44,7 @@ export class UserService {
                 }
                 return throwError(() => err);
             }),
-        )
+        );
     }
     
     public updateUserCredentials(password: string, newPassword: string): Observable<void> {
@@ -52,7 +52,7 @@ export class UserService {
         const payload: ChangePasswordRequest = {
             password,
             newPassword,
-        }
+        };
         return this.http.post(url, payload).pipe(
             mapToVoid(),
             catchHttpError(),

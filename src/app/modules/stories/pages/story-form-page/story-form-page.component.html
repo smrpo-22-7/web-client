@@ -1,0 +1,77 @@
+<div class="container-lg" >
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-6 ozadje">
+                <div class="text-center rob">
+                    <h2>Add a new story</h2>
+                </div>
+                <ng-container *ngIf="priority$ | async as priorities">
+                <form [formGroup]="storyForm" class="rob">
+                <div>
+                    <div>
+                        <label for="name" class="form-label">Name:</label>
+                        <input id="name" class="form-control" formControlName="name"/>
+                    </div>
+                    <div>
+                        <label for="description" class="form-label zgorjirob">Description:</label>
+                        <textarea id="description" class="form-control" formControlName="description"></textarea>
+                    </div>
+
+                    <div>
+
+                        <label for="test" class="form-label zgorjirob">Add tests:</label>
+                        <input id="test" class="form-control" formControlName="test"/>
+                        <span (click)="addTest()">
+                            <input type="submit" class="zgorjirob">
+                        </span>
+
+                    </div>
+
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>Test</td>
+                            <td>Actions</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let test of sysTestsCtrl.controls; let i = index">
+                            <td>{{test.value}}</td>
+                            <td>
+                                        <span (click)="removeTest(i)">
+                                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                        </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <label for="priority" class="form-label zgorjirob">Priority: </label>
+                        <select id="priority" class="form-control" formControlName="priority">
+                            <option value="" disabled selected>Select one...</option>
+                            <option *ngFor="let priority of priorities" [value]="priority.prioritytypeId">
+                                {{priority.priorityname}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="businessvalue" class="form-label zgorjirob">Business value:</label>
+                        <input type="number" id="businessvalue" class="form-control" formControlName="businessvalue">
+                    </div>
+
+                    <div style="width: 100%; text-align: right;">
+                        <button type="submit" class="gumb zgorjirob">Create</button>
+                    </div>
+                </div>
+
+
+                </form>
+                </ng-container>
+            </div>
+        </div>
+
+</div>
+
+

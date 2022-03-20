@@ -1,0 +1,74 @@
+<div class="container-lg" >
+    <ng-container *ngIf="roles$ | async as roles" >
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-6 ozadje">
+                <div class="text-center rob">
+                    <h2>Add a new project</h2>
+                </div>
+
+                <ng-container *ngIf="roles$ | async as roles">
+                    <form [formGroup]="projectForm">
+                        <div>
+                            <label>Project name:</label>
+                            <input formControlName="name"/>
+                        </div>
+
+                        <div>
+                            <div>
+                                <input
+                                    formControlName="userQuery"
+                                    placeholder="Search users"
+                                    [typeaheadAsync]="true"
+                                    [typeahead]="users$"
+                                    [typeaheadOptionsLimit]="5"
+                                    [typeaheadWaitMs]="300"
+                                    [typeaheadItemTemplate]="searchResultTemplate"
+                                    (typeaheadOnSelect)="onUserSelect($event.item)"
+                                    [typeaheadMinLength]="1"
+                                />
+                            </div>
+                            <ng-template #searchResultTemplate let-model="item">
+                                <span>{{model.username}}</span>
+                            </ng-template>
+
+                            <table>
+                                <thead>
+                                <tr>
+                                    <td>Username</td>
+                                    <td>Role</td>
+                                    <td>Actions</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let user of usersCtrl.controls; let i = index"
+                                    [formGroup]="$any(user)">
+                                    <td>{{$any(user).controls['userName'].value}}</td>
+                                    <td>
+                                        <select formControlName="role">
+                                            <option *ngFor="let role of roles" [value]="role.roleId">
+                                                {{role.name}}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span (click)="removeUser(i)">
+                                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </ng-container>
+
+                <!--<form [formGroup]="userForm" (ngSubmit)="createProject()" class="rob">
+
+                </form>-->
+                </div>
+
+        </div>
+    </ng-container>
+</div>
+

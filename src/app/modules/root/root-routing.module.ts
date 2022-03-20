@@ -15,6 +15,11 @@ const routes: Routes = [
                 canActivateChild: [AdminGuard]
             },
             {
+                path: "projects/:projectId/stories",
+                loadChildren: () => import("../stories/stories.module").then(m => m.StoriesModule),
+                canActivateChild: [AuthenticatedChildGuard]
+            },
+            {
                 path: "projects",
                 loadChildren: () => import("../projects/projects.module").then(m => m.ProjectsModule),
                 canActivateChild: [AuthenticatedChildGuard]

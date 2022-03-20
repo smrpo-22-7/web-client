@@ -74,7 +74,7 @@ export class AuthService {
         ).subscribe({
             next: (request: PKCEChallenge) => {
                 const { code_challenge_method, code_verifier, code_challenge } = request;
-                sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
+                localStorage.setItem(AuthService.PKCE_KEY, code_verifier);
                 window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
                     prompt: "none",
                     redirect_uri: window.location.origin + window.location.pathname,
@@ -91,7 +91,7 @@ export class AuthService {
         ).subscribe({
             next: request => {
                 const { code_challenge_method, code_challenge, code_verifier } = request;
-                sessionStorage.setItem(AuthService.PKCE_KEY, code_verifier);
+                localStorage.setItem(AuthService.PKCE_KEY, code_verifier);
                 
                 window.location.href = this.buildQueryUrl(this.authConfig.authorizationUrl, {
                     redirect_uri: window.location.origin + window.location.pathname,
@@ -118,7 +118,8 @@ export class AuthService {
         formData.set("code", code);
         formData.set("grant_type", "authorization_code");
         
-        const verifier = sessionStorage.getItem(AuthService.PKCE_KEY);
+        const verifier = localStorage.getItem(AuthService.PKCE_KEY);
+        localStorage.removeItem(AuthService.PKCE_KEY);
         if (verifier === null) {
             throw new Error("No PKCE challenge! Code cannot be exchanged!");
         }

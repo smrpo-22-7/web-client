@@ -17,20 +17,25 @@
                         <textarea id="description" class="form-control" formControlName="description"></textarea>
                     </div>
 
-                    <div>
+                    <div class="input-group mb-3">
 
                         <label for="test" class="form-label zgorjirob">Add tests:</label>
+                        <div class="input-group">
                         <input id="test" class="form-control" formControlName="test"/>
-                        <span (click)="addTest()">
-                            <input type="submit" class="zgorjirob">
+                            <div class="input-group-addon">
+                        <span (click)="addTest()" class="input-group-text">
+                            Add
+                            <!--<button type="submit" class="gumb zgorjirob">Add</button>-->
+                            <!-- <fa-icon [icon]="['fas', 'times']"></fa-icon> -->
                         </span>
-
+                            </div>
+                        </div>
                     </div>
 
-                    <table>
-                        <thead>
-                        <tr>
-                            <td>Test</td>
+                    <table class="table table-light table-hover table-bordered">
+                        <thead >
+                        <tr class="table-dark">
+                            <td style="width:66%">Test</td>
                             <td>Actions</td>
                         </tr>
                         </thead>
@@ -48,7 +53,7 @@
 
                     <div>
                         <label for="priority" class="form-label zgorjirob">Priority: </label>
-                        <select id="priority" class="form-control" formControlName="priority">
+                        <select id="priority" class="form-select" formControlName="priority">
                             <option value="" disabled selected>Select one...</option>
                             <option *ngFor="let priority of priorities" [value]="priority.prioritytypeId">
                                 {{priority.priorityname}}

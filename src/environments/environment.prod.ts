@@ -4,6 +4,6 @@ export const environment: AppEnvironment = {
     production: true,
     service: {
         apiUrl: "https://smrpo.mjamsek.com/v1",
-        authUrl: "https://smrpo.mjamsek.comu",
+        authUrl: "https://smrpo.mjamsek.com",
     }
 };

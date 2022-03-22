@@ -1,12 +1,36 @@
 <div>
     <h1>Admin panel</h1>
 
-    <div>
-        <a routerLink="/admin/projects/new">Add project</a>
-    </div>
+    <div class="panel-links">
 
-    <div>
-        <a routerLink="/admin/users/new">Add user</a>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Projects</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a class="card-link" routerLink="/admin/projects/new">New project</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="card-link" routerLink="/admin/projects">All project</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Users</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a class="card-link" routerLink="/admin/users/new">New User</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="card-link" routerLink="/admin/users">All users</a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 </div>

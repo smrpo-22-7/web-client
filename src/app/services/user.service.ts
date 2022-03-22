@@ -4,7 +4,7 @@ import { catchError, map, Observable, of, throwError } from "rxjs";
 import { BaseError } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
-import { ChangePasswordRequest, ConflictError, UsernameCheckRequest, UserProfile, UserRegisterRequest } from "@lib";
+import { ChangePasswordRequest, ConflictError, User, UsernameCheckRequest, UserProfile, UserRegisterRequest } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
 
@@ -44,7 +44,7 @@ export class UserService {
                 }
                 return throwError(() => err);
             }),
-        )
+        );
     }
     
     public updateUserCredentials(password: string, newPassword: string): Observable<void> {
@@ -52,7 +52,7 @@ export class UserService {
         const payload: ChangePasswordRequest = {
             password,
             newPassword,
-        }
+        };
         return this.http.post(url, payload).pipe(
             mapToVoid(),
             catchHttpError(),
@@ -71,6 +71,19 @@ export class UserService {
         const url = `${this.apiUrl}/users/profile`;
         return this.http.patch(url, userProfile).pipe(
             mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public queryUser(query: string, limit: number): Observable<User[]> {
+        const url = `${this.apiUrl}/users`;
+        return this.http.get(url, {
+            params: {
+                limit,
+                filter: `username:LIKEIC:'%${query}%'`,
+            }
+        }).pipe(
+            mapToType<User[]>(),
             catchHttpError(),
         );
     }

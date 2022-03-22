@@ -6,6 +6,7 @@ import { RoleService, UserService } from "@services";
 import { validateUniqueUsername } from "@utils";
 import { validateUserForm, validateUserRoles } from "./validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+import { ToastrService } from "ngx-toastr";
 
 
 @Component({
@@ -18,10 +19,11 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
     public roles$: Observable<SysRole[]>;
     public userForm: FormGroup;
     private destroy$ = new Subject<boolean>();
-    
+
     constructor(private fb: FormBuilder,
                 private roleService: RoleService,
-                private userService: UserService) {
+                private userService: UserService,
+                private toastrService: ToastrService) {
         super();
     }
     
@@ -62,12 +64,14 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
             this.userService.createUser(formValue).pipe(take(1)).subscribe({
                 next: () => {
                     console.log("created!");
+                    this.toastrService.success("New user was added!", "Success!");
                     this.userForm.reset();
+                    window.location.reload();
                 },
                 error: err => {
                     console.error(err);
                 }
-            })
+            });
         } else {
             throw new TypeError("Form does not match the required format!");
         }

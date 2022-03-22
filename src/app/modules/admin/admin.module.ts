@@ -1,11 +1,12 @@
 import { NgModule } from "@angular/core";
-import { AdminPanelPageComponent } from './pages/admin-panel-page/admin-panel-page.component';
-import { UsersListPageComponent } from './pages/users-list-page/users-list-page.component';
+import { AdminPanelPageComponent } from "./pages/admin-panel-page/admin-panel-page.component";
+import { UsersListPageComponent } from "./pages/users-list-page/users-list-page.component";
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { AdminRoutingModule } from "./admin-routing.module";
 import { RouterModule } from "@angular/router";
-import { UserFormPageComponent } from './pages/user-form-page/user-form-page.component';
+import { UserFormPageComponent } from "./pages/user-form-page/user-form-page.component";
+import { ProjectFormPageComponent } from "./pages/project-form-page/project-form-page.component";
 
 @NgModule({
     imports: [
@@ -14,9 +15,10 @@ import { UserFormPageComponent } from './pages/user-form-page/user-form-page.com
         AdminRoutingModule,
     ],
     declarations: [
-      AdminPanelPageComponent,
-      UsersListPageComponent,
-      UserFormPageComponent
+        AdminPanelPageComponent,
+        UsersListPageComponent,
+        UserFormPageComponent,
+        ProjectFormPageComponent
     ]
 })
 export class AdminModule {

@@ -6,7 +6,12 @@ import { AppEnvironment } from "./env.types";
 
 export const environment: AppEnvironment = {
     production: false,
-    scrumServiceUrl: "http://localhost:8080"
+    service: {
+        //apiUrl: "http://localhost:8080/v1",
+        apiUrl: "https://smrpo.mjamsek.com/v1",
+        //authUrl: "http://localhost:8080",
+        authUrl: "https://smrpo.mjamsek.com",
+    }
 };
 
 /*

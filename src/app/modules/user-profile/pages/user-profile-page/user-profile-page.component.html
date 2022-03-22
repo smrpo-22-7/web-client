@@ -1,0 +1,127 @@
+<div class="container-fluid pb-5">
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mt-4 mb-2">User profile</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <ng-container *ngIf="userProfile$ | async">
+                <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" formControlName="username"
+                            [class.is-invalid]="hasError(profileForm.get('username'))"/>
+
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('username'), 'required')">
+                            Username is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('username'), 'usernameExists')">
+                            Username already exists!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input class="form-control" formControlName="firstName"
+                            [class.is-invalid]="hasError(profileForm.get('firstName'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('firstName'), 'required')">
+                            First name is required!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input class="form-control" formControlName="lastName"
+                            [class.is-invalid]="hasError(profileForm.get('lastName'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('lastName'), 'required')">
+                            Last name is required!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" formControlName="email"
+                            [class.is-invalid]="hasError(profileForm.get('email'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('email'), 'required')">
+                            Email is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('email'), 'email')">
+                            Invalid email!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone number</label>
+                        <input class="form-control" formControlName="phoneNumber"
+                            [class.is-invalid]="hasError(profileForm.get('phoneNumber'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('phoneNumber'), 'pattern')">
+                            Invalid phone number!
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-outline-primary"
+                            [disabled]="isInvalid(profileForm)"
+                            type="submit">Update profile</button>
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="mt-5 row">
+        <div class="col-6">
+            <h4>Change password</h4>
+
+            <form [formGroup]="passwordForm" (ngSubmit)="updatePasswords()">
+
+                <div class="form-group">
+                    <label>Current password:</label>
+                    <input type="password" formControlName="password" class="form-control"
+                        autocomplete="off" [class.is-invalid]="hasError(passwordForm.get('password'))"/>
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('password'), 'required')">
+                        Field is required!
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>New password:</label>
+                    <input type="password" formControlName="newPassword" class="form-control" autocomplete="off"
+                        [class.is-invalid]="hasError(passwordForm.get('newPassword')) || hasError(passwordForm)"
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'required')">
+                        Field is required!
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'minlength')">
+                        New password must be at least 12 characters long!
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'maxlength')">
+                        New password must be at most 128 characters long!
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm new password:</label>
+                    <input type="password" formControlName="confirmNewPassword" class="form-control" autocomplete="off"
+                        [class.is-invalid]="hasError(passwordForm.get('confirmNewPassword')) || hasError(passwordForm)"
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('confirmNewPassword'), 'required')">
+                        Field is required!
+                    </div>
+                    <div class="invalid-feedback" *ngIf="hasError(passwordForm, 'passwordMismatch')">
+                        Passwords do not match!
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-outline-primary"
+                        [disabled]="isInvalid(passwordForm)"
+                        type="submit">Change password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

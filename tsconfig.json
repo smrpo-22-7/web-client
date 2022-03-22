@@ -21,7 +21,34 @@
         "lib": [
             "es2020",
             "dom"
-        ]
+        ],
+        "strictPropertyInitialization": false,
+        "paths": {
+            "@lib": [
+                "src/app/models/index.ts"
+            ],
+            "@services": [
+                "src/app/services/index.ts"
+            ],
+            "@context": [
+                "src/app/context/index.ts"
+            ],
+            "@config/*": [
+                "src/app/config/*.ts"
+            ],
+            "@utils": [
+                "src/app/utils/index.ts"
+            ],
+            "@environment/*": [
+                "src/environments/*.ts"
+            ],
+            "@injectables": [
+                "src/app/injectables.ts"
+            ],
+            "@shared/*": [
+                "src/app/modules/shared/*"
+            ]
+        }
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

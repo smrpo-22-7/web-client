@@ -1,0 +1,8 @@
+<ng-container *ngIf="projects$ | async as projects">
+    <div>
+        <select [formControl]="projectCtrl">
+            <option [ngValue]="null" disabled></option>
+            <option *ngFor="let project of projects" [ngValue]="project.id">{{project.name}}</option>
+        </select>
+    </div>
+</ng-container>

@@ -1,0 +1,53 @@
+<header>
+    <div class="first-links">
+
+        <div class="brand-link">
+            <a routerLink="/">
+                SCRUM
+            </a>
+        </div>
+
+        <ng-container *ngIf="nav$ | async as nav">
+
+            <div>
+                <sc-project-picker></sc-project-picker>
+            </div>
+
+            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                <div class="nav-link">
+                    <a [routerLink]="['/projects', nav.projectId, 'stories']">
+                        Stories
+                    </a>
+                </div>
+            </ng-container>
+
+        </ng-container>
+    </div>
+    <div class="second-links">
+        <ng-container *ngIf="auth$ | async as auth; else noAuth">
+            <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
+
+                <ng-container *ngIf="auth.parsedAccessToken.roles.includes('admin')">
+                    <div class="nav-link" tooltip="Admin dashboard" tooltipPlacement="bottom">
+                        <a routerLink="/admin" class="admin-btn">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                        </a>
+                    </div>
+                </ng-container>
+
+                <div class="nav-link userinfo-link">
+                    <sc-user-icon [info]="auth.parsedAccessToken" (whenLogoutClicked)="logout()"></sc-user-icon>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-template #noAuth>
+            <div class="nav-link">
+                <div (click)="login()" class="login-btn" tooltip="Log in" [tooltipPlacement]="'bottom'">
+                    <fa-icon [icon]="['fas', 'arrow-right-to-bracket']"></fa-icon>
+                </div>
+            </div>
+        </ng-template>
+
+
+    </div>
+</header>

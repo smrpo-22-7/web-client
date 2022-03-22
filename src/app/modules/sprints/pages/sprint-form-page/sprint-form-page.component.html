@@ -8,6 +8,7 @@
             <ng-container >
                 <form [formGroup]="sprintForm" class="rob">
                     <div>
+
                         <div>
                             <label for="startdate" class="form-label">Start date:</label>
                             <input type="date" id="startdate" class="form-control" formControlName="startdate"/>
@@ -15,12 +16,16 @@
 
                         <div>
                             <label for="enddate" class="form-label zgorjirob">End date:</label>
-                            <input type="date" id="enddate" class="form-control" formControlName="enddate"/>
+                            <input [class.is-invalid]="hasError(sprintForm)" type="date" id="enddate" class="form-control" formControlName="enddate"/>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm, 'datesNotGood')">
+                                End date is before start date!
+                            </div>
                         </div>
+
 
                         <div>
                             <label for="velocity" class="form-label zgorjirob">Velocity:</label>
-                            <input type="number" step="0.01" id="velocity" class="form-control" formControlName="velocity"/>
+                            <input type="number" id="velocity" class="form-control" formControlName="velocity"/>
                         </div>
 
                         <div style="width: 100%; text-align: right;">

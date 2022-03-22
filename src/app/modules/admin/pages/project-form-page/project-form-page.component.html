@@ -7,7 +7,7 @@
                 <div class="text-center rob">
                     <h2>Add a new project</h2>
                 </div>
-                <form [formGroup]="projectForm" class="rob">
+                <form [formGroup]="projectForm" (ngSubmit)="createProject()" class="rob">
 
                     <div>
                         <div>
@@ -18,7 +18,7 @@
                             <div class="invalid-feedback" *ngIf="hasError(projectForm.get('name'), 'required')">
                                 Project name is required!
                             </div>
-                            <div class="invalid-feedback" *ngIf="hasError(projectForm.get('name'), 'usernameExists')">
+                            <div class="invalid-feedback" *ngIf="hasError(projectForm.get('name'), 'nameExists')">
                                 Project name already exists!
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                     [formGroup]="$any(user)">
                                     <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
                                     <td>
-                                        <select formControlName="role" id="role" class="form-select">
+                                        <select formControlName="projectRoleId" id="projectRoleId" class="form-select">
                                             <option *ngFor="let role of roles" [value]="role.roleId">
                                                 {{role.name}}
                                             </option>

@@ -7,6 +7,9 @@ import { validateUniqueUsername } from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ToastrService } from "ngx-toastr";
 import { validateUserForm, validateUserRoles } from "../../../admin/pages/user-form-page/validators";
+import {validatePasswords} from "../../../user-profile/pages/user-profile-page/password.validators";
+import { validateDates } from "./sprint.validators";
+
 
 @Component({
     selector: "sc-sprint-form-page",
@@ -24,9 +27,9 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
 
     ngOnInit() {
         this.sprintForm = this.fb.group({
-            startdate: this.fb.control(""),
-            enddate: this.fb.control(""),
-            velocity: this.fb.control("")
-        });
+            startdate: this.fb.control(new Date().toISOString()),
+            enddate: this.fb.control(new Date().toISOString()),
+            velocity: this.fb.control(1)
+        }, { validators: [validateDates] } );
     }
 }

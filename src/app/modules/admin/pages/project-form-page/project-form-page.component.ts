@@ -5,6 +5,9 @@ import { isUserRegisterRequest, ProjectRole, SysRole, User } from "@lib";
 import { ProjectService, RoleService, UserService } from "@services";
 //import { validateUniqueProjectName, validateProjectForm, validateUserRoles } from "./formvalidators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+import { isProjectRegisterRequest } from "../../../../models/scrum-service-lib-v1/project.types";
+import { ToastrService } from "ngx-toastr";
+import {validateUniqueProjectName} from "../../../../utils/validators/project.validator";
 
 @Component({
     selector: "sc-project-form-page",
@@ -17,22 +20,20 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
     public users$: Observable<User[]>;
     public projectForm: FormGroup;
     private destroy$ = new Subject<boolean>();
+    public check: boolean;
 
     constructor(private fb: FormBuilder,
                 private roleService: RoleService,
                 private projectService: ProjectService,
-                private userService: UserService) {
+                private userService: UserService,
+                private toastrService: ToastrService) {
         super();
     }
 
     ngOnInit(): void {
-        //this.userForm = this.fb.group({
-        //projectname: this.fb.control("", [Validators.required], [validateUniqueProjectName(this.userService)]),
-        //users: this.fb.array([], [Validators.required]),
-        //}, //{ validators: [validateProjectForm] });
         this.projectForm = this.fb.group({
-            name: this.fb.control(""),
-            users: this.fb.array([]),
+            name: this.fb.control("",[Validators.required], [validateUniqueProjectName(this.projectService)]),
+            members: this.fb.array([]),
             userQuery: this.fb.control(""),
         });
 
@@ -49,19 +50,58 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
             }),
             takeUntil(this.destroy$)
         );
+
+        this.check=true;
     }
 
     public onUserSelect($event: User): void {
         this.userQueryCtrl.setValue("");
-        this.usersCtrl.push(this.fb.group({
-            userName: this.fb.control($event.username),
-            userId: this.fb.control($event.id),
-            role: this.fb.control("member"),
-        }));
+        const formValue = this.projectForm.getRawValue();
+        for (let val of formValue["members"]) {
+            if (val.userName == $event.username) {
+                this.check=false;
+                break;
+            }
+        }
+        if (this.check) {
+            this.usersCtrl.push(this.fb.group({
+                userName: this.fb.control($event.username),
+                userId: this.fb.control($event.id),
+                projectRoleId: this.fb.control("member"),
+            }));
+        }
+        this.check=true;
     }
 
     removeUser(index: number): void {
         this.usersCtrl.removeAt(index);
+    }
+
+
+    public createProject() {
+        const formValue = this.projectForm.getRawValue();
+        delete formValue["userQuery"];
+        for (let val of formValue["members"]) {
+            delete val.userName;
+        }
+        console.log(formValue);
+        if (isProjectRegisterRequest(formValue)) {
+            this.projectService.createProject(formValue).pipe(take(1)).subscribe({
+                next: () => {
+                    console.log("created!");
+                    this.toastrService.success("New project was added!", "Success!");
+                    this.projectForm.reset();
+                    this.projectForm.controls["members"].reset();
+                    window.location.reload();
+                },
+                error: err => {
+                    console.log("NAPAKA!");
+                    console.error(err);
+                }
+            });
+        } else {
+            throw new TypeError("Form does not match the required format!");
+        }
     }
 
     ngOnDestroy() {
@@ -69,7 +109,7 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
     }
 
     public get usersCtrl(): FormArray {
-        return this.projectForm.controls["users"] as FormArray;
+        return this.projectForm.controls["members"] as FormArray;
     }
 
     public get userQueryCtrl(): FormControl {

@@ -66,6 +66,7 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
                     console.log("created!");
                     this.toastrService.success("New user was added!", "Success!");
                     this.userForm.reset();
+                    window.location.reload();
                 },
                 error: err => {
                     console.error(err);

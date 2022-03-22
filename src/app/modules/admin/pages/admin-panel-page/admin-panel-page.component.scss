@@ -1,0 +1,25 @@
+@import "src/styles/variables";
+
+h1 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.panel-links {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .card {
+        width: 15%;
+        margin-right: 20px;
+        background-color: white;
+
+        .card-link {
+            text-decoration: none;
+        }
+        * {
+            background-color: white;
+        }
+    }
+}

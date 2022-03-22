@@ -6,9 +6,9 @@ import { mapToType } from "@utils";
 import { OpenApiDefinition } from "@lib";
 
 
-@Injectable(({
+@Injectable({
     providedIn: "root"
-}))
+})
 export class CodebookService {
     
     private oas$ = new BehaviorSubject<OpenApiDefinition | null>(null);

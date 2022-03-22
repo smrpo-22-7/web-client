@@ -8,3 +8,4 @@ export { AuthService } from "./auth.service";
 export { UserService } from "./user.service";
 export { RoleService } from "./role.service";
 export { ErrorService } from "./error.service";
+export { CodebookService } from "./codebook.service";

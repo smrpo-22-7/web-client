@@ -23,3 +23,11 @@ export const API_URL = new InjectionToken<string>("apiUrl", {
     providedIn: "root",
     factory: () => environment.service.apiUrl
 });
+
+export const SCHEMA_URL = new InjectionToken<string>("schemaUrl", {
+    providedIn: "root",
+    factory: () => {
+        const baseUrl = environment.service.apiUrl.replace("/v1", "");
+        return baseUrl + "/openapi/specs?format=json";
+    }
+})

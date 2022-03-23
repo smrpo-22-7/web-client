@@ -13,9 +13,19 @@ export { ProjectRole,
     NameCheckRequest,
     ProjectRegisterRequest,
     Project,
-    isProjectRegisterRequest } from "./project.types";
+    isProjectRegisterRequest,
+    
+} from "./project.types";
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";
 export { Codebooks } from "./codebooks";
 export {SprintRegisterRequest,
-    isSprintRegisterRequest} from "./sprint.types";
+    isSprintRegisterRequest
+} from "./sprint.types";
+export {
+    Story,
+    AcceptanceTest,
+    StoryRegisterRequest,
+    isStoryRegisterRequest
+} from "./story.types";
+

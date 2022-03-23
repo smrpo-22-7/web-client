@@ -71,6 +71,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
     public createStory(projectId: string) {
         const formValue = this.storyForm.getRawValue();
         delete formValue["result"];
+        formValue["tests"] = formValue["tests"].map((x: string) => ({ ["result"]: x }));
         if (isStoryRegisterRequest(formValue)) {
             this.storypriorityservice.createStory(formValue, projectId).pipe(take(1)).subscribe({
                 next: () => {

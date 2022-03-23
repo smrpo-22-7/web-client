@@ -25,7 +25,7 @@ const routes: Routes = [
                 canActivateChild: [AuthenticatedChildGuard]
             },
             {
-                path: "sprints",
+                path: "projects/:projectId/sprints",
                 loadChildren: () => import("../sprints/sprints.module").then(m => m.SprintsModule),
                 canActivateChild: [AuthenticatedChildGuard]
             },

@@ -7,28 +7,7 @@
             </a>
         </div>
 
-        <ng-container *ngIf="nav$ | async as nav">
-
-            <div>
-                <sc-project-picker></sc-project-picker>
-            </div>
-
-            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-                <div class="nav-link">
-                    <a [routerLink]="['/projects', nav.projectId, 'stories']">
-                        Stories
-                    </a>
-                </div>
-
-                <div class="nav-link">
-                    <a [routerLink]="['/projects', nav.projectId, 'sprints']">
-                        Sprints
-                    </a>
-
-                </div>
-            </ng-container>
-
-        </ng-container>
+        <sc-project-picker></sc-project-picker>
     </div>
     <div class="second-links">
         <ng-container *ngIf="auth$ | async as auth; else noAuth">

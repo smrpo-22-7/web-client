@@ -4,6 +4,12 @@ export interface BaseType {
     updatedAt: Date;
 }
 
+export type SimpleStatus = "ACTIVE" | "DISABLED";
+export const SimpleStatus = {
+    ACTIVE: "ACTIVE" as SimpleStatus,
+    DISABLED: "DISABLED" as SimpleStatus,
+};
+
 export interface RestParams {
     limit?: number;
     offset?: number;

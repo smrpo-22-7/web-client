@@ -1,21 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject, take, takeUntil } from "rxjs";
-import {
-    StoryRegisterRequest,
-    isStoryRegisterRequest,
-    ProjectRole,
-    SysRole,
-    PriorityType,
-    isProjectRegisterRequest,
-    NavStateStatus, NavState
-} from "@lib";
-import { ProjectService, RoleService, UserService, StorypriorityService } from "@services";
-import { validateUniqueUsername } from "@utils";
-import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ToastrService } from "ngx-toastr";
-import { validateUserForm, validateUserRoles } from "../../../admin/pages/user-form-page/validators";
+import {
+    isStoryRegisterRequest,
+    NavStateStatus, NavState, Codebooks
+} from "@lib";
+import { CodebookService, StorypriorityService } from "@services";
+import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import {NavContext} from "@context";
+import { StoryPriorityLabel } from "@config/enums.config";
 
 @Component({
     selector: "sc-story-form-page",
@@ -24,17 +18,18 @@ import {NavContext} from "@context";
 })
 export class StoryFormPageComponent extends FormBaseComponent implements OnInit, OnDestroy {
 
-
     public navStates = NavStateStatus;
     public nav$: Observable<NavState>;
-
-    public priority$: Observable<PriorityType[]>;
+    public priorities$: Observable<string[]>;
+    public priorityLabels = StoryPriorityLabel;
+    
     public storyForm: FormGroup;
     private destroy$ = new Subject<boolean>();
 
     constructor(private fb: FormBuilder,
                 private storypriorityservice: StorypriorityService,
                 private toastrService: ToastrService,
+                private codebookService: CodebookService,
                 private nav: NavContext,) {
         super();
     }
@@ -49,8 +44,8 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
             businessValue: this.fb.control(1, [Validators.min(1)]),
             timeEstimate: this.fb.control(1),
         });
-
-        this.priority$ = this.storypriorityservice.getPriorities().pipe(
+        
+        this.priorities$ = this.codebookService.getCodebook(Codebooks.StoryPriority).pipe(
             takeUntil(this.destroy$),
         );
 
@@ -62,8 +57,6 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
 
     public addTest(){
         const formValue = this.storyForm.getRawValue();
-        console.log(formValue["result"]);
-        console.log(this.fb.control(formValue["result"]));
         this.sysTestsCtrl.push(this.fb.control(formValue["result"]));
         this.storyForm.controls["result"].reset();
     }
@@ -75,13 +68,11 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
         if (isStoryRegisterRequest(formValue)) {
             this.storypriorityservice.createStory(formValue, projectId).pipe(take(1)).subscribe({
                 next: () => {
-                    console.log("created!");
                     this.toastrService.success("New story was added!", "Success!");
                     this.storyForm.reset();
                     window.location.reload();
                 },
                 error: err => {
-                    console.log("NAPAKA!");
                     console.error(err);
                 }
             });
@@ -101,7 +92,6 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
 
     removeTest(index: number): void {
         this.sysTestsCtrl.removeAt(index);
-        console.log(this.storyForm.controls["tests"]);
     }
 
 }

@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { filter, Observable, Subject, switchMap, take, takeUntil } from "rxjs";
-import { isUserRegisterRequest, ProjectRole, SysRole, User } from "@lib";
-import { ProjectService, RoleService, UserService } from "@services";
-//import { validateUniqueProjectName, validateProjectForm, validateUserRoles } from "./formvalidators";
-import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
-import { isProjectRegisterRequest } from "../../../../models/scrum-service-lib-v1/project.types";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
-import {validateUniqueProjectName} from "../../../../utils/validators/project.validator";
+import { filter, Observable, Subject, switchMap, take, takeUntil } from "rxjs";
+
+import { ProjectRole, User, isProjectRegisterRequest } from "@lib";
+import { ProjectService, RoleService, UserService } from "@services";
+import {validateUniqueProjectName} from "@utils";
+import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 
 @Component({
     selector: "sc-project-form-page",

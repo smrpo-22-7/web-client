@@ -7,7 +7,7 @@
                 </div>
                 <ng-container *ngIf="nav$ | async as nav">
                     <ng-container *ngIf="nav.status === navStates.IN_CONTEXT" >
-                <ng-container *ngIf="priority$ | async as priorities">
+                <ng-container *ngIf="priorities$ | async as priorities">
                 <form [formGroup]="storyForm" class="rob" (ngSubmit)="createStory(nav.projectId)">
                 <div>
                     <div>
@@ -63,8 +63,8 @@
                         <label for="priority" class="form-label zgorjirob">Priority: </label>
                         <select id="priority" class="form-select" formControlName="priority" [class.is-invalid]="hasError(storyForm.get('priority'))">
                             <option value="" disabled selected>Select one...</option>
-                            <option *ngFor="let priority of priorities" [value]="priority.prioritytypeId">
-                                {{priority.priorityname}}
+                            <option *ngFor="let priority of priorities" [value]="priority">
+                                {{priorityLabels[priority]}}
                             </option>
                         </select>
                         <div class="invalid-feedback" *ngIf="hasError(storyForm.get('priority'), 'required')">

@@ -1,0 +1,31 @@
+<div>
+    <div>
+        <ng-container *ngIf="projects$ | async as projects">
+            <h3>My projects</h3>
+            <ng-container *ngIf="projects.entities.length > 0; else noProjects">
+                <div class="project-cards">
+                    <div class="project-container" *ngFor="let project of projects.entities">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{project.name}}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="card-link" (click)="changeContext(project.id)" [routerLink]="['/projects', project.id, 'stories']">Stories</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="card-link" (click)="changeContext(project.id)" [routerLink]="['/projects', project.id, 'sprints']">Sprints</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noProjects>
+                <p>You don't have any projects!</p>
+                <p>To create project, contact your admin.</p>
+            </ng-template>
+        </ng-container>
+    </div>
+
+</div>

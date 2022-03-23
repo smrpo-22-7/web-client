@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AuthService } from "@services";
 import { Observable, Subject, takeUntil } from "rxjs";
 import { AuthState, AuthStateStatus } from "@lib";
+import { AuthService } from "@services";
 
 @Component({
-    selector: "sc-landing-page",
-    templateUrl: "./landing-page.component.html",
-    styleUrls: ["./landing-page.component.scss"]
+    selector: "sc-anon-landing",
+    templateUrl: "./anon-landing.component.html",
+    styleUrls: ["./anon-landing.component.scss"]
 })
-export class LandingPageComponent implements OnInit, OnDestroy {
+export class AnonLandingComponent implements OnInit, OnDestroy {
     
     public auth$: Observable<AuthState>;
     private destroy$ = new Subject<boolean>();
@@ -24,7 +24,12 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         );
     }
     
+    public login() {
+        this.auth.login();
+    }
+    
     ngOnDestroy() {
         this.destroy$.next(true);
     }
+    
 }

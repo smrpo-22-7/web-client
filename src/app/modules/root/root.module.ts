@@ -12,6 +12,8 @@ import { SessionCheckComponent } from "./components/session-check/session-check.
 import { HeaderComponent } from './components/header/header.component';
 import { ProjectPickerComponent } from './components/project-picker/project-picker.component';
 import { UserIconComponent } from './components/header/user-icon/user-icon.component';
+import { UserLandingComponent } from './pages/landing-page/user-landing/user-landing.component';
+import { AnonLandingComponent } from './pages/landing-page/anon-landing/anon-landing.component';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { UserIconComponent } from './components/header/user-icon/user-icon.compo
         HeaderComponent,
         ProjectPickerComponent,
         UserIconComponent,
+        UserLandingComponent,
+        AnonLandingComponent,
     ],
     exports: [
         RouterModule,

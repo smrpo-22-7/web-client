@@ -4,27 +4,29 @@
         <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
 
             <ng-container *ngIf="projects$ | async as projects">
-                <div>
-                    <select class="custom-select" [formControl]="projectCtrl">
-                        <option [ngValue]="null" disabled></option>
-                        <option *ngFor="let project of projects.entities"
-                            [ngValue]="project.id">{{project.name}}</option>
-                    </select>
-                </div>
+                <ng-container *ngIf="projects.entities.length > 0">
+                    <div>
+                        <select class="custom-select" [formControl]="projectCtrl">
+                            <option [ngValue]="null" disabled></option>
+                            <option *ngFor="let project of projects.entities"
+                                [ngValue]="project.id">{{project.name}}</option>
+                        </select>
+                    </div>
 
-                <ng-container *ngIf="nav$ | async as nav">
-                    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-                        <div class="nav-link">
-                            <a [routerLink]="['/projects', nav.projectId, 'stories']">
-                                Stories
-                            </a>
-                        </div>
+                    <ng-container *ngIf="nav$ | async as nav">
+                        <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                            <div class="nav-link">
+                                <a [routerLink]="['/projects', nav.projectId, 'stories']">
+                                    Stories
+                                </a>
+                            </div>
 
-                        <div class="nav-link">
-                            <a [routerLink]="['/projects', nav.projectId, 'sprints']">
-                                Sprints
-                            </a>
-                        </div>
+                            <div class="nav-link">
+                                <a [routerLink]="['/projects', nav.projectId, 'sprints']">
+                                    Sprints
+                                </a>
+                            </div>
+                        </ng-container>
                     </ng-container>
                 </ng-container>
             </ng-container>

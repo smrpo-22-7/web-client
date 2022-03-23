@@ -19,3 +19,4 @@ export {
 } from "./nav.types";
 
 export { ProjectRegisterRequest } from "./scrum-service-lib-v1/project.types";
+export { StoryRegisterRequest, isStoryRegisterRequest } from "./scrum-service-lib-v1/story.types";

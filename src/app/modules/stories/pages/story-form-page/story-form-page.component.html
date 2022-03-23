@@ -5,23 +5,31 @@
                 <div class="text-center rob">
                     <h2>Add a new story</h2>
                 </div>
+                <ng-container *ngIf="nav$ | async as nav">
+                    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT" >
                 <ng-container *ngIf="priority$ | async as priorities">
-                <form [formGroup]="storyForm" class="rob">
+                <form [formGroup]="storyForm" class="rob" (ngSubmit)="createStory(nav.projectId)">
                 <div>
                     <div>
-                        <label for="name" class="form-label">Name:</label>
-                        <input id="name" class="form-control" formControlName="name"/>
+                        <label for="title" class="form-label">Story title:</label>
+                        <input id="title" class="form-control" formControlName="title"  [class.is-invalid]="hasError(storyForm.get('title'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(storyForm.get('title'), 'required')">
+                            Title is required!
+                        </div>
                     </div>
                     <div>
                         <label for="description" class="form-label zgorjirob">Description:</label>
-                        <textarea id="description" class="form-control" formControlName="description"></textarea>
+                        <textarea id="description" class="form-control" formControlName="description" [class.is-invalid]="hasError(storyForm.get('description'))"></textarea>
+                        <div class="invalid-feedback" *ngIf="hasError(storyForm.get('description'), 'required')">
+                            Description is required!
+                        </div>
                     </div>
 
                     <div class="input-group mb-3">
 
-                        <label for="test" class="form-label zgorjirob">Add tests:</label>
+                        <label for="result" class="form-label zgorjirob">Add tests:</label>
                         <div class="input-group">
-                        <input id="test" class="form-control" formControlName="test"/>
+                        <input id="result" class="form-control" formControlName="result"/>
                             <div class="input-group-addon">
                         <span (click)="addTest()" class="input-group-text">
                             Add
@@ -53,17 +61,29 @@
 
                     <div>
                         <label for="priority" class="form-label zgorjirob">Priority: </label>
-                        <select id="priority" class="form-select" formControlName="priority">
+                        <select id="priority" class="form-select" formControlName="priority" [class.is-invalid]="hasError(storyForm.get('priority'))">
                             <option value="" disabled selected>Select one...</option>
                             <option *ngFor="let priority of priorities" [value]="priority.prioritytypeId">
                                 {{priority.priorityname}}
                             </option>
                         </select>
+                        <div class="invalid-feedback" *ngIf="hasError(storyForm.get('priority'), 'required')">
+                            Priority is required!
+                        </div>
                     </div>
 
                     <div>
-                        <label for="businessvalue" class="form-label zgorjirob">Business value:</label>
-                        <input type="number" id="businessvalue" class="form-control" formControlName="businessvalue">
+                        <label for="businessValue" class="form-label zgorjirob">Business value:</label>
+                        <input type="number" id="businessValue" class="form-control" formControlName="businessValue"
+                               [class.is-invalid]="hasError(storyForm.get('businessValue'))">
+                        <div class="invalid-feedback" *ngIf="hasError(storyForm.get('businessValue'), 'min')">
+                            Business value has to be positive!
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="timeEstimate" class="form-label zgorjirob">Estimated time:</label>
+                        <input type="number" id="timeEstimate" class="form-control" formControlName="timeEstimate">
                     </div>
 
                     <div style="width: 100%; text-align: right;">
@@ -73,6 +93,8 @@
 
 
                 </form>
+                </ng-container>
+                    </ng-container>
                 </ng-container>
             </div>
         </div>

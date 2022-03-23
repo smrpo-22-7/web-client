@@ -7,6 +7,7 @@ import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
+import { AccordionModule } from "ngx-bootstrap/accordion";
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
         BsDropdownModule.forRoot(),
         TypeaheadModule.forRoot(),
         BsDatepickerModule.forRoot(),
+        AccordionModule.forRoot(),
     ],
     exports: [
         AlertModule,
@@ -35,6 +37,7 @@ import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
         BsDropdownModule,
         TypeaheadModule,
         BsDatepickerModule,
+        AccordionModule,
     ]
 })
 export class BootstrapModule {

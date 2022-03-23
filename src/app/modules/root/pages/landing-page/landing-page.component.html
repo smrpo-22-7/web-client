@@ -1,1 +1,11 @@
-<p>landing-page works!</p>
+<div class="landing-page">
+    <h1>SCRUM</h1>
+    <ng-container *ngIf="auth$ | async as auth">
+        <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
+            <sc-user-landing></sc-user-landing>
+        </ng-container>
+        <ng-template #noAuth>
+            <sc-anon-landing></sc-anon-landing>
+        </ng-template>
+    </ng-container>
+</div>

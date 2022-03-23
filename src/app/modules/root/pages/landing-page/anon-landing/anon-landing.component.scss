@@ -1,0 +1,10 @@
+@import "src/styles/variables";
+
+.login-link {
+    color: $primary-color;
+
+    &:hover {
+        cursor: pointer;
+        color: $secondary-color;
+    }
+}

@@ -1,8 +1,57 @@
 <div>
-    <h1>Project stories page</h1>
+    <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">Project stories</h1>
+
+        <a class="btn btn-outline-primary" routerLink="new">Add a new story</a>
+    </div>
+
+    <ng-container *ngIf="storiesForm.length > 0">
+        <div class="story-actions">
+            <button class="btn btn-primary">Add stories to sprint</button>
+        </div>
+    </ng-container>
 
     <div>
-        <a routerLink="new">Add a new story</a>
+        <ng-container *ngIf="stories$ | async as stories">
+            <ng-container *ngIf="stories.entities.length > 0; else noStories">
+                <div>
+                    <accordion [isAnimated]="true">
+                        <accordion-group *ngFor="let story of stories.entities">
+                            <div accordion-heading class="detail-header">
+                                <div class="story-check">
+                                    <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
+                                </div>
+                                <div>
+                                    {{story.title}} (#{{story.numberId}})
+                                </div>
+                            </div>
+                            <div>
+                                <p>{{story.description}}</p>
+                                <div *ngIf="story.tests && story.tests.length > 0">
+                                    <h5>Acceptance tests</h5>
+                                    <div>
+                                        <ul>
+                                            <li *ngFor="let test of story.tests">{{test.result}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </accordion-group>
+
+                    </accordion>
+                </div>
+                <div class="pagination-container">
+                    <pagination
+                        [itemsPerPage]="limit$.value"
+                        [totalItems]="stories.count"
+                        (pageChanged)="newPage($event)"
+                    ></pagination>
+                </div>
+            </ng-container>
+            <ng-template #noStories>
+                <p>No stories have been created yet for this project.</p>
+            </ng-template>
+        </ng-container>
     </div>
 
 </div>

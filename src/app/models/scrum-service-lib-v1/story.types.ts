@@ -1,5 +1,30 @@
-import { BaseType, UserRegisterRequest, validateFields } from "@lib";
+import { BaseType, SimpleStatus, validateFields } from "@lib";
 
+export interface AcceptanceTest extends BaseType {
+    result: string;
+    storyId: string;
+}
+
+export interface Story extends BaseType {
+    title: string;
+    description: string;
+    numberId: number;
+    status: SimpleStatus;
+    businessValue: number;
+    timeEstimate: number;
+    priority: Story.Priority;
+    tests: AcceptanceTest[];
+}
+
+export namespace Story {
+    export type Priority = "MUST_HAVE" | "SHOULD_HAVE" | "COULD_HAVE" | "WONT_HAVE_THIS_TIME";
+    export const Priority = {
+        MUST_HAVE: "MUST_HAVE",
+        SHOULD_HAVE: "SHOULD_HAVE",
+        COULD_HAVE: "COULD_HAVE",
+        WONT_HAVE_THIS_TIME: "WONT_HAVE_THIS_TIME",
+    };
+}
 
 
 export interface StoryRegisterRequest {

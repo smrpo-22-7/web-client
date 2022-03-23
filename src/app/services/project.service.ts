@@ -4,7 +4,7 @@ import { catchError, map, Observable, of, throwError } from "rxjs";
 import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
-import { ConflictError, ProjectRegisterRequest, NameCheckRequest, Project, ProjectRole } from "@lib";
+import { ConflictError, ProjectRegisterRequest, NameCheckRequest, Project, ProjectRole, Story } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
 
@@ -63,6 +63,25 @@ export class ProjectService {
                 return throwError(() => err);
             }),
         );
+    }
+    
+    public getProjectStories(projectId: string, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
+        const url = `${this.apiUrl}/projects/${projectId}/stories`;
+        const params = {
+            limit,
+            offset,
+            order: "numberId ASC"
+        };
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<Story[]>>(),
+            map((res: HttpResponse<Story[]>) => {
+                return EntityList.of(
+                    res.body!,
+                    parseInt(res.headers.get("x-total-count")!),
+                );
+            }),
+            catchHttpError(),
+        )
     }
     
 }

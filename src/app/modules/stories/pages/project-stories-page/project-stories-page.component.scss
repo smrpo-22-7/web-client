@@ -1,0 +1,19 @@
+@import "src/styles/variables";
+
+.story-actions {
+    margin-bottom: 20px;
+}
+.detail-header {
+    display: flex;
+    align-items: center;
+
+    .story-check {
+        margin-right: 15px;
+    }
+}
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}

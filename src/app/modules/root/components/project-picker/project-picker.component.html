@@ -1,8 +1,33 @@
-<ng-container *ngIf="projects$ | async as projects">
-    <div>
-        <select [formControl]="projectCtrl">
-            <option [ngValue]="null" disabled></option>
-            <option *ngFor="let project of projects" [ngValue]="project.id">{{project.name}}</option>
-        </select>
-    </div>
-</ng-container>
+<!-- If user is authenticated, display project picker and project context -->
+<div class="d-flex justify-content-start align-items-center project-links">
+    <ng-container *ngIf="auth$ | async as auth">
+        <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
+
+            <ng-container *ngIf="projects$ | async as projects">
+                <div>
+                    <select class="custom-select" [formControl]="projectCtrl">
+                        <option [ngValue]="null" disabled></option>
+                        <option *ngFor="let project of projects.entities"
+                            [ngValue]="project.id">{{project.name}}</option>
+                    </select>
+                </div>
+
+                <ng-container *ngIf="nav$ | async as nav">
+                    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                        <div class="nav-link">
+                            <a [routerLink]="['/projects', nav.projectId, 'stories']">
+                                Stories
+                            </a>
+                        </div>
+
+                        <div class="nav-link">
+                            <a [routerLink]="['/projects', nav.projectId, 'sprints']">
+                                Sprints
+                            </a>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</div>

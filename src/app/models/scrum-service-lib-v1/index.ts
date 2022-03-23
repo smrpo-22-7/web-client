@@ -16,3 +16,5 @@ export { ProjectRole,
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";
 export { Codebooks } from "./codebooks";
+export {SprintRegisterRequest,
+    isSprintRegisterRequest} from "./sprint.types";

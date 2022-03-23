@@ -5,27 +5,54 @@
             <div class="text-center rob">
                 <h2>Add a new sprint</h2>
             </div>
-            <ng-container >
-                <form [formGroup]="sprintForm" class="rob">
+            <ng-container *ngIf="nav$ | async as nav">
+                <ng-container *ngIf="nav.status === navStates.IN_CONTEXT" >
+                <form [formGroup]="sprintForm" (ngSubmit)="createSprint(nav.projectId)" class="rob">
                     <div>
-
                         <div>
-                            <label for="startdate" class="form-label">Start date:</label>
-                            <input type="date" id="startdate" class="form-control" formControlName="startdate"/>
+                            <label for="title" class="form-label">Title:</label>
+                            <input id="title" class="form-control" formControlName="title"
+                                   [class.is-invalid]="hasError(sprintForm.get('title'))"
+                                   placeholder="e.g. SprintTitle" />
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('title'), 'required')">
+                                Username is required!
+                            </div>
                         </div>
 
                         <div>
-                            <label for="enddate" class="form-label zgorjirob">End date:</label>
-                            <input [class.is-invalid]="hasError(sprintForm)" type="date" id="enddate" class="form-control" formControlName="enddate"/>
-                            <div class="invalid-feedback" *ngIf="hasError(sprintForm, 'datesNotGood')">
-                                End date is before start date!
+                            <label for="startDate" class="form-label">Start date:</label>
+                            <input [class.is-invalid]="hasError(sprintForm.get('startDate')) || hasError(sprintForm)" type="date" id="startDate" class="form-control" formControlName="startDate"/>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('startDate'), 'required')">
+                                Start date is required.
+                            </div>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm, 'startInPast')">
+                                Start date should be in the future.
+                            </div>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm, 'endBeforeStart')">
+                                Start date should be before end date.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="endDate" class="form-label zgorjirob">End date:</label>
+                            <input [class.is-invalid]="hasError(sprintForm.get('endDate'))" type="date" id="endDate" class="form-control" formControlName="endDate"/>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('endDate'), 'required')">
+                                End date is required.
                             </div>
                         </div>
 
 
                         <div>
-                            <label for="velocity" class="form-label zgorjirob">Velocity:</label>
-                            <input type="number" id="velocity" class="form-control" formControlName="velocity"/>
+                            <label for="expectedSpeed" class="form-label zgorjirob">Velocity:</label>
+                            <input [class.is-invalid]="hasError(sprintForm.get('expectedSpeed'))" type="number" id="expectedSpeed" class="form-control"
+                                   formControlName="expectedSpeed"/>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('expectedSpeed'), 'required')">
+                                Velocity is required.
+                            </div>
+                            <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('expectedSpeed'), 'min')">
+                                Velocity has to be positive.
+                            </div>
+
                         </div>
 
                         <div style="width: 100%; text-align: right;">
@@ -36,6 +63,7 @@
 
 
                 </form>
+                </ng-container>
             </ng-container>
         </div>
     </div>

@@ -1,26 +1,39 @@
 import { FormGroup, ValidationErrors } from "@angular/forms";
 
 export function validateDates(formGroup: FormGroup): ValidationErrors | null {
-    const startDate: string = formGroup.controls["startdate"].value;
+    const startDate: string = formGroup.controls["startDate"].value;
     console.log(startDate);
 
-    //poslji to ISO obliko na bazo:
-    //if (startDate) {const cekiram = new Date(startDate).toISOString();
-    //   console.log(cekiram);}
-
-    const endDate: string = formGroup.controls["enddate"].value;
+    const endDate: string = formGroup.controls["endDate"].value;
+    const errors: ValidationErrors = {};
+    let hasErrors = false;
 
     if (startDate !== null && endDate !== null) {
         if (startDate.length > 0 || endDate.length > 0) {
             if ((new Date(startDate).getTime() > new Date(endDate).getTime())) {
                 console.log("wtf");
                 return {
-                    datesNotGood: true,
+                    endBeforeStart: true,
                 };
+
             }
         }
     }
     return null;
 
+}
+
+export function valiStartdate(formGroup: FormGroup): ValidationErrors | null {
+    const startDate: string = formGroup.controls["startDate"].value;
+
+    if (startDate !== null && startDate.length > 0) {
+        if ((new Date(startDate).getTime() < new Date().getTime())) {
+            console.log("Zacetek je v preteklosti");
+            return {
+                startInPast: true,
+            };
+        }
+    }
+    return null;
 
 }

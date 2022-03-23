@@ -11,3 +11,4 @@ export { ProjectService } from "./project.service";
 export { ErrorService } from "./error.service";
 export { StorypriorityService } from "./storypriority.service";
 export { CodebookService } from "./codebook.service";
+export { SprintService } from "./sprint.service";

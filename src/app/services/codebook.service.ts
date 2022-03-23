@@ -16,7 +16,8 @@ export class CodebookService {
     constructor(@Inject(SCHEMA_URL) private schemaUrl: string,
         private http: HttpClient) {
     }
-    
+
+    //
     public getCodebook(codebook: string): Observable<string[]> {
         return this.oas$.pipe(
             switchMap((openapi) => {

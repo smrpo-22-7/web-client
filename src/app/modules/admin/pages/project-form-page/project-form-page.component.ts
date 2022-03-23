@@ -54,6 +54,21 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
         this.check=true;
     }
 
+    public isDisabled(idRole: string): boolean {
+        const formValue = this.projectForm.getRawValue();
+        for (let val of formValue["members"]) {
+            if (val.projectRoleId == "product_owner" && idRole == "product_owner") {
+                return true;
+            }
+        }
+        for (let val of formValue["members"]) {
+            if (val.projectRoleId =="scrum_master" && idRole == "scrum_master") {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public onUserSelect($event: User): void {
         this.userQueryCtrl.setValue("");
         const formValue = this.projectForm.getRawValue();

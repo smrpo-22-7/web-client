@@ -56,7 +56,7 @@
                                     <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
                                     <td>
                                         <select formControlName="projectRoleId" id="projectRoleId" class="form-select">
-                                            <option *ngFor="let role of roles" [value]="role.roleId">
+                                            <option *ngFor="let role of roles" [value]="role.roleId" [disabled]="isDisabled(role.roleId)">
                                                 {{role.name}}
                                             </option>
                                         </select>

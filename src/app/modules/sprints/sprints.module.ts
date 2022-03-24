@@ -5,6 +5,7 @@ import { SprintsRoutingModule } from "./sprints-routing.module";
 import { SprintFormPageComponent } from "./pages/sprint-form-page/sprint-form-page.component";
 import { ProjectSprintsListPageComponent } from "./pages/project-sprints-list-page/project-sprints-list-page.component";
 import { SprintRowComponent } from './components/sprint-row/sprint-row.component';
+import { SprintDetailsPageComponent } from './pages/sprint-details-page/sprint-details-page.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { SprintRowComponent } from './components/sprint-row/sprint-row.component
     declarations: [
         ProjectSprintsListPageComponent,
         SprintFormPageComponent,
-        SprintRowComponent
+        SprintRowComponent,
+        SprintDetailsPageComponent
     ]
 })
 export class SprintsModule {

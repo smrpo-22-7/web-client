@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, take, tap } from "rxjs";
-import { NavState, NavStateStatus, ProjectRole } from "@lib";
-import { ProjectService } from "@services";
+import { BehaviorSubject, Observable, of, switchMap, take, tap } from "rxjs";
+import { AuthStateStatus, NavState, NavStateStatus, ProjectRole } from "@lib";
+import { AuthService, ProjectService } from "@services";
 import { mapToVoid } from "@utils";
 
 
@@ -16,10 +16,26 @@ export class NavContext {
         status: NavStateStatus.NO_CONTEXT,
     });
     
-    constructor(private projectService: ProjectService) {
+    constructor(private projectService: ProjectService,
+                private auth: AuthService) {
     }
     
-    public initializeContext(): Observable<void> {
+    public initializeContext(): void {
+        this.auth.getAuthState().pipe(
+            switchMap(state => {
+                if (state.status === AuthStateStatus.AUTHENTICATED) {
+                    return this.init();
+                }
+                return of(undefined);
+            }),
+        ).subscribe({
+            next: () => {
+            
+            }
+        });
+    }
+    
+    private init(): Observable<void> {
         return new Observable<void>(observer => {
             const storedItem = localStorage.getItem(NavContext.STORAGE_KEY);
             if (storedItem) {
@@ -43,7 +59,6 @@ export class NavContext {
             take(1),
         ).subscribe({
             next: () => {
-            
             },
             error: err => {
                 console.error(err);

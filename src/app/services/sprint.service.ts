@@ -1,20 +1,11 @@
 import { Inject, Injectable } from "@angular/core";
-import { ProjectRole, SprintListResponse } from "@lib";
-
 import { HttpClient } from "@angular/common/http";
-import { catchError, map, Observable, of, throwError } from "rxjs";
-import { BaseError } from "@mjamsek/prog-utils";
+import { Observable } from "rxjs";
 
 import { API_URL } from "@injectables";
 import {
-    ChangePasswordRequest,
-    ConflictError,
-    User,
-    UsernameCheckRequest,
-    UserProfile,
-    UserRegisterRequest,
-    ProjectRegisterRequest,
-    NameCheckRequest,
+    Sprint,
+    SprintListResponse,
     SprintRegisterRequest
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
@@ -58,7 +49,14 @@ export class SprintService {
             mapToVoid(),
             catchHttpError(),
         );
-        
+    }
+    
+    public getSprint(sprintId: string): Observable<Sprint> {
+        const url = `${this.apiUrl}/sprints/${sprintId}`;
+        return this.http.get(url).pipe(
+            mapToType<Sprint>(),
+            catchHttpError(),
+        );
     }
     
 }

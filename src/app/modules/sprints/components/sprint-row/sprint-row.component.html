@@ -1,6 +1,8 @@
 <div>
-    Sprint:
-    <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
-    <strong> - </strong>
-    <strong>{{sprint.endDate | date: "dd.MM.yyyy"}}</strong>
+    <a [routerLink]="sprint.id">
+        Sprint:
+        <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
+        <strong> - </strong>
+        <strong>{{sprint.endDate | date: "dd.MM.yyyy"}}</strong>
+    </a>
 </div>

@@ -1,0 +1,18 @@
+<div class="mt-5">
+    <ng-container *ngIf="sprint$ | async as sprint">
+
+        <div>
+            <h2>Sprint: {{sprint.title}}</h2>
+        </div>
+        <div>
+            <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
+            <strong> - </strong>
+            <strong>{{sprint.endDate | date: "dd.MM.yyyy"}}</strong>
+        </div>
+
+        <div>
+
+        </div>
+
+    </ng-container>
+</div>

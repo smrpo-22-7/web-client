@@ -1,1 +1,39 @@
-<p>users-list-page works!</p>
+<h2 class="mt-5">Users</h2>
+<div>
+    <ng-container *ngIf="users$ | async as users">
+
+        <div class="story-filters">
+            <span class="filter" [class.applied]="filter$.value === statuses.ACTIVE" (click)="applyFilter('ACTIVE')">Active</span>
+            <span class="filter" [class.applied]="filter$.value === statuses.DISABLED" (click)="applyFilter('DISABLED')">Disabled</span>
+        </div>
+        <ng-container *ngIf="users.entities.length > 0; else noMembers">
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users.entities">
+                        <td>{{user.lastName}} {{user.firstName}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination-container">
+                <pagination
+                    [itemsPerPage]="limit$.value"
+                    [totalItems]="users.count"
+                    (pageChanged)="newPage($event)"
+                ></pagination>
+            </div>
+        </ng-container>
+        <ng-template #noMembers>
+            <p>No users yet!</p>
+        </ng-template>
+    </ng-container>
+
+
+</div>

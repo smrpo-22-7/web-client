@@ -35,5 +35,8 @@
         &:last-child {
             margin-right: 0;
         }
+        &.applied {
+            color: $secondary-color;
+        }
     }
 }

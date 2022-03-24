@@ -1,10 +1,18 @@
 import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { catchError, map, Observable, of, throwError } from "rxjs";
-import { BaseError } from "@mjamsek/prog-utils";
+import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
-import { ChangePasswordRequest, ConflictError, User, UsernameCheckRequest, UserProfile, UserRegisterRequest } from "@lib";
+import {
+    ChangePasswordRequest,
+    ConflictError,
+    SimpleStatus,
+    User,
+    UsernameCheckRequest,
+    UserProfile,
+    UserRegisterRequest
+} from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
 
@@ -84,6 +92,27 @@ export class UserService {
             }
         }).pipe(
             mapToType<User[]>(),
+            catchHttpError(),
+        );
+    }
+    
+    public getUsers(status: SimpleStatus, offset: number = 0, limit: number = 10): Observable<EntityList<User>> {
+        const url = `${this.apiUrl}/users`;
+        return this.http.get(url, {
+            observe: "response",
+            params: {
+                limit,
+                offset,
+                filter: `status:EQ:'${status}'`
+            }
+        }).pipe(
+            mapToType<HttpResponse<User[]>>(),
+            map((resp: HttpResponse<User[]>) => {
+                return EntityList.of(
+                    resp.body!,
+                    parseInt(resp.headers.get("x-total-count")!),
+                );
+            }),
             catchHttpError(),
         );
     }

@@ -1,0 +1,22 @@
+@import "src/styles/variables";
+
+.story-filters {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .filter {
+        margin-right: 15px;
+        color: $primary-color;
+
+        &:hover {
+            cursor: pointer;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+        &.applied {
+            color: $secondary-color;
+        }
+    }
+}

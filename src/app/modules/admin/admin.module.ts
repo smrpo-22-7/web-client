@@ -7,6 +7,7 @@ import { AdminRoutingModule } from "./admin-routing.module";
 import { RouterModule } from "@angular/router";
 import { UserFormPageComponent } from "./pages/user-form-page/user-form-page.component";
 import { ProjectFormPageComponent } from "./pages/project-form-page/project-form-page.component";
+import { ProjectListPageComponent } from './pages/project-list-page/project-list-page.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { ProjectFormPageComponent } from "./pages/project-form-page/project-form
         AdminPanelPageComponent,
         UsersListPageComponent,
         UserFormPageComponent,
-        ProjectFormPageComponent
+        ProjectFormPageComponent,
+        ProjectListPageComponent
     ]
 })
 export class AdminModule {

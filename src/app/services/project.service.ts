@@ -11,7 +11,7 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember, StoriesFilter
+    ProjectMember, StoriesFilter, SimpleStatus
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -30,6 +30,25 @@ export class ProjectService {
         const url = `${this.apiUrl}/projects/roles`;
         return this.http.get(url).pipe(
             mapToType<ProjectRole[]>(),
+            catchHttpError(),
+        );
+    }
+    
+    public getProjects(status: SimpleStatus, offset: number = 0, limit: number = 10): Observable<EntityList<Project>> {
+        const url = `${this.apiUrl}/projects`;
+        const params = {
+            offset,
+            limit,
+            filter: `status:EQ:'${status}'`,
+        };
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<Project[]>>(),
+            map((resp: HttpResponse<Project[]>) => {
+                return EntityList.of(
+                    resp.body!,
+                    parseInt(resp.headers.get("x-total-count")!),
+                );
+            }),
             catchHttpError(),
         );
     }

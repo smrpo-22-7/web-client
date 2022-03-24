@@ -4,11 +4,13 @@ import { AdminPanelPageComponent } from "./pages/admin-panel-page/admin-panel-pa
 import { UsersListPageComponent } from "./pages/users-list-page/users-list-page.component";
 import { UserFormPageComponent } from "./pages/user-form-page/user-form-page.component";
 import { ProjectFormPageComponent } from "./pages/project-form-page/project-form-page.component";
+import { ProjectListPageComponent } from "./pages/project-list-page/project-list-page.component";
 
 const routes: Routes = [
     { path: "", pathMatch: "full", component: AdminPanelPageComponent },
     { path: "users", component: UsersListPageComponent },
     { path: "users/new", component: UserFormPageComponent },
+    { path: "projects", component: ProjectListPageComponent },
     { path: "projects/new", component: ProjectFormPageComponent }
 ];
 

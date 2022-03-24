@@ -21,15 +21,14 @@
 
     <div>
         <ng-container *ngIf="stories$ | async as stories">
+            <div class="story-filters">
+                <span class="filter" [class.applied]="filter$.value === 'ALL'" (click)="applyFilter('ALL')">All</span>
+                <span class="filter" [class.applied]="filter$.value === 'NOT_REALIZED'" (click)="applyFilter('NOT_REALIZED')">Not realized</span>
+                <span class="filter" [class.applied]="filter$.value === 'REALIZED'" (click)="applyFilter('REALIZED')">Realized</span>
+                <span class="filter" [class.applied]="filter$.value === 'ESTIMATED'" (click)="applyFilter('ESTIMATED')">Estimated</span>
+                <span class="filter" [class.applied]="filter$.value === 'NOT_ESTIMATED'" (click)="applyFilter('NOT_ESTIMATED')">Not estimated</span>
+            </div>
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
-                <div class="story-filters">
-                    <span class="filter" [class.applied]="filter$.value === 'ALL'" (click)="applyFilter('ALL')">All</span>
-                    <span class="filter" [class.applied]="filter$.value === 'NOT_REALIZED'" (click)="applyFilter('NOT_REALIZED')">Not realized</span>
-                    <span class="filter" [class.applied]="filter$.value === 'REALIZED'" (click)="applyFilter('REALIZED')">Realized</span>
-                    <span class="filter" [class.applied]="filter$.value === 'ESTIMATED'" (click)="applyFilter('ESTIMATED')">Estimated</span>
-                    <span class="filter" [class.applied]="filter$.value === 'NOT_ESTIMATED'" (click)="applyFilter('NOT_ESTIMATED')">Not estimated</span>
-                </div>
-
                 <div>
                     <accordion [isAnimated]="true">
                         <accordion-group *ngFor="let story of stories.entities">

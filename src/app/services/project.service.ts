@@ -150,7 +150,7 @@ export class ProjectService {
         if (filter === "REALIZED") {
             return "realized:EQ:true"
         } else if (filter === "NOT_REALIZED") {
-            return "realized:NEQ:true"
+            return "realized:EQ:false"
         } else if (filter === "NOT_ESTIMATED") {
             return "timeEstimate:ISNULL"
         } else if (filter === "ESTIMATED") {

@@ -6,8 +6,8 @@ import { SprintDetailsPageComponent } from "./pages/sprint-details-page/sprint-d
 
 const routes: Routes = [
     { path: "", pathMatch: "full", component: ProjectSprintsListPageComponent },
+    { path: "new", component: SprintFormPageComponent },
     { path: ":sprintId", component: SprintDetailsPageComponent },
-    { path: "new", component: SprintFormPageComponent }
 ]
 
 @NgModule({

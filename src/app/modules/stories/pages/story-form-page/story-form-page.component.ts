@@ -10,6 +10,7 @@ import { CodebookService, StorypriorityService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import {NavContext} from "@context";
 import { StoryPriorityLabel } from "@config/enums.config";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "sc-story-form-page",
@@ -29,6 +30,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
     constructor(private fb: FormBuilder,
                 private storypriorityservice: StorypriorityService,
                 private toastrService: ToastrService,
+                private router: Router,
                 private codebookService: CodebookService,
                 private nav: NavContext,) {
         super();
@@ -70,7 +72,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
                 next: () => {
                     this.toastrService.success("New story was added!", "Success!");
                     this.storyForm.reset();
-                    window.location.reload();
+                    this.router.navigate(["/projects", projectId, "stories"])
                 },
                 error: err => {
                     console.error(err);

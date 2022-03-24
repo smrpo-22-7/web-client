@@ -7,6 +7,7 @@ import { ProjectRole, User, isProjectRegisterRequest } from "@lib";
 import { ProjectService, RoleService, UserService } from "@services";
 import {validateUniqueProjectName} from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "sc-project-form-page",
@@ -24,6 +25,7 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
     constructor(private fb: FormBuilder,
                 private roleService: RoleService,
                 private projectService: ProjectService,
+                private router: Router,
                 private userService: UserService,
                 private toastrService: ToastrService) {
         super();
@@ -106,7 +108,7 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
                     this.toastrService.success("New project was added!", "Success!");
                     this.projectForm.reset();
                     this.projectForm.controls["members"].reset();
-                    window.location.reload();
+                    this.router.navigate(["/admin/projects"]);
                 },
                 error: err => {
                     console.log("NAPAKA!");

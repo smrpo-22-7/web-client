@@ -7,6 +7,7 @@ import { validateUniqueUsername } from "@utils";
 import { validateUserForm, validateUserRoles } from "./validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -22,6 +23,7 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
 
     constructor(private fb: FormBuilder,
                 private roleService: RoleService,
+                private router: Router,
                 private userService: UserService,
                 private toastrService: ToastrService) {
         super();
@@ -66,7 +68,7 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
                     console.log("created!");
                     this.toastrService.success("New user was added!", "Success!");
                     this.userForm.reset();
-                    window.location.reload();
+                    this.router.navigate(["/admin/users"]);
                 },
                 error: err => {
                     console.error(err);

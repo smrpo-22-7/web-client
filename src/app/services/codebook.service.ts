@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { SCHEMA_URL } from "@injectables";
 import { BehaviorSubject, map, Observable, of, switchMap, tap } from "rxjs";
 import { mapToType } from "@utils";
-import { OpenApiDefinition } from "@lib";
+import { Codebooks, OpenApiDefinition } from "@lib";
 
 
 @Injectable({
@@ -19,7 +19,14 @@ export class CodebookService {
 
     //
     public getCodebook(codebook: string): Observable<string[]> {
-        return this.oas$.pipe(
+        if (codebook === Codebooks.SimpleStatus) {
+            return of(["ACTIVE", "DISABLED"]);
+        } else if (codebook === Codebooks.StoryPriority) {
+            return of(["MUST_HAVE", "SHOULD_HAVE", "COULD_HAVE", "WONT_HAVE_THIS_TIME"]);
+        } else {
+            throw new Error("Codebook not found!");
+        }
+        /*return this.oas$.pipe(
             switchMap((openapi) => {
                 if (openapi === null) {
                     return this.http.get(this.schemaUrl).pipe(
@@ -37,7 +44,7 @@ export class CodebookService {
                 }
                 throw new Error("Codebook not found!");
             }),
-        );
+        );*/
     }
     
 }

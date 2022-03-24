@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button class="btn-close close" aria-label="Close" type="button" (click)="decline()"></button>
+</div>
+<div class="modal-body">
+    <p class="text-center">{{dialog}}</p>
+</div>
+<div class="modal-footer justify-content-center">
+    <button type="button" class="btn {{buttonStyles.decline}} decline" (click)="decline()">Decline</button>
+    <button type="button" class="btn {{buttonStyles.confirm}} confirm" (click)="confirm()">Confirm</button>
+</div>
+

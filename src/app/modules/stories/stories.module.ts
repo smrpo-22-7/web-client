@@ -5,6 +5,7 @@ import { SprintsRoutingModule } from "../sprints/sprints-routing.module";
 import { ProjectStoriesPageComponent } from "./pages/project-stories-page/project-stories-page.component";
 import { StoryFormPageComponent } from "./pages/story-form-page/story-form-page.component";
 import { StoriesRoutingModule } from "./stories-routing.module";
+import { AddStoryDialogComponent } from './components/add-story-dialog/add-story-dialog.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { StoriesRoutingModule } from "./stories-routing.module";
     ],
     declarations: [
         ProjectStoriesPageComponent,
-        StoryFormPageComponent
+        StoryFormPageComponent,
+        AddStoryDialogComponent
     ]
 })
 export class StoriesModule {

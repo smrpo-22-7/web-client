@@ -84,4 +84,12 @@ export class ProjectService {
         )
     }
     
+    public getUserRole(projectId: string): Observable<ProjectRole> {
+        const url = `${this.apiUrl}/projects/${projectId}/roles/user`;
+        return this.http.get(url).pipe(
+            mapToType<ProjectRole>(),
+            catchHttpError(),
+        );
+    }
+    
 }

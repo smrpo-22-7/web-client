@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { NavState, NavStateStatus } from "@lib";
+import { BehaviorSubject, Observable, take, tap } from "rxjs";
+import { NavState, NavStateStatus, ProjectRole } from "@lib";
+import { ProjectService } from "@services";
+import { mapToVoid } from "@utils";
 
 
 @Injectable({
@@ -14,7 +16,7 @@ export class NavContext {
         status: NavStateStatus.NO_CONTEXT,
     });
     
-    constructor() {
+    constructor(private projectService: ProjectService) {
     }
     
     public initializeContext(): Observable<void> {
@@ -28,10 +30,24 @@ export class NavContext {
     }
     
     public setContext(projectId: string): void {
-        localStorage.setItem(NavContext.STORAGE_KEY, projectId);
-        this.context$.next({
-            status: NavStateStatus.IN_CONTEXT,
-            projectId,
+        this.projectService.getUserRole(projectId).pipe(
+            tap((role: ProjectRole) => {
+                localStorage.setItem(NavContext.STORAGE_KEY, projectId);
+                this.context$.next({
+                    status: NavStateStatus.IN_CONTEXT,
+                    projectId,
+                    projectRole: role,
+                });
+            }),
+            mapToVoid(),
+            take(1),
+        ).subscribe({
+            next: () => {
+            
+            },
+            error: err => {
+                console.error(err);
+            },
         });
     }
     

@@ -1,24 +1,20 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subject, take, takeUntil } from "rxjs";
+import { ToastrService } from "ngx-toastr";
+
 import {
-    isUserRegisterRequest,
-    ProjectRole,
-    SysRole,
-    PriorityType,
     isSprintRegisterRequest,
     NavState,
     NavStateStatus
 } from "@lib";
-import { ProjectService, RoleService, UserService, StorypriorityService, SprintService } from "@services";
-import { validateUniqueUsername } from "@utils";
+import { SprintService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
-import { ToastrService } from "ngx-toastr";
-import { validateUserForm, validateUserRoles } from "../../../admin/pages/user-form-page/validators";
-import {validatePasswords} from "../../../user-profile/pages/user-profile-page/password.validators";
 import { validateDates, valiStartdate } from "./sprint.validators";
 import {NavContext} from "@context";
-import {startCase} from "lodash";
+import { getDaysFromDate, truncateTime } from "@utils";
+import { formatDate } from "@angular/common";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -36,6 +32,7 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
     constructor(private fb: FormBuilder,
                 private toastrService: ToastrService,
                 private sprintService: SprintService,
+                private router: Router,
                 private nav: NavContext,) {
         super();
     }
@@ -43,8 +40,8 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
     ngOnInit() {
         this.sprintForm = this.fb.group({
             title: this.fb.control("", [Validators.required]),
-            startDate: this.fb.control("", [Validators.required]),
-            endDate: this.fb.control("", [Validators.required]),
+            startDate: this.fb.control(formatDate(getDaysFromDate(new Date(), 1), "yyyy-MM-dd", "sl-SI"), [Validators.required]),
+            endDate: this.fb.control(formatDate(getDaysFromDate(new Date(), 2), "yyyy-MM-dd", "sl-SI"), [Validators.required]),
             expectedSpeed: this.fb.control(1,[Validators.required, Validators.min(1)])
         }, { validators: [validateDates, valiStartdate] } );
 
@@ -55,18 +52,13 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
 
     public createSprint(projectId: string) {
         const formValue = this.sprintForm.getRawValue();
-        //daj se v pravo obliko ISO
         if (isSprintRegisterRequest(formValue)) {
-            //const startDateISO = new Date(formValue["startDate"]); //.toISOString();
-            //const endDateISO = new Date(formValue["endDate"]); //.toISOString();
-            //formValue["startDate"] = startDateISO;
-            //formValue["endDate"] = endDateISO;
+            formValue["startDate"] = truncateTime(new Date(formValue["startDate"]));
+            formValue["endDate"] = truncateTime(new Date(formValue["endDate"]));
             this.sprintService.createSprint(formValue, projectId).pipe(take(1)).subscribe({
                 next: () => {
-                    console.log("created sprint!");
                     this.toastrService.success("New sprint was made!", "Success!");
-                    this.sprintForm.reset();
-                    window.location.reload();
+                    this.router.navigate(["/projects", projectId, "sprints"]);
                 },
                 error: err => {
                     console.error(err);
@@ -75,6 +67,13 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
             });
         } else {
             throw new TypeError("Something wrong with form!");
+        }
+    }
+    
+    public onDateChange($event: Event, control: AbstractControl | null) {
+        if (control && control instanceof FormControl) {
+            const inputElem = $event.target as HTMLInputElement;
+            control.patchValue(formatDate(inputElem.valueAsDate!, "yyyy-MM-dd", "sl-SI"));
         }
     }
 

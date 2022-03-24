@@ -4,14 +4,51 @@
         <div>
             <h2>Sprint: {{sprint.title}}</h2>
         </div>
-        <div>
+        <div class="mb-5">
             <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
             <strong> - </strong>
             <strong>{{sprint.endDate | date: "dd.MM.yyyy"}}</strong>
         </div>
 
         <div>
+            <h4>Stories in this sprint</h4>
+            <ng-container *ngIf="stories$ | async as stories">
+                <ng-container *ngIf="stories.entities.length > 0; else noStories">
+                    <div>
+                        <accordion [isAnimated]="true">
+                            <accordion-group *ngFor="let story of stories.entities">
+                                <div accordion-heading class="detail-header">
+                                    <div>
+                                        {{story.title}} (#{{story.numberId}})
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>{{story.description}}</p>
+                                    <div *ngIf="story.tests && story.tests.length > 0">
+                                        <h5>Acceptance tests</h5>
+                                        <div>
+                                            <ul>
+                                                <li *ngFor="let test of story.tests">{{test.result}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </accordion-group>
 
+                        </accordion>
+                    </div>
+                    <div class="pagination-container">
+                        <pagination
+                            [itemsPerPage]="limit$.value"
+                            [totalItems]="stories.count"
+                            (pageChanged)="newPage($event)"
+                        ></pagination>
+                    </div>
+                </ng-container>
+                <ng-template #noStories>
+                    <p>No stories have been created yet for this project.</p>
+                </ng-template>
+            </ng-container>
         </div>
 
     </ng-container>

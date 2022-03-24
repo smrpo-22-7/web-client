@@ -1,14 +1,15 @@
 import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { map, Observable } from "rxjs";
 
 import { API_URL } from "@injectables";
 import {
     Sprint,
     SprintListResponse,
-    SprintRegisterRequest
+    SprintRegisterRequest, Story
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
+import { EntityList } from "@mjamsek/prog-utils";
 
 
 @Injectable({
@@ -47,6 +48,24 @@ export class SprintService {
         const url = `${this.apiUrl}/sprints/${sprintId}/stories`;
         return this.http.post(url, { storyIds }).pipe(
             mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public getSprintStories(sprintId: string, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
+        const url = `${this.apiUrl}/sprints/${sprintId}/stories`;
+        const params = {
+            offset,
+            limit,
+        };
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<Story[]>>(),
+            map((res: HttpResponse<Story[]>) => {
+                return EntityList.of(
+                    res.body!,
+                    parseInt(res.headers.get("x-total-count")!),
+                );
+            }),
             catchHttpError(),
         );
     }

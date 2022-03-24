@@ -10,7 +10,8 @@ import { CodebookService, StorypriorityService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import {NavContext} from "@context";
 import { StoryPriorityLabel } from "@config/enums.config";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { validateUniqueStoryTitle } from "./validators";
 
 @Component({
     selector: "sc-story-form-page",
@@ -31,6 +32,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
                 private storypriorityservice: StorypriorityService,
                 private toastrService: ToastrService,
                 private router: Router,
+                private route: ActivatedRoute,
                 private codebookService: CodebookService,
                 private nav: NavContext,) {
         super();
@@ -38,7 +40,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
 
     ngOnInit(): void {
         this.storyForm = this.fb.group({
-            title: this.fb.control("", [Validators.required]),
+            title: this.fb.control("", [Validators.required], [validateUniqueStoryTitle(this.route.snapshot.params["projectId"]!, this.storypriorityservice)]),
             description: this.fb.control("", [Validators.required]),
             result: this.fb.control(""),
             tests: this.fb.array([]),

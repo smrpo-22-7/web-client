@@ -16,6 +16,9 @@
                         <div class="invalid-feedback" *ngIf="hasError(storyForm.get('title'), 'required')">
                             Title is required!
                         </div>
+                        <div class="invalid-feedback" *ngIf="hasError(storyForm.get('title'), 'titleExists')">
+                            Story with this title already exists!
+                        </div>
                     </div>
                     <div>
                         <label for="description" class="form-label zgorjirob">Description:</label>

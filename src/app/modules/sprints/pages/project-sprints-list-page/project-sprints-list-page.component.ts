@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { SprintService } from "@services";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
-import { SprintListResponse } from "@lib";
+import { NavState, NavStateStatus, SprintListResponse } from "@lib";
+import { ProjectRole } from "@config/roles.config";
+import { NavContext } from "@context";
 
 @Component({
     selector: "sc-project-sprints-list-page",
@@ -12,9 +14,14 @@ import { SprintListResponse } from "@lib";
 export class ProjectSprintsListPageComponent implements OnInit, OnDestroy {
     
     public sprints$: Observable<SprintListResponse>;
+    public nav$: Observable<NavState>;
     private destroy$ = new Subject<boolean>();
     
+    public navStates = NavStateStatus;
+    public projectRoles = ProjectRole;
+    
     constructor(private sprintService: SprintService,
+                private nav: NavContext,
                 private route: ActivatedRoute) {
     }
     
@@ -27,6 +34,9 @@ export class ProjectSprintsListPageComponent implements OnInit, OnDestroy {
             switchMap((projectId: string) => {
                 return this.sprintService.getProjectSprints(projectId, true, true, true);
             }),
+            takeUntil(this.destroy$),
+        );
+        this.nav$ = this.nav.getNavState().pipe(
             takeUntil(this.destroy$),
         );
     }

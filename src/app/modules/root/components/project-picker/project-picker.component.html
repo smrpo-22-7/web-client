@@ -7,7 +7,6 @@
                 <ng-container *ngIf="projects.entities.length > 0">
                     <div>
                         <select class="custom-select" [formControl]="projectCtrl">
-                            <option [ngValue]="null" disabled></option>
                             <option *ngFor="let project of projects.entities"
                                 [ngValue]="project.id">{{project.name}}</option>
                         </select>

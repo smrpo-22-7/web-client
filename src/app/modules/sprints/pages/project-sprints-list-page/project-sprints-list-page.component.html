@@ -1,8 +1,12 @@
-<div>
+<div *ngIf="nav$ | async as nav">
     <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
         <h1 class="mb-0">Project sprints</h1>
 
-        <a class="btn btn-outline-primary" routerLink="new">Add a new sprint</a>
+        <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                <a class="btn btn-outline-primary" routerLink="new">Add a new sprint</a>
+            </ng-container>
+        </ng-container>
     </div>
 
     <ng-container *ngIf="sprints$ | async as sprints">

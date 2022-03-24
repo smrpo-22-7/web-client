@@ -11,7 +11,7 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember
+    ProjectMember, StoriesFilter
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -73,12 +73,13 @@ export class ProjectService {
         );
     }
     
-    public getProjectStories(projectId: string, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
+    public getProjectStories(projectId: string, filter: StoriesFilter, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
         const url = `${this.apiUrl}/projects/${projectId}/stories`;
         const params = {
             limit,
             offset,
-            order: "numberId ASC"
+            order: "numberId ASC",
+            filter: this.buildFilterString(filter),
         };
         return this.http.get(url, { params, observe: "response" }).pipe(
             mapToType<HttpResponse<Story[]>>(),
@@ -124,5 +125,18 @@ export class ProjectService {
             }),
             catchHttpError(),
         );
+    }
+    
+    private buildFilterString(filter: StoriesFilter): string {
+        if (filter === "REALIZED") {
+            return "realized:EQ:true"
+        } else if (filter === "NOT_REALIZED") {
+            return "realized:NEQ:true"
+        } else if (filter === "NOT_ESTIMATED") {
+            return "timeEstimate:ISNULL"
+        } else if (filter === "ESTIMATED") {
+            return "timeEstimate:ISNOTNULL"
+        }
+        return "";
     }
 }

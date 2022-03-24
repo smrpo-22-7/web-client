@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
-import { EntityList } from "@mjamsek/prog-utils";
-import { NavState, NavStateStatus, Story } from "@lib";
-import { ModalService, ProjectService } from "@services";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { AbstractControl, FormArray, FormBuilder } from "@angular/forms";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
+import { EntityList } from "@mjamsek/prog-utils";
+
+import { NavState, NavStateStatus, StoriesFilter, Story } from "@lib";
+import { ModalService, ProjectService } from "@services";
+import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { AddStoryDialogComponent } from "../../components/add-story-dialog/add-story-dialog.component";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
@@ -27,6 +28,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
+    public filter$ = new BehaviorSubject<StoriesFilter>("ALL");
     public totalPages = 0;
     private refresh$ = new BehaviorSubject<void>(undefined);
     
@@ -53,10 +55,10 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             })
         );
     
-        this.stories$ = combineLatest([this.projectId$, this.offset$, this.limit$, this.refresh$]).pipe(
-            switchMap((params: [string, number, number, void]) => {
-                const [projectId, offset, limit] = params;
-                return this.projectService.getProjectStories(projectId, offset, limit);
+        this.stories$ = combineLatest([this.projectId$, this.filter$, this.offset$, this.limit$, this.refresh$]).pipe(
+            switchMap((params: [string, StoriesFilter, number, number, void]) => {
+                const [projectId, filter, offset, limit] = params;
+                return this.projectService.getProjectStories(projectId, filter, offset, limit);
             }),
             takeUntil(this.destroy$)
         );
@@ -95,6 +97,11 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     public newPage($event: PageChangedEvent): void {
         this.offset$.next(($event.page - 1) * $event.itemsPerPage);
+    }
+    
+    public applyFilter(filter: StoriesFilter): void {
+        this.filter$.next(filter);
+        this.offset$.next(0);
     }
     
     ngOnDestroy() {

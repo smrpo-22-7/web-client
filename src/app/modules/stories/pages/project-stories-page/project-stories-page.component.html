@@ -22,15 +22,28 @@
     <div>
         <ng-container *ngIf="stories$ | async as stories">
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
+                <div class="story-filters">
+                    <span class="filter" (click)="applyFilter('ALL')">All</span>
+                    <span class="filter" (click)="applyFilter('NOT_REALIZED')">Not realized</span>
+                    <span class="filter" (click)="applyFilter('REALIZED')">Realized</span>
+                    <span class="filter" (click)="applyFilter('ESTIMATED')">Estimated</span>
+                    <span class="filter" (click)="applyFilter('NOT_ESTIMATED')">Not estimated</span>
+                </div>
+
                 <div>
                     <accordion [isAnimated]="true">
                         <accordion-group *ngFor="let story of stories.entities">
                             <div accordion-heading class="detail-header">
                                 <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
                                     <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                                        <div class="story-check">
-                                            <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
-                                        </div>
+                                        <ng-container *ngIf="story.timeEstimate && !story.realized; else checkPlaceholder">
+                                            <div class="story-check">
+                                                <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #checkPlaceholder>
+                                            <div class="story-check check-placeholder"></div>
+                                        </ng-template>
                                     </ng-container>
                                 </ng-container>
                                 <div>

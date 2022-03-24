@@ -13,6 +13,7 @@ export interface Story extends BaseType {
     businessValue: number;
     timeEstimate: number;
     priority: Story.Priority;
+    realized: boolean;
     tests: AcceptanceTest[];
 }
 

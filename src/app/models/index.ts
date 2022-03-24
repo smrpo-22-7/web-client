@@ -18,3 +18,4 @@ export {
     NavState,
 } from "./nav.types";
 export { ConfirmDialogEvents, ConfirmDialogOptions } from "./modal.models";
+export { StoriesFilter } from "./filter.types";

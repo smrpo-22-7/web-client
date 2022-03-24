@@ -14,13 +14,13 @@
                         <thead>
                             <tr>
                                 <th>User</th>
-                                <th>Role</th>
+                                <th class="role-col">Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let member of members.entities">
                                 <td>{{member.user.lastName}} {{member.user.firstName}}</td>
-                                <td>{{member.projectRole.name}}</td>
+                                <td class="role-col">{{member.projectRole.name}}</td>
                             </tr>
                         </tbody>
                     </table>

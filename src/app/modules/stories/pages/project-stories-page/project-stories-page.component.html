@@ -1,13 +1,21 @@
-<div>
+<div *ngIf="nav$ | async as nav">
     <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
         <h1 class="mb-0">Project stories</h1>
 
-        <a class="btn btn-outline-primary" routerLink="new">Add a new story</a>
+        <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER || nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
+                <a class="btn btn-outline-primary" routerLink="new">Add a new story</a>
+            </ng-container>
+        </ng-container>
     </div>
 
     <ng-container *ngIf="storiesForm.length > 0">
         <div class="story-actions">
-            <button class="btn btn-primary">Add stories to sprint</button>
+            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                    <button class="btn btn-primary" (click)="openSprintModal()">Add stories to sprint</button>
+                </ng-container>
+            </ng-container>
         </div>
     </ng-container>
 
@@ -18,9 +26,13 @@
                     <accordion [isAnimated]="true">
                         <accordion-group *ngFor="let story of stories.entities">
                             <div accordion-heading class="detail-header">
-                                <div class="story-check">
-                                    <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
-                                </div>
+                                <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                                    <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                                        <div class="story-check">
+                                            <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
                                 <div>
                                     {{story.title}} (#{{story.numberId}})
                                 </div>

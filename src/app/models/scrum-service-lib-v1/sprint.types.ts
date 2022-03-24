@@ -1,11 +1,26 @@
-import { BaseType, UserRegisterRequest } from "@lib";
+import { BaseType, SimpleStatus, UserRegisterRequest } from "@lib";
 import { validateFields } from "./common.types";
 
 export interface SprintRegisterRequest {
     title: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     expectedSpeed: number;
+}
+
+export interface Sprint extends BaseType {
+    title: string;
+    startDate: Date;
+    endDate: Date;
+    status: SimpleStatus;
+    expectedSpeed: number;
+    projectId: string;
+}
+
+export interface SprintListResponse {
+    activeSprint: Sprint;
+    pastSprints: Sprint[];
+    futureSprints: Sprint[];
 }
 
 export function isSprintRegisterRequest(request: unknown): request is SprintRegisterRequest {

@@ -9,7 +9,8 @@ export {
     isUserProfile,
 } from "./user.types";
 export { SysRole } from "./role.types";
-export { ProjectRole,
+export {
+    ProjectRole,
     NameCheckRequest,
     ProjectRegisterRequest,
     Project,
@@ -19,8 +20,11 @@ export { ProjectRole,
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";
 export { Codebooks } from "./codebooks";
-export {SprintRegisterRequest,
-    isSprintRegisterRequest
+export {
+    SprintRegisterRequest,
+    isSprintRegisterRequest,
+    SprintListResponse,
+    Sprint
 } from "./sprint.types";
 export {
     Story,

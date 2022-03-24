@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h4 class="modal-title">Add stories to sprint</h4>
+    <button class="btn-close close" aria-label="Close" type="button" (click)="close()"></button>
+</div>
+<div class="modal-body">
+    <div>
+        <ng-container *ngIf="sprints$ | async as sprints">
+            <ng-container *ngIf="sprints.futureSprints && sprints.futureSprints.length > 0; else noFuture">
+                <div *ngFor="let sprint of sprints.futureSprints">
+                    <div class="sprint-link" (click)="onSprintSelect(sprint.id)">
+                        <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
+                        <strong> - </strong>
+                        <strong>{{sprint.endDate | date: "dd.MM.yyyy"}}</strong>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noFuture>
+                <p>No future sprints!</p>
+            </ng-template>
+        </ng-container>
+    </div>
+</div>

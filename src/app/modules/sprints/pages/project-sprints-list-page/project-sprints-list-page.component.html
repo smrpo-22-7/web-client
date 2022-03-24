@@ -1,5 +1,47 @@
-<p>project-sprints-list-page works!</p>
+<div>
+    <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">Project sprints</h1>
 
-<a routerLink="new">
-    Add new sprint
-</a>
+        <a class="btn btn-outline-primary" routerLink="new">Add a new sprint</a>
+    </div>
+
+    <ng-container *ngIf="sprints$ | async as sprints">
+
+        <h4 class="mt-2">Active sprint</h4>
+        <div>
+            <ng-container *ngIf="sprints.activeSprint; else noActive">
+                <sc-sprint-row [sprint]="sprints.activeSprint"></sc-sprint-row>
+            </ng-container>
+            <ng-template #noActive>
+                <p>No active sprints!</p>
+            </ng-template>
+        </div>
+
+        <h4 class="mt-2">Future sprints</h4>
+        <div>
+            <ng-container *ngIf="sprints.futureSprints && sprints.futureSprints.length > 0; else noFuture">
+                <div *ngFor="let sprint of sprints.futureSprints">
+                    <sc-sprint-row [sprint]="sprint"></sc-sprint-row>
+                </div>
+            </ng-container>
+            <ng-template #noFuture>
+                <p>No future sprints!</p>
+            </ng-template>
+        </div>
+
+        <h4 class="mt-2">Past sprints</h4>
+        <div>
+            <ng-container *ngIf="sprints.pastSprints && sprints.pastSprints.length > 0; else noPast">
+                <div *ngFor="let sprint of sprints.pastSprints">
+                    <sc-sprint-row [sprint]="sprint"></sc-sprint-row>
+                </div>
+            </ng-container>
+            <ng-template #noPast>
+                <p>No past sprints!</p>
+            </ng-template>
+        </div>
+
+    </ng-container>
+
+
+</div>

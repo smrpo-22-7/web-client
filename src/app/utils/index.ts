@@ -8,3 +8,4 @@ export {
 export { isUUID } from "./object.utils";
 export { createPKCEChallenge, parseTokenPayload } from "./oidc.utils";
 export * from "./validators";
+export { getDaysFromDate, truncateTime } from "./datetime.utils";

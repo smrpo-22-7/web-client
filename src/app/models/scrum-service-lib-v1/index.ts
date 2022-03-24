@@ -16,6 +16,7 @@ export {
     Project,
     isProjectRegisterRequest,
     ProjectMember,
+    SprintConflictCheckRequest,
 } from "./project.types";
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";

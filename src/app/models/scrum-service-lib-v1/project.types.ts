@@ -10,6 +10,11 @@ export interface Project extends BaseType {
     status: SimpleStatus;
 }
 
+export interface SprintConflictCheckRequest {
+    startDate: Date;
+    endDate: Date;
+}
+
 export interface ProjectMember {
     user: User;
     projectRole: ProjectRole;

@@ -14,6 +14,7 @@ export interface Story extends BaseType {
     timeEstimate: number;
     priority: Story.Priority;
     realized: boolean;
+    assigned: boolean;
     tests: AcceptanceTest[];
 }
 

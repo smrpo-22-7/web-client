@@ -6,6 +6,7 @@ import { ValidationErrorComponent } from "./components/validation-error/validati
 import { HasErroredDirective } from "./directives/has-errored.directive";
 import { BootstrapModule } from "./bootstrap.module";
 import { IconsModule } from "./icons.module";
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { IconsModule } from "./icons.module";
     declarations: [
         ValidationErrorComponent,
         HasErroredDirective,
+        ConfirmDialogComponent,
     ]
 })
 export class SharedModule {

@@ -17,3 +17,4 @@ export {
     NavStateStatus,
     NavState,
 } from "./nav.types";
+export { ConfirmDialogEvents, ConfirmDialogOptions } from "./modal.models";

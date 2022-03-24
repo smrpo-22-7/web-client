@@ -16,6 +16,12 @@
                     <ng-container *ngIf="nav$ | async as nav">
                         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
                             <div class="nav-link">
+                                <a [routerLink]="['/projects', nav.projectId]">
+                                    Info
+                                </a>
+                            </div>
+
+                            <div class="nav-link">
                                 <a [routerLink]="['/projects', nav.projectId, 'stories']">
                                     Stories
                                 </a>

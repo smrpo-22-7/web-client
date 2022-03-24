@@ -1,0 +1,45 @@
+<div>
+    <ng-container *ngIf="project$ | async as project">
+
+        <div class="mt-5 mb-4">
+            <h2>{{project.name}}</h2>
+        </div>
+
+        <div>
+            <ng-container *ngIf="members$ | async as members">
+                <ng-container *ngIf="members.entities.length > 0; else noMembers">
+                    <h3>Members</h3>
+
+                    <table class="table table-responsive table-hover">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let member of members.entities">
+                                <td>{{member.user.lastName}} {{member.user.firstName}}</td>
+                                <td>{{member.projectRole.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination-container">
+                        <pagination
+                            [itemsPerPage]="limit$.value"
+                            [totalItems]="members.count"
+                            (pageChanged)="newPage($event)"
+                        ></pagination>
+                    </div>
+                </ng-container>
+                <ng-template #noMembers>
+                    <p>No members yet!</p>
+                </ng-template>
+            </ng-container>
+
+
+        </div>
+
+    </ng-container>
+</div>

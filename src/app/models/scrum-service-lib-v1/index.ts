@@ -15,7 +15,7 @@ export {
     ProjectRegisterRequest,
     Project,
     isProjectRegisterRequest,
-    
+    ProjectMember,
 } from "./project.types";
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";

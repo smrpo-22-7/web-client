@@ -1,4 +1,4 @@
-import { BaseType, SimpleStatus, validateFields } from "@lib";
+import { BaseType, SimpleStatus, User, validateFields } from "@lib";
 
 export interface ProjectRole extends BaseType {
     roleId: string;
@@ -10,6 +10,10 @@ export interface Project extends BaseType {
     status: SimpleStatus;
 }
 
+export interface ProjectMember {
+    user: User;
+    projectRole: ProjectRole;
+}
 
 export interface NameCheckRequest {
     value: string;

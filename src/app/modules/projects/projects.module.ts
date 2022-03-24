@@ -4,6 +4,7 @@ import { ProjectFormPageComponent } from './pages/project-form-page/project-form
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared/shared.module";
 import { ProjectsRoutingModule } from "./projects-routing.module";
+import { ProjectDetailsPageComponent } from './pages/project-details-page/project-details-page.component';
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { ProjectsRoutingModule } from "./projects-routing.module";
     ],
     declarations: [
       ProjectsListPageComponent,
-      ProjectFormPageComponent
+      ProjectFormPageComponent,
+      ProjectDetailsPageComponent
     ]
 })
 export class ProjectsModule {

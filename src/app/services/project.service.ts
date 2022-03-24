@@ -4,7 +4,15 @@ import { catchError, map, Observable, of, throwError } from "rxjs";
 import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
-import { ConflictError, ProjectRegisterRequest, NameCheckRequest, Project, ProjectRole, Story } from "@lib";
+import {
+    ConflictError,
+    ProjectRegisterRequest,
+    NameCheckRequest,
+    Project,
+    ProjectRole,
+    Story,
+    ProjectMember
+} from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
 
@@ -92,4 +100,29 @@ export class ProjectService {
         );
     }
     
+    public getProject(projectId: string): Observable<Project> {
+        const url = `${this.apiUrl}/projects/${projectId}`;
+        return this.http.get(url).pipe(
+            mapToType<Project>(),
+            catchHttpError(),
+        );
+    }
+    
+    public getProjectMembers(projectId: string, offset: number = 0, limit: number = 10): Observable<EntityList<ProjectMember>> {
+        const url = `${this.apiUrl}/projects/${projectId}/members`;
+        const params = {
+            offset,
+            limit,
+        };
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<ProjectMember[]>>(),
+            map((res: HttpResponse<ProjectMember[]>) => {
+                return EntityList.of(
+                    res.body!,
+                    parseInt(res.headers.get("x-total-count")!),
+                );
+            }),
+            catchHttpError(),
+        );
+    }
 }

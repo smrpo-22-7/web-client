@@ -36,7 +36,7 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
         }, { validators: [validatePasswords] });
         
         this.profileForm = this.fb.group({
-            username: this.fb.control("", [Validators.required], [validateUniqueUsername(this.userService)]),
+            username: this.fb.control({value: "", disabled: true}, [], [validateUniqueUsername(this.userService)]),
             firstName: this.fb.control("", [Validators.required]),
             lastName: this.fb.control("", [Validators.required]),
             email: this.fb.control("", [Validators.required, Validators.email]),
@@ -58,6 +58,8 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     public updateProfile() {
         const formValues = this.profileForm.getRawValue();
         if (isUserProfile(formValues)) {
+            // @ts-ignore next-line
+            delete formValues["username"];
             this.userService.updateUserProfile(formValues).pipe(
                 take(1),
             ).subscribe({

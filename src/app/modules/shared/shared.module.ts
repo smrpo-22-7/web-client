@@ -7,6 +7,7 @@ import { HasErroredDirective } from "./directives/has-errored.directive";
 import { BootstrapModule } from "./bootstrap.module";
 import { IconsModule } from "./icons.module";
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { NgForTrackByIdDirective } from './directives/base-type-track-by.directive';
 
 @NgModule({
     imports: [
@@ -24,11 +25,13 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
         HasErroredDirective,
         BootstrapModule,
         IconsModule,
+        NgForTrackByIdDirective,
     ],
     declarations: [
         ValidationErrorComponent,
         HasErroredDirective,
         ConfirmDialogComponent,
+        NgForTrackByIdDirective,
     ]
 })
 export class SharedModule {

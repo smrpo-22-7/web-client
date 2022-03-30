@@ -13,3 +13,4 @@ export { StorypriorityService } from "./storypriority.service";
 export { CodebookService } from "./codebook.service";
 export { SprintService } from "./sprint.service";
 export { ModalService } from "./modal.service";
+export { DocsService } from "./docs.service";

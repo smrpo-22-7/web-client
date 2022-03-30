@@ -1,0 +1,21 @@
+<ng-container *ngIf="docs$ | async as docs">
+    <div>
+        <button *ngIf="!showUploadForm" class="btn btn-secondary" type="button" (click)="showUploadButton()">Upload</button>
+        <form *ngIf="showUploadForm">
+            <input type="file" name="new-file" (change)="uploadFile($any($event.target).files)"/>
+            <button class="btn btn-primary"
+                [disabled]="selectedFile === null"
+                (click)="submitFile(docs.projectId)">Save</button>
+        </form>
+    </div>
+
+    <form [formGroup]="docsForm" (ngSubmit)="updateDocs(docs.projectId)">
+        <div class="form-group">
+            <textarea class="form-control" formControlName="markdownContent"></textarea>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</ng-container>

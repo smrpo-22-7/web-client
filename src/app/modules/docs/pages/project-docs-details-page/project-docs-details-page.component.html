@@ -1,0 +1,6 @@
+<div>
+    <a class="btn btn-link btn-primary" routerLink="edit">Edit</a>
+</div>
+<ng-container *ngIf="docs$ | async as docs">
+    <div [innerHTML]="docs"></div>
+</ng-container>

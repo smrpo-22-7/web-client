@@ -30,6 +30,11 @@ const routes: Routes = [
                 canActivateChild: [AuthenticatedChildGuard]
             },
             {
+                path: "projects/:projectId/docs",
+                loadChildren: () => import("../docs/docs.module").then(m => m.DocsModule),
+                canActivateChild: [AuthenticatedChildGuard]
+            },
+            {
                 path: "user-profile",
                 loadChildren: () => import("../user-profile/user-profile.module").then(m => m.UserProfileModule),
                 canActivateChild: [AuthenticatedChildGuard]

@@ -17,11 +17,11 @@ import {
     faFileImport,
     faExclamationTriangle,
     faArrowRightToBracket,
-
+    faFloppyDisk,
     faArrowLeft,
     faChevronRight,
     faDatabase,
-    faSlidersH, faPowerOff, faUser, faCog,
+    faSlidersH, faPowerOff, faUser, faCog, faDownload, faUpload, faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
@@ -60,6 +60,10 @@ export class IconsModule {
             faSlidersH,
             faPowerOff,
             faUser,
+            faDownload,
+            faUpload,
+            faFloppyDisk,
+            faXmark,
         );
     }
 }

@@ -17,6 +17,7 @@ export {
     isProjectRegisterRequest,
     ProjectMember,
     SprintConflictCheckRequest,
+    ProjectQuery,
 } from "./project.types";
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";
@@ -33,4 +34,6 @@ export {
     StoryRegisterRequest,
     isStoryRegisterRequest
 } from "./story.types";
-
+export {
+    ProjectDocumentation,
+} from "./docs.types";

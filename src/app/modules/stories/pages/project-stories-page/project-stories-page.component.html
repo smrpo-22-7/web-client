@@ -31,7 +31,7 @@
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
                 <div>
                     <accordion [isAnimated]="true">
-                        <accordion-group *ngFor="let story of stories.entities">
+                        <accordion-group *ngFor="let story of stories.entities; trackById">
                             <div accordion-heading class="detail-header">
                                 <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
                                     <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">

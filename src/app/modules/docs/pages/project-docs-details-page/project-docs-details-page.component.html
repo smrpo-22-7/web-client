@@ -1,0 +1,15 @@
+<div class="actions">
+
+    <button class="btn btn-sm btn-primary" (click)="downloadDocumentation()">
+        <fa-icon [icon]="['fas', 'download']"></fa-icon>
+        Download
+    </button>
+
+    <a class="btn btn-sm btn-outline-primary" routerLink="edit">
+        <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+        Edit
+    </a>
+</div>
+<ng-container *ngIf="docs$ | async as docs">
+    <div [innerHTML]="docs"></div>
+</ng-container>

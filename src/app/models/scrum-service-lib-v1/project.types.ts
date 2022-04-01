@@ -10,6 +10,11 @@ export interface Project extends BaseType {
     status: SimpleStatus;
 }
 
+export interface ProjectQuery {
+    id: string;
+    name: string;
+}
+
 export interface SprintConflictCheckRequest {
     startDate: Date;
     endDate: Date;

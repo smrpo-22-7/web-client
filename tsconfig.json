@@ -23,6 +23,7 @@
             "dom"
         ],
         "strictPropertyInitialization": false,
+        "allowSyntheticDefaultImports": true,
         "paths": {
             "@lib": [
                 "src/app/models/index.ts"

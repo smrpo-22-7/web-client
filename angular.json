@@ -31,9 +31,12 @@
                             "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/styles.scss",
+                            "node_modules/simplemde/dist/simplemde.min.css"
                         ],
-                        "scripts": []
+                        "scripts": [
+                            "node_modules/simplemde/dist/simplemde.min.js"
+                        ]
                     },
                     "configurations": {
                         "production": {

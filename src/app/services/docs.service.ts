@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
 import { API_URL } from "@injectables";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { Observable, tap } from "rxjs";
+import { saveAs } from "file-saver";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 import { ProjectDocumentation } from "@lib";
 
@@ -61,5 +62,29 @@ export class DocsService {
             mapToVoid(),
             catchHttpError(),
         );
+    }
+    
+    public downloadDocumentationFile(projectId: string): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/documentation/content`;
+        const params = {
+            attachment: true,
+        };
+        const headers = new HttpHeaders({
+            accept: "text/markdown",
+        });
+        
+        return this.http.get(url, { headers, params, responseType: "blob", observe: "response" }).pipe(
+            tap((resp: HttpResponse<Blob>) => {
+                const blob = new Blob([resp.body!], { type: "text/markdown" });
+                saveAs(blob, this.parseContentDispositionHeader(resp));
+            }),
+            mapToVoid(),
+        )
+    }
+    
+    private parseContentDispositionHeader(resp: HttpResponse<Blob>): string {
+        const header = resp.headers.get("content-disposition")!;
+        const filename = header.split(";").find(v => v.startsWith("filename"))!;
+        return filename.replace("filename=", "");
     }
 }

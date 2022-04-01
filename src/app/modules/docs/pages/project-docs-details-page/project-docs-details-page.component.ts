@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, SecurityContext } from "@angular/core";
-import { filter, map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
+import { filter, map, Observable, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { DocsService } from "@services";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -13,6 +13,7 @@ import { mapToType } from "@utils";
 export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
     
     public docs$: Observable<string>;
+    private projectId$: Observable<string>;
     private destroy$ = new Subject<boolean>();
     
     constructor(private route: ActivatedRoute,
@@ -21,11 +22,13 @@ export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.docs$ = this.route.paramMap.pipe(
+        this.projectId$ = this.route.paramMap.pipe(
             startWith(this.route.snapshot.paramMap),
             map((paramMap: ParamMap) => {
                 return paramMap.get("projectId") as string;
-            }),
+            })
+        );
+        this.docs$ = this.projectId$.pipe(
             switchMap((projectId: string) => {
                 return this.docsService.getDocumentationContent(projectId, true, true);
             }),
@@ -38,6 +41,19 @@ export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
             mapToType<string>(),
             takeUntil(this.destroy$),
         );
+    }
+    
+    public downloadDocumentation(): void {
+        this.projectId$.pipe(
+            switchMap((projectId: string) => {
+                return this.docsService.downloadDocumentationFile(projectId);
+            }),
+            take(1),
+        ).subscribe({
+            next: () => {
+            
+            },
+        });
     }
     
     ngOnDestroy() {

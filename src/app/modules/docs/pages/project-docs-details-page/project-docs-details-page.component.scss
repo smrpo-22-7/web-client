@@ -1,0 +1,21 @@
+@import "src/styles/variables";
+
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 20px 0;
+
+    button, a {
+        margin-right: 15px;
+        // min-width: 100px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        fa-icon {
+            margin-right: 5px;
+        }
+    }
+}

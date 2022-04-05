@@ -8,6 +8,7 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import {BsDatepickerModule} from "ngx-bootstrap/datepicker";
 import { AccordionModule } from "ngx-bootstrap/accordion";
+import { TabsModule } from "ngx-bootstrap/tabs";
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { AccordionModule } from "ngx-bootstrap/accordion";
         TypeaheadModule.forRoot(),
         BsDatepickerModule.forRoot(),
         AccordionModule.forRoot(),
+        TabsModule.forRoot(),
     ],
     exports: [
         AlertModule,
@@ -38,6 +40,7 @@ import { AccordionModule } from "ngx-bootstrap/accordion";
         TypeaheadModule,
         BsDatepickerModule,
         AccordionModule,
+        TabsModule,
     ]
 })
 export class BootstrapModule {

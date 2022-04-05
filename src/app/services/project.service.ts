@@ -11,7 +11,7 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember, StoriesFilter, SimpleStatus
+    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -20,7 +20,6 @@ import { catchHttpError, mapToType, mapToVoid } from "@utils";
     providedIn: "root"
 })
 export class ProjectService {
-    
     
     constructor(@Inject(API_URL) private apiUrl: string,
                 private http: HttpClient) {
@@ -142,6 +141,32 @@ export class ProjectService {
                     parseInt(res.headers.get("x-total-count")!),
                 );
             }),
+            catchHttpError(),
+        );
+    }
+    
+    public getProjectWallPosts(projectId: string, offset: number = 0, limit: number = 0): Observable<EntityList<ProjectWallPost>> {
+        const url = `${this.apiUrl}/projects/${projectId}/posts`;
+        const params = {
+            offset,
+            limit,
+        };
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<ProjectWallPost[]>>(),
+            map((res: HttpResponse<ProjectWallPost[]>) => {
+                return EntityList.of(
+                    res.body!,
+                    parseInt(res.headers.get("x-total-count")!),
+                );
+            }),
+            catchHttpError(),
+        );
+    }
+    
+    public addProjectWallPost(projectId: string, post: Partial<ProjectWallPost>): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/posts`;
+        return this.http.post(url, post).pipe(
+            mapToVoid(),
             catchHttpError(),
         );
     }

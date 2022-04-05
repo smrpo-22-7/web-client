@@ -37,3 +37,4 @@ export {
 export {
     ProjectDocumentation,
 } from "./docs.types";
+export { ProjectWallPost } from "./project-wall.types";

@@ -1,0 +1,21 @@
+@import "src/styles/variables";
+
+.editor-container {
+    margin-top: 20px;
+}
+.actions {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+
+    .btn {
+        margin-right: 15px;
+
+        fa-icon {
+            margin-right: 5px;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

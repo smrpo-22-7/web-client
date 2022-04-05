@@ -1,0 +1,42 @@
+<div>
+
+    <ng-container *ngIf="showForm">
+        <sc-wall-post-form [projectId$]="projectId$"
+            (whenCancel)="onPostCancel()"
+            (whenPostCreate)="onPostCreated()"
+        >
+        </sc-wall-post-form>
+    </ng-container>
+
+    <ng-container *ngIf="!showForm">
+        <div class="actions">
+            <button class="btn btn-outline-primary" (click)="toggleForm()">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                Add post
+            </button>
+        </div>
+
+        <ng-container *ngIf="posts$ | async as posts">
+            <ng-container *ngIf="posts.entities.length > 0; else noPosts">
+                <div class="card" *ngFor="let post of posts.entities">
+                    <div class="card-body">
+                        <h6 class="card-title">{{post.createdAt | date: "dd.MM.yyyy HH:mm:ss"}} - {{post.author.firstName}} {{post.author.lastName}}</h6>
+                        <p class="card-text" [innerHTML]="post.htmlContent"></p>
+                    </div>
+                </div>
+
+                <div class="pagination-container">
+                    <pagination
+                        [itemsPerPage]="limit$.value"
+                        [totalItems]="posts.count"
+                        (pageChanged)="newPage($event)"
+                    ></pagination>
+                </div>
+            </ng-container>
+            <ng-template #noPosts>
+                <p>No posts yet!</p>
+            </ng-template>
+        </ng-container>
+    </ng-container>
+</div>
+

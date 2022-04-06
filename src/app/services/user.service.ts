@@ -9,11 +9,12 @@ import {
     ConflictError,
     SimpleStatus,
     User,
-    UsernameCheckRequest,
+    UsernameCheckRequest, UserPreference,
     UserProfile,
     UserRegisterRequest
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
+import UserPreferenceKey = UserPreference.UserPreferenceKey;
 
 
 @Injectable({
@@ -113,6 +114,29 @@ export class UserService {
                     parseInt(resp.headers.get("x-total-count")!),
                 );
             }),
+            catchHttpError(),
+        );
+    }
+    
+    public getUserPreferences(preferenceKeys: string[]): Observable<Map<UserPreferenceKey, UserPreference>> {
+        const url = `${this.apiUrl}/users/preferences`;
+        return this.http.post(url, { keys: preferenceKeys }).pipe(
+            mapToType<Record<string, UserPreference>>(),
+            map((resp: Record<string, UserPreference>) => {
+                const map = new Map<UserPreferenceKey, UserPreference>();
+                Object.keys(resp).forEach(key => {
+                    map.set(key, resp[key]);
+                });
+                return map;
+            }),
+            catchHttpError(),
+        );
+    }
+    
+    public updateUserPreference(userPreference: UserPreference): Observable<void> {
+        const url = `${this.apiUrl}/users/preferences`;
+        return this.http.patch(url, userPreference).pipe(
+            mapToVoid(),
             catchHttpError(),
         );
     }

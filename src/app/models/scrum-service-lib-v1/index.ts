@@ -5,6 +5,7 @@ export {
     ChangePasswordRequest,
     UsernameCheckRequest,
     UserRegisterRequest,
+    UserPreference,
     isUserRegisterRequest,
     isUserProfile,
 } from "./user.types";

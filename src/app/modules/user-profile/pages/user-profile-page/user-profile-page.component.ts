@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subject, take, tap } from "rxjs";
+import { map, Observable, Subject, switchMap, take, takeUntil, tap } from "rxjs";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { isUserProfile, UnauthorizedError, UserProfile, ValidationError } from "@lib";
+import { isUserProfile, UnauthorizedError, UserPreference, UserProfile, ValidationError } from "@lib";
 import { UserService } from "@services";
 import { validatePasswords } from "./password.validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ToastrService } from "ngx-toastr";
-import { PHONE_NUMBER_REGEX, validateUniqueUsername } from "@utils";
+import { PHONE_NUMBER_REGEX } from "@utils";
 import { BaseError } from "@mjamsek/prog-utils";
+import { validateUsernameProfile } from "./validators";
+import UserPreferenceKey = UserPreference.UserPreferenceKey;
 
 @Component({
     selector: "sc-user-profile-page",
@@ -18,9 +20,11 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     
     private destroy$ = new Subject<boolean>();
     public userProfile$: Observable<UserProfile>;
+    public prefs$: Observable<Map<UserPreferenceKey, UserPreference>>;
     
     public passwordForm: FormGroup;
     public profileForm: FormGroup;
+    public settingsForm: FormGroup;
     
     constructor(private userService: UserService,
                 private fb: FormBuilder,
@@ -29,6 +33,10 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     }
     
     ngOnInit(): void {
+        this.settingsForm = this.fb.group({
+            twoFa: this.fb.control(""),
+        });
+        
         this.passwordForm = this.fb.group({
             password: this.fb.control("", [Validators.required]),
             newPassword: this.fb.control("", [Validators.required, Validators.minLength(12), Validators.maxLength(128)]),
@@ -36,19 +44,62 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
         }, { validators: [validatePasswords] });
         
         this.profileForm = this.fb.group({
-            username: this.fb.control({value: "", disabled: true}, [], [validateUniqueUsername(this.userService)]),
+            username: this.fb.control("", [Validators.required]),
+            oldUsername: this.fb.control(""),
             firstName: this.fb.control("", [Validators.required]),
             lastName: this.fb.control("", [Validators.required]),
             email: this.fb.control("", [Validators.required, Validators.email]),
             phoneNumber: this.fb.control("", [Validators.pattern(PHONE_NUMBER_REGEX)]),
-        });
+        }, { asyncValidators: [validateUsernameProfile(this.userService)] });
         
         this.userProfile$ = this.userService.getUserProfile().pipe(
             tap((profile: UserProfile) => {
-                this.profileForm.patchValue(profile, { emitEvent: false } );
+                this.profileForm.patchValue({
+                    ...profile,
+                    oldUsername: profile.username,
+                }, { emitEvent: false });
             }),
             take(1),
         );
+        
+        this.prefs$ = this.userService.getUserPreferences([UserPreferenceKey.ENABLED_2FA]).pipe(
+            tap((prefs: Map<UserPreferenceKey, UserPreference>) => {
+                let value = false;
+                const twoFaPref = prefs.get(UserPreferenceKey.ENABLED_2FA);
+                if (twoFaPref) {
+                    value = twoFaPref.value === "true";
+                }
+                this.settingsForm.patchValue({
+                    twoFa: value,
+                }, { emitEvent: false });
+            }),
+            takeUntil(this.destroy$),
+        );
+        
+        this.twoFaCtrl.valueChanges.pipe(
+            switchMap((value: boolean) => {
+                return this.userService.updateUserPreference({
+                    key: UserPreferenceKey.ENABLED_2FA,
+                    value: value.toString(),
+                }).pipe(
+                    map(() => value),
+                );
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe({
+            next: value => {
+                const message = `2FA was ${value ? "enabled" : "disabled"}!`;
+                if (value) {
+                    this.toastrService.success(message, "Success!");
+                } else {
+                    this.toastrService.warning(message, "Success!");
+                }
+            },
+            error: err => {
+                console.error(err);
+                this.toastrService.error("Error updating settings!", "Error!");
+            }
+        })
     }
     
     ngOnDestroy() {
@@ -56,10 +107,9 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     }
     
     public updateProfile() {
-        const formValues = this.profileForm.getRawValue();
+        const formValues: Record<string, any> = this.profileForm.getRawValue();
+        delete formValues["oldUsername"];
         if (isUserProfile(formValues)) {
-            // @ts-ignore next-line
-            delete formValues["username"];
             this.userService.updateUserProfile(formValues).pipe(
                 take(1),
             ).subscribe({
@@ -109,5 +159,9 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     
     public get newPasswordCtrl(): FormControl {
         return this.passwordForm.controls["newPassword"] as FormControl;
+    }
+    
+    public get twoFaCtrl(): FormControl {
+        return this.settingsForm.controls["twoFa"] as FormControl;
     }
 }

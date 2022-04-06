@@ -37,6 +37,20 @@ export interface UserRegisterRequest {
     grantedRoles: string[];
 }
 
+export interface UserPreference {
+    userId?: string;
+    key: string;
+    value: string;
+    dataType?: string;
+}
+
+export namespace UserPreference {
+    export type UserPreferenceKey = "auth.2fa.enabled" | string;
+    export const UserPreferenceKey = {
+        ENABLED_2FA: "auth.2fa.enabled" as UserPreferenceKey,
+    };
+}
+
 export function isUserRegisterRequest(request: unknown): request is UserRegisterRequest {
     if (request instanceof Object) {
         const obj = request as any;

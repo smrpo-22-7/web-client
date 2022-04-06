@@ -13,12 +13,11 @@
                     <div class="form-group">
                         <label>Username</label>
                         <input class="form-control" formControlName="username"
-                            [class.is-invalid]="hasError(profileForm.get('username'))"/>
-
+                            [class.is-invalid]="hasError(profileForm) || hasError(profileForm.get('username'))"/>
                         <div class="invalid-feedback" *ngIf="hasError(profileForm.get('username'), 'required')">
                             Username is required!
                         </div>
-                        <div class="invalid-feedback" *ngIf="hasError(profileForm.get('username'), 'usernameExists')">
+                        <div class="invalid-feedback" *ngIf="hasError(profileForm, 'usernameExists')">
                             Username already exists!
                         </div>
                     </div>
@@ -124,4 +123,24 @@
             </form>
         </div>
     </div>
+
+    <ng-container *ngIf="prefs$ | async as prefs">
+        <div class="mt-5 row">
+            <div class="col-6">
+                <h4>Settings</h4>
+
+                <form [formGroup]="settingsForm">
+                    <div class="form-group">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" role="switch" id="two_fa_switch"
+                                formControlName="twoFa"
+                            />
+                            <label class="form-check-label" for="two_fa_switch">2FA enabled</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+
 </div>

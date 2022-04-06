@@ -8,6 +8,7 @@ import { BootstrapModule } from "./bootstrap.module";
 import { IconsModule } from "./icons.module";
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { NgForTrackByIdDirective } from './directives/base-type-track-by.directive';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
     imports: [
@@ -26,12 +27,14 @@ import { NgForTrackByIdDirective } from './directives/base-type-track-by.directi
         BootstrapModule,
         IconsModule,
         NgForTrackByIdDirective,
+        SafeHtmlPipe,
     ],
     declarations: [
         ValidationErrorComponent,
         HasErroredDirective,
         ConfirmDialogComponent,
         NgForTrackByIdDirective,
+        SafeHtmlPipe,
     ]
 })
 export class SharedModule {

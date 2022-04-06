@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, SecurityContext } from "@angular/core";
-import { filter, map, Observable, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { filter, map, Observable, share, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { DocsService } from "@services";
-import { DomSanitizer } from "@angular/platform-browser";
 import { mapToType } from "@utils";
 
 @Component({
     selector: "sc-project-docs-details-page",
     templateUrl: "./project-docs-details-page.component.html",
-    styleUrls: ["./project-docs-details-page.component.scss"]
+    styleUrls: ["./project-docs-details-page.component.scss"],
+    encapsulation: ViewEncapsulation.None,
 })
 export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
     
@@ -17,8 +17,7 @@ export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<boolean>();
     
     constructor(private route: ActivatedRoute,
-                private docsService: DocsService,
-                private domSanitizer: DomSanitizer) {
+                private docsService: DocsService) {
     }
     
     ngOnInit(): void {
@@ -32,13 +31,11 @@ export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
             switchMap((projectId: string) => {
                 return this.docsService.getDocumentationContent(projectId, true, true);
             }),
-            map((content: string) => {
-                return this.domSanitizer.sanitize(SecurityContext.HTML, content);
-            }),
             filter((content: string | null) => {
                 return content !== null;
             }),
             mapToType<string>(),
+            share(),
             takeUntil(this.destroy$),
         );
     }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { map, Observable, Subject, switchMap, take, takeUntil, tap } from "rxjs";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { isUserProfile, UnauthorizedError, UserPreference, UserProfile, ValidationError } from "@lib";
-import { UserService } from "@services";
+import { AuthService, UserService } from "@services";
 import { validatePasswords } from "./password.validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ToastrService } from "ngx-toastr";
@@ -28,6 +28,7 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
     
     constructor(private userService: UserService,
                 private fb: FormBuilder,
+                private auth: AuthService,
                 private toastrService: ToastrService) {
         super();
     }
@@ -115,6 +116,9 @@ export class UserProfilePageComponent extends FormBaseComponent implements OnIni
             ).subscribe({
                 next: () => {
                     this.toastrService.success("User profile updated!", "Success!");
+                    this.auth.refreshTokens().pipe(take(1)).subscribe(() => {
+                    
+                    });
                 },
                 error: (err: BaseError) => {
                     if (err instanceof ValidationError) {

@@ -138,6 +138,12 @@ export class AuthService {
         );
     }
     
+    public refreshTokens(): Observable<void> {
+        return this.refreshToken().pipe(
+            mapToVoid(),
+        );
+    }
+    
     public getAccessToken(): Observable<string | null> {
         return this.auth.getAuthState().pipe(
             switchMap((state: AuthState) => {

@@ -5,3 +5,16 @@
     display: flex;
     align-items: center;
 }
+.sorts {
+    margin-bottom: 10px;
+    .link {
+        color: $link-color;
+        &:hover {
+            cursor: pointer;
+        }
+        &.active {
+            color: $secondary-color;
+        }
+    }
+
+}

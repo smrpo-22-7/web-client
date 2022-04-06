@@ -145,11 +145,12 @@ export class ProjectService {
         );
     }
     
-    public getProjectWallPosts(projectId: string, offset: number = 0, limit: number = 0): Observable<EntityList<ProjectWallPost>> {
+    public getProjectWallPosts(projectId: string, offset: number = 0, limit: number = 0, order: string = "DESC"): Observable<EntityList<ProjectWallPost>> {
         const url = `${this.apiUrl}/projects/${projectId}/posts`;
         const params = {
             offset,
             limit,
+            order: `createdAt ${order}`,
         };
         return this.http.get(url, { params, observe: "response" }).pipe(
             mapToType<HttpResponse<ProjectWallPost[]>>(),

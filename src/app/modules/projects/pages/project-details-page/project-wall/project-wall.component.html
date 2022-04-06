@@ -15,6 +15,12 @@
                 Add post
             </button>
         </div>
+        <div class="sorts">
+            Sort by:
+            <span class="link" (click)="setOrder('DESC')" [class.active]="sort$.value === 'DESC'"
+            >Newest</span>&#160;<span class="link" (click)="setOrder('ASC')" [class.active]="sort$.value === 'ASC'"
+        >Oldest</span>
+        </div>
 
         <ng-container *ngIf="posts$ | async as posts">
             <ng-container *ngIf="posts.entities.length > 0; else noPosts">

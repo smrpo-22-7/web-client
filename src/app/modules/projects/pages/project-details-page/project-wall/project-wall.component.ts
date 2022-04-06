@@ -5,6 +5,8 @@ import { EntityList } from "@mjamsek/prog-utils";
 import { ProjectWallPost } from "@lib";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 
+type SortOrder = "ASC" | "DESC";
+
 @Component({
     selector: "sc-project-wall",
     templateUrl: "./project-wall.component.html",
@@ -19,6 +21,7 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
     public refresh$ = new BehaviorSubject<void>(undefined);
+    public sort$ = new BehaviorSubject<SortOrder>("DESC");
     private destroy$ = new Subject<boolean>();
     
     public showForm: boolean = false;
@@ -27,10 +30,10 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.posts$ = combineLatest([this.projectId$, this.offset$, this.limit$, this.refresh$]).pipe(
-            switchMap((routeParams: [string, number, number, void]) => {
-                const [projectId, offset, limit] = routeParams;
-                return this.projectService.getProjectWallPosts(projectId, offset, limit);
+        this.posts$ = combineLatest([this.projectId$, this.offset$, this.limit$, this.sort$, this.refresh$]).pipe(
+            switchMap((routeParams: [string, number, number, SortOrder, void]) => {
+                const [projectId, offset, limit, order] = routeParams;
+                return this.projectService.getProjectWallPosts(projectId, offset, limit, order);
             }),
             takeUntil(this.destroy$)
         );
@@ -51,6 +54,10 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     
     public onPostCancel() {
         this.showForm = false;
+    }
+    
+    public setOrder(order: SortOrder) {
+        this.sort$.next(order);
     }
     
     ngOnDestroy() {

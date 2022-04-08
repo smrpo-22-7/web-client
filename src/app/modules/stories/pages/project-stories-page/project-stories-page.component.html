@@ -33,20 +33,37 @@
                     <accordion [isAnimated]="true">
                         <accordion-group *ngFor="let story of stories.entities; trackById">
                             <div accordion-heading class="detail-header">
-                                <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-                                    <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                                        <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned; else checkPlaceholder">
-                                            <div class="story-check">
-                                                <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
-                                            </div>
+                                <div class="detail-header-left-group">
+                                    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                                        <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                                            <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned; else checkPlaceholder">
+                                                <div class="story-check">
+                                                    <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #checkPlaceholder>
+                                                <div class="story-check check-placeholder"></div>
+                                            </ng-template>
                                         </ng-container>
-                                        <ng-template #checkPlaceholder>
-                                            <div class="story-check check-placeholder"></div>
-                                        </ng-template>
                                     </ng-container>
-                                </ng-container>
-                                <div>
-                                    {{story.title}} (#{{story.numberId}})
+                                    <div>
+                                        {{story.title}} (#{{story.numberId}})
+                                    </div>
+                                </div>
+                                <div class="detail-header-right-group">
+
+                                    <div class="estimate-input">
+                                        <label>Time estimate:</label>
+                                        <input class="form-control form-control-sm"
+                                            min="1"
+                                            step="1"
+                                            (click)="preventExpand($event)"
+                                            (ngModelChange)="onEstimateUpdate($event, story.id)"
+                                            [class.is-invalid]="story.timeEstimate <= 0"
+                                            [(ngModel)]="story.timeEstimate"/>
+                                        <span>(pt)</span>
+                                    </div>
+
                                 </div>
                             </div>
                             <div>

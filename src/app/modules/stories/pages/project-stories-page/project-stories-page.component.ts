@@ -2,15 +2,27 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder } from "@angular/forms";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
+import {
+    BehaviorSubject,
+    combineLatest,
+    debounceTime,
+    map,
+    Observable,
+    startWith,
+    Subject,
+    switchMap,
+    take,
+    takeUntil, timeout
+} from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
 
 import { NavState, NavStateStatus, StoriesFilter, Story } from "@lib";
-import { ModalService, ProjectService } from "@services";
+import { ModalService, ProjectService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { AddStoryDialogComponent } from "../../components/add-story-dialog/add-story-dialog.component";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: "sc-project-stories-page",
@@ -35,6 +47,8 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     public storiesForm: FormArray;
     
     constructor(private projectService: ProjectService,
+                private storyService: StoryService,
+                private toastrService: ToastrService,
                 private route: ActivatedRoute,
                 private modalService: ModalService,
                 private nav: NavContext,
@@ -76,6 +90,26 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
                     return;
                 }
             });
+        }
+    }
+    
+    public preventExpand($event: Event) {
+        $event.stopPropagation();
+    }
+    
+    public onEstimateUpdate(newValue: number, storyId: string): void {
+        if (newValue && newValue > 0) {
+            setTimeout(() => {
+                this.storyService.updateStoryTimeEstimate(storyId, newValue).pipe(take(1)).subscribe({
+                    next: () => {
+                        this.toastrService.success("Time estimate was updated!", "Success!");
+                    },
+                    error: err => {
+                        console.error(err);
+                        this.toastrService.error("Error updating time estimate!", "Error!");
+                    }
+                })
+            }, 500);
         }
     }
     

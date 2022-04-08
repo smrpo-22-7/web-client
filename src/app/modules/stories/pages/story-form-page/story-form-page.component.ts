@@ -6,7 +6,7 @@ import {
     isStoryRegisterRequest,
     NavStateStatus, NavState, Codebooks
 } from "@lib";
-import { CodebookService, StorypriorityService } from "@services";
+import { CodebookService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { NavContext } from "@context";
 import { StoryPriorityLabel } from "@config/enums.config";
@@ -30,7 +30,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
     private destroy$ = new Subject<boolean>();
     
     constructor(private fb: FormBuilder,
-                private storypriorityservice: StorypriorityService,
+                private storypriorityservice: StoryService,
                 private toastrService: ToastrService,
                 private router: Router,
                 private route: ActivatedRoute,

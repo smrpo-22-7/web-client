@@ -1,6 +1,5 @@
-
-<div class="container-lg" >
-    <ng-container *ngIf="roles$ | async as roles" >
+<div class="container-lg">
+    <ng-container *ngIf="roles$ | async as roles">
 
         <div class="row justify-content-center my-5">
             <div class="col-lg-6 ozadje">
@@ -13,8 +12,8 @@
                         <div>
                             <label for="name" class="form-label">Project name:</label>
                             <input id="name" class="form-control" formControlName="name"
-                                   [class.is-invalid]="hasError(projectForm.get('name'))"
-                                   placeholder="e.g. NewProject" />
+                                [class.is-invalid]="hasError(projectForm.get('name'))"
+                                placeholder="e.g. NewProject"/>
                             <div class="invalid-feedback" *ngIf="hasError(projectForm.get('name'), 'required')">
                                 Project name is required!
                             </div>
@@ -27,7 +26,8 @@
                             <div>
                                 <label for="userquery" class="form-label zgorjirob">Add users:</label>
                                 <input id="userquery" class="form-control"
-                                       formControlName="userQuery"
+                                    autocomplete="off"
+                                    formControlName="userQuery"
                                     placeholder="Search users"
                                     [typeaheadAsync]="true"
                                     [typeahead]="users$"
@@ -44,43 +44,53 @@
 
                             <table class="table table-light table-hover table-bordered zgorjirob align-middle">
                                 <thead>
-                                <tr class="table-dark">
-                                    <td>Username</td>
-                                    <td>Role</td>
-                                    <td>Actions</td>
-                                </tr>
+                                    <tr class="table-dark">
+                                        <td>Username</td>
+                                        <td>Role</td>
+                                        <td>Actions</td>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let user of usersCtrl.controls; let i = index"
-                                    [formGroup]="$any(user)">
-                                    <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
-                                    <td>
-                                        <select formControlName="projectRoleId" id="projectRoleId" class="form-select">
-                                            <option *ngFor="let role of roles" [value]="role.roleId" [disabled]="isDisabled(role.roleId)">
-                                                {{role.name}}
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <span (click)="removeUser(i)">
-                                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                                        </span>
-                                    </td>
-                                </tr>
+                                    <tr *ngFor="let user of usersCtrl.controls; let i = index"
+                                        [formGroup]="$any(user)">
+                                        <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
+                                        <td>
+                                            <select formControlName="projectRoleId" id="projectRoleId"
+                                                class="form-select">
+                                                <option *ngFor="let role of roles" [value]="role.roleId"
+                                                    [disabled]="isDisabled(role.roleId)">
+                                                    {{role.name}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="table-actions">
+                                                <span (click)="removeUser(i)" class="remove-btn">
+                                                    <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            <div class="invalid-feedback" [class.force-invalid-feedback]="hasErrorNoTouch(projectForm, 'noMembers')">
+                                Project must have at least some members
+                            </div>
+                            <div class="invalid-feedback" [class.force-invalid-feedback]="hasErrorNoTouch(projectForm, 'missingRoles')">
+                                Project lacks required roles! Each project must have at least one product owner, scrum master and one or more members.
+                            </div>
                         </div>
-                        <div style="width: 100%; text-align: right;">
-                            <button type="submit" class="gumb">Create</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" [disabled]="isInvalid(projectForm)">Create</button>
                         </div>
-                                </div>
-                    </form>
+                    </div>
+                </form>
 
 
                 <!--<form [formGroup]="userForm" (ngSubmit)="createProject()" class="rob">
 
                 </form>-->
-                </div>
+            </div>
 
         </div>
     </ng-container>

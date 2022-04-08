@@ -34,3 +34,17 @@
 ::placeholder{
     color:rgb(211, 211, 211);
 }
+.table-actions {
+    width: 100%;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 15px;
+}
+.remove-btn {
+    font-size: 1.1rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

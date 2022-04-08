@@ -32,11 +32,11 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
     ngOnInit(): void {
         this.userForm = this.fb.group({
             username: this.fb.control("", [Validators.required], [validateUniqueUsername(this.userService)]),
-            password: this.fb.control("", [Validators.required]),
+            password: this.fb.control("", [Validators.required, Validators.minLength(12), Validators.maxLength(128)]),
             confirmPassword: this.fb.control("", [Validators.required]),
             firstName: this.fb.control("", [Validators.required]),
             lastName: this.fb.control("", [Validators.required]),
-            email: this.fb.control("", [Validators.required]),
+            email: this.fb.control("", [Validators.required, Validators.email]),
             grantedRoles: this.fb.array([], [validateUserRoles]),
         }, { validators: [validateUserForm] });
         

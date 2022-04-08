@@ -25,17 +25,20 @@ export function validateUserRoles(formControl: AbstractControl): ValidationError
     const errors: ValidationErrors = {};
     
     if (roles.length === 0) {
+        console.log("len: ", roles.length);
         errors["sysRolesRequired"] = true;
         hasErrors = true;
     }
     
     if (roles.length > 0) {
         const assignedRoles = roles.controls.map(ctrl => ctrl.value);
+        console.log("ass: ", assignedRoles);
         if (assignedRoles.includes(SysRole.RoleId.ADMIN) && !assignedRoles.includes(SysRole.RoleId.USER)) {
             errors["sysRolesAdmin"] = true;
             hasErrors = true;
         }
     }
     
+    console.log(hasErrors, errors);
     return hasErrors ? errors : null;
 }

@@ -13,6 +13,16 @@ export abstract class FormBaseComponent {
         return !isEmpty(control.errors) && control.touched;
     }
     
+    public hasErrorNoTouch(control: AbstractControl | null, error?: keyof ValidationErrors | string): boolean {
+        if (!control) {
+            return true;
+        }
+        if (error) {
+            return control.errors && control.errors[error];
+        }
+        return !isEmpty(control.errors);
+    }
+    
     /**
      * Recursively checks if control and it's children are invalid
      * @param control control to be checked

@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
+import { APP_INITIALIZER, ErrorHandler, LOCALE_ID, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import localeSl from "@angular/common/locales/sl";
@@ -9,6 +9,7 @@ import { ApiInterceptor, AuthInterceptor, AuthService } from "@services";
 import { AppConfigFactory } from "./factories";
 import { NavContext } from "@context";
 import { registerLocaleData } from "@angular/common";
+import { AppErrorHandler } from "./handlers";
 
 registerLocaleData(localeSl);
 
@@ -25,6 +26,7 @@ registerLocaleData(localeSl);
         { provide: APP_INITIALIZER, useFactory: AppConfigFactory, deps: [NavContext, AuthService], multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: ErrorHandler, useClass: AppErrorHandler },
         { provide: LOCALE_ID, useValue: "sl-SI" },
     ],
     bootstrap: [AppComponent]

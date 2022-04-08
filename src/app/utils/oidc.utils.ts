@@ -98,6 +98,7 @@ export function parseTokenPayload(token: string): TokenInfo {
             expiresAt: epochSecondsToDate(parsedPayload["exp"]),
             sessionState: parsedPayload["session_state"],
             roles: parsedPayload["roles"],
+            lastLogin: parsedPayload["llog"],
         }
     } catch (err) {
         console.error(err);

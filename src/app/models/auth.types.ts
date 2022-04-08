@@ -13,6 +13,7 @@ export interface TokenInfo {
     email: string;
     sessionState: string;
     roles: string[];
+    lastLogin: Date;
 }
 
 type AuthenticatedState = {

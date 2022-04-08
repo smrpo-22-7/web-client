@@ -35,7 +35,7 @@ export interface StoryRegisterRequest {
     priority: string
     businessValue: number
     timeEstimate: number
-    tests:  { result: string }[];
+    tests: { result: string }[];
 }
 
 export function isStoryRegisterRequest(request: unknown): request is StoryRegisterRequest {
@@ -45,10 +45,6 @@ export function isStoryRegisterRequest(request: unknown): request is StoryRegist
             { field: "title", type: "string" },
             { field: "description", type: "string" },
             { field: "priority", type: "string" },
-            { field: "businessValue", type: "number" },
-            { field: "timeEstimate", type: "number" }
-            //{ field: "userId", type: "string" },
-            //{ field: "projectRoleId", type: "string" },
         )) {
             if (obj.hasOwnProperty("tests") && Array.isArray(obj["tests"])) {
                 return true;

@@ -9,6 +9,7 @@ import { IconsModule } from "./icons.module";
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { NgForTrackByIdDirective } from './directives/base-type-track-by.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { PrettifyArrayPipe } from './pipes/prettify-array.pipe';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
         IconsModule,
         NgForTrackByIdDirective,
         SafeHtmlPipe,
+        PrettifyArrayPipe,
     ],
     declarations: [
         ValidationErrorComponent,
@@ -35,6 +37,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
         ConfirmDialogComponent,
         NgForTrackByIdDirective,
         SafeHtmlPipe,
+        PrettifyArrayPipe,
     ]
 })
 export class SharedModule {

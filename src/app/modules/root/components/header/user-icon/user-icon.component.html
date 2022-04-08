@@ -17,6 +17,12 @@
         </li>
         <li role="menuitem">
             <span class="dropdown-item user-login-text">
+                Roles:<br/>
+                {{info.roles | prettifyArray}}
+            </span>
+        </li>
+        <li role="menuitem">
+            <span class="dropdown-item user-login-text">
                 Last login at:<br/>
                 {{info.lastLogin}}
             </span>

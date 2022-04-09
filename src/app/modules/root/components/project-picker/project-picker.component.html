@@ -6,7 +6,7 @@
             <ng-container *ngIf="projects$ | async as projects">
                 <ng-container *ngIf="projects.entities.length > 0">
                     <div>
-                        <select class="custom-select" [formControl]="projectCtrl">
+                        <select class="form-select form-select-sm" [formControl]="projectCtrl">
                             <option *ngFor="let project of projects.entities"
                                 [ngValue]="project.id">{{project.name}}</option>
                         </select>

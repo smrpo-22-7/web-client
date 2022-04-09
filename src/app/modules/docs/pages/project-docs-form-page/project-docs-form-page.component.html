@@ -6,14 +6,13 @@
     <form *ngIf="showUploadForm">
         <input type="file" name="new-file" (change)="uploadFile($any($event.target).files)"/>
         <button class="btn btn-primary"
-            [disabled]="selectedFile === null"
+            [disabled]="!selectedFile"
             (click)="submitFile(projectIdCtrlVal)">
             <fa-icon [icon]="['fas', 'floppy-disk']"></fa-icon>
             Save
         </button>
     </form>
 </div>
-
 <div class="editor-container">
     <form [formGroup]="docsForm" (ngSubmit)="updateDocs(projectIdCtrlVal)">
         <textarea formControlName="markdownContent" #mdEditor></textarea>

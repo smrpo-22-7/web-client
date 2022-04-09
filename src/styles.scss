@@ -32,20 +32,17 @@ body {
     &:hover {
         color: $white;
     }
-    &:disabled {
-        color: $white;
-    }
 }
 .btn-danger, .btn-outline-danger {
     &:hover {
         color: $white;
     }
-    &:disabled {
-        color: $white;
-    }
 }
 .btn-primary, .btn-danger {
     color: $white;
+    &:disabled {
+        color: $white;
+    }
 }
 
 a {

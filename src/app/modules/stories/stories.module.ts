@@ -6,6 +6,10 @@ import { ProjectStoriesPageComponent } from "./pages/project-stories-page/projec
 import { StoryFormPageComponent } from "./pages/story-form-page/story-form-page.component";
 import { StoriesRoutingModule } from "./stories-routing.module";
 import { AddStoryDialogComponent } from './components/add-story-dialog/add-story-dialog.component';
+import { StoryListHeaderComponent } from './components/story-list-header/story-list-header.component';
+import { StoryListContentComponent } from './components/story-list-content/story-list-content.component';
+import { StoryTasksDialogComponent } from './components/story-tasks-dialog/story-tasks-dialog.component';
+import { TaskListRowComponent } from './components/story-tasks-dialog/task-list-row/task-list-row.component';
 
 
 @NgModule({
@@ -18,7 +22,11 @@ import { AddStoryDialogComponent } from './components/add-story-dialog/add-story
     declarations: [
         ProjectStoriesPageComponent,
         StoryFormPageComponent,
-        AddStoryDialogComponent
+        AddStoryDialogComponent,
+        StoryListHeaderComponent,
+        StoryListContentComponent,
+        StoryTasksDialogComponent,
+        TaskListRowComponent
     ]
 })
 export class StoriesModule {

@@ -31,54 +31,20 @@
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
                 <div>
                     <accordion [isAnimated]="true">
-                        <accordion-group *ngFor="let story of stories.entities; trackById">
+                        <accordion-group *ngFor="let story of stories.entities; trackBy: getStoryId">
                             <div accordion-heading class="detail-header">
-                                <div class="detail-header-left-group">
-                                    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-                                        <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                                            <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned; else checkPlaceholder">
-                                                <div class="story-check">
-                                                    <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
-                                                </div>
-                                            </ng-container>
-                                            <ng-template #checkPlaceholder>
-                                                <div class="story-check check-placeholder"></div>
-                                            </ng-template>
-                                        </ng-container>
-                                    </ng-container>
-                                    <div>
-                                        {{story.title}} (#{{story.numberId}})
-                                    </div>
-                                </div>
-                                <div class="detail-header-right-group">
-
-                                    <div class="estimate-input">
-                                        <label>Time estimate:</label>
-                                        <input class="form-control form-control-sm"
-                                            min="1"
-                                            step="1"
-                                            (click)="preventExpand($event)"
-                                            (ngModelChange)="onEstimateUpdate($event, story.id)"
-                                            [class.is-invalid]="story.timeEstimate <= 0"
-                                            [(ngModel)]="story.timeEstimate"/>
-                                        <span>(pt)</span>
-                                    </div>
-
-                                </div>
+                                <sc-story-list-header
+                                    [nav]="nav"
+                                    [story]="story"
+                                    (whenSelected)="onStorySelect($event)">
+                                </sc-story-list-header>
                             </div>
                             <div>
-                                <p>{{story.description}}</p>
-                                <div *ngIf="story.tests && story.tests.length > 0">
-                                    <h5>Acceptance tests</h5>
-                                    <div>
-                                        <ul>
-                                            <li *ngFor="let test of story.tests">{{test.result}}</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                <sc-story-list-content
+                                    [story]="story"
+                                ></sc-story-list-content>
                             </div>
                         </accordion-group>
-
                     </accordion>
                 </div>
                 <div class="pagination-container">

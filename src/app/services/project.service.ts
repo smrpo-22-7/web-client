@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { HttpClient, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpResponse } from "@angular/common/http";
 import { catchError, map, Observable, of, throwError } from "rxjs";
 import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
@@ -11,10 +11,9 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost
+    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost, KeeQuery, WrapOption, UserProfile
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
-
 
 @Injectable({
     providedIn: "root"
@@ -35,11 +34,7 @@ export class ProjectService {
     
     public getProjects(status: SimpleStatus, offset: number = 0, limit: number = 10): Observable<EntityList<Project>> {
         const url = `${this.apiUrl}/projects`;
-        const params = {
-            offset,
-            limit,
-            filter: `status:EQ:'${status}'`,
-        };
+        const params = this.buildKeeParams({ offset, limit, filter: `status:EQ:'${status}'` });
         return this.http.get(url, { params, observe: "response" }).pipe(
             mapToType<HttpResponse<Project[]>>(),
             map((resp: HttpResponse<Project[]>) => {
@@ -93,12 +88,12 @@ export class ProjectService {
     
     public getProjectStories(projectId: string, filter: StoriesFilter, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
         const url = `${this.apiUrl}/projects/${projectId}/stories`;
-        const params = {
-            limit,
+        const params = this.buildKeeParams({
             offset,
+            limit,
             order: "numberId ASC",
-            filter: this.buildFilterString(filter),
-        };
+            filter: this.buildFilterString(filter)
+        });
         return this.http.get(url, { params, observe: "response" }).pipe(
             mapToType<HttpResponse<Story[]>>(),
             map((res: HttpResponse<Story[]>) => {
@@ -127,31 +122,44 @@ export class ProjectService {
         );
     }
     
-    public getProjectMembers(projectId: string, offset: number = 0, limit: number = 10): Observable<EntityList<ProjectMember>> {
+    public getProjectMembers(projectId: string, params: KeeQuery, wrapped?: "nowrap"): Observable<ProjectMember[]>;
+    public getProjectMembers(projectId: string, params: KeeQuery, wrapped?: "wrap"): Observable<EntityList<ProjectMember>>;
+    public getProjectMembers(projectId: string, {
+        offset = 0,
+        limit = 10,
+        order,
+        filter
+    }: KeeQuery, wrapped: WrapOption = "wrap"): Observable<any> {
         const url = `${this.apiUrl}/projects/${projectId}/members`;
-        const params = {
-            offset,
-            limit,
-        };
-        return this.http.get(url, { params, observe: "response" }).pipe(
+        const keeParams = this.buildKeeParams({ offset, limit, order, filter });
+        return this.http.get(url, { params: keeParams, observe: "response" }).pipe(
             mapToType<HttpResponse<ProjectMember[]>>(),
             map((res: HttpResponse<ProjectMember[]>) => {
-                return EntityList.of(
-                    res.body!,
-                    parseInt(res.headers.get("x-total-count")!),
-                );
+                if (wrapped === "wrap") {
+                    return EntityList.of(
+                        res.body!,
+                        parseInt(res.headers.get("x-total-count")!),
+                    );
+                } else {
+                    return res.body!;
+                }
             }),
+            catchHttpError(),
+        );
+    }
+    
+    public queryProjectMembers(projectId: string, query: string): Observable<UserProfile[]> {
+        const url = `${this.apiUrl}/projects/${projectId}/members/query`;
+        const params = { query };
+        return this.http.get(url, { params }).pipe(
+            mapToType<UserProfile[]>(),
             catchHttpError(),
         );
     }
     
     public getProjectWallPosts(projectId: string, offset: number = 0, limit: number = 0, order: string = "DESC"): Observable<EntityList<ProjectWallPost>> {
         const url = `${this.apiUrl}/projects/${projectId}/posts`;
-        const params = {
-            offset,
-            limit,
-            order: `createdAt ${order}`,
-        };
+        const params = this.buildKeeParams({ offset, limit, order: `createdAt ${order}` });
         return this.http.get(url, { params, observe: "response" }).pipe(
             mapToType<HttpResponse<ProjectWallPost[]>>(),
             map((res: HttpResponse<ProjectWallPost[]>) => {
@@ -170,6 +178,19 @@ export class ProjectService {
             mapToVoid(),
             catchHttpError(),
         );
+    }
+    
+    private buildKeeParams({ offset = 0, limit = 10, order, filter }: KeeQuery): HttpParams {
+        let params = new HttpParams();
+        params = params.set("offset", offset);
+        params = params.set("limit", limit);
+        if (order) {
+            params = params.set("order", order);
+        }
+        if (filter) {
+            params = params.set("filter", filter);
+        }
+        return params;
     }
     
     private buildFilterString(filter: StoriesFilter): string {

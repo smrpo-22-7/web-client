@@ -1,0 +1,93 @@
+<div class="modal-content modal-padd">
+    <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Large modal</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="row">
+                <strong class="col-8">
+                    Task
+                </strong>
+                <strong class="col-2">
+                    Estimate
+                </strong>
+                <strong class="col-2">
+                    Assignee
+                </strong>
+            </div>
+            <ng-container *ngIf="tasks$ | async as tasks">
+                <sc-task-list-row *ngFor="let task of tasks" [storyId]="storyId" [task]="task"
+                ></sc-task-list-row>
+            </ng-container>
+        </div>
+
+        <div class="mt-4">
+
+            <form [formGroup]="taskForm" (ngSubmit)="addTask()">
+                <h5>Add new task</h5>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input class="form-control" formControlName="description" type="text"
+                        [class.is-invalid]="hasError(taskForm.get('description'))"
+                    />
+                    <div class="invalid-feedback" *ngIf="hasError(taskForm.get('description'), 'required')">
+                        Task description must be provided!
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Time estimate (h):</label>
+                            <input class="form-control" formControlName="estimate" type="number"
+                                [class.is-invalid]="hasError(taskForm.get('estimate'))"/>
+                            <div class="invalid-feedback" *ngIf="hasError(taskForm.get('estimate'), 'min')">
+                                Time estimate cannot be zero or negative!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <ng-container *ngIf="assigneeInitialsCtrl.value === null; else selectedUser">
+                            <div class="form-group">
+                                <label>Assign user:</label>
+                                <input class="form-control" type="text"
+                                    autocomplete="off"
+                                    formControlName="userQuery"
+                                    placeholder="Search users"
+                                    [typeaheadAsync]="true"
+                                    [typeahead]="members$"
+                                    [typeaheadOptionsLimit]="5"
+                                    [typeaheadWaitMs]="250"
+                                    [typeaheadItemTemplate]="searchResultTemplate"
+                                    (typeaheadOnSelect)="onUserSelect($event.item)"
+                                    [typeaheadMinLength]="0"
+                                />
+                                <ng-template #searchResultTemplate let-model="item">
+                                    <span>{{model.lastName}} {{model.firstName}}</span>
+                                </ng-template>
+                            </div>
+                        </ng-container>
+                        <ng-template #selectedUser>
+                            <div class="form-group assignee-control">
+                                <sc-user-initials-icon [initials]="assigneeInitialsCtrl.value"
+                                    [disabled]="true"
+                                ></sc-user-initials-icon>
+                                <span class="user-name">
+                                    {{assigneeNameCtrl.value}} (pending)
+                                </span>
+                                <span class="clear-btn" (click)="clearAssignee()">
+                                    <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                </span>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

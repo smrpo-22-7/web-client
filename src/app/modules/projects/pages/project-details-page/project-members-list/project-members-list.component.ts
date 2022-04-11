@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable, Subject, switchMap, takeUntil } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
 import { ProjectMember } from "@lib";
-import { ActivatedRoute } from "@angular/router";
 import { ProjectService } from "@services";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 
@@ -28,7 +27,7 @@ export class ProjectMembersListComponent implements OnInit, OnDestroy {
         this.members$ = combineLatest([this.projectId$, this.offset$, this.limit$]).pipe(
             switchMap((routeParams: [string, number, number]) => {
                 const [projectId, offset, limit] = routeParams;
-                return this.projectService.getProjectMembers(projectId, offset, limit);
+                return this.projectService.getProjectMembers(projectId, { offset, limit }, "wrap");
             }),
             takeUntil(this.destroy$)
         );

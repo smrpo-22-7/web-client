@@ -2,27 +2,26 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder } from "@angular/forms";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 import {
     BehaviorSubject,
     combineLatest,
-    debounceTime,
     map,
     Observable,
     startWith,
     Subject,
     switchMap,
     take,
-    takeUntil, timeout
+    takeUntil,
 } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
-
-import { NavState, NavStateStatus, StoriesFilter, Story } from "@lib";
+import { CheckboxSelectEvent, NavState, NavStateStatus, StoriesFilter, Story } from "@lib";
 import { ModalService, ProjectService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { AddStoryDialogComponent } from "../../components/add-story-dialog/add-story-dialog.component";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
-import { ToastrService } from "ngx-toastr";
+
 
 @Component({
     selector: "sc-project-stories-page",
@@ -78,38 +77,16 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         );
     }
     
-    public onStorySelect($event: Event) {
-        $event.stopPropagation();
-        const checkboxElement = $event.target as HTMLInputElement;
-        if (checkboxElement.checked) {
-            this.storiesForm.push(this.fb.control(checkboxElement.value));
+    public onStorySelect($event: CheckboxSelectEvent<string>) {
+        if ($event.checked) {
+            this.storiesForm.push(this.fb.control($event.item));
         } else {
             this.storiesForm.controls.forEach((ctrl: AbstractControl, i: number) => {
-                if (ctrl.value === checkboxElement.value) {
+                if (ctrl.value === $event.item) {
                     this.storiesForm.removeAt(i);
                     return;
                 }
             });
-        }
-    }
-    
-    public preventExpand($event: Event) {
-        $event.stopPropagation();
-    }
-    
-    public onEstimateUpdate(newValue: number, storyId: string): void {
-        if (newValue && newValue > 0) {
-            setTimeout(() => {
-                this.storyService.updateStoryTimeEstimate(storyId, newValue).pipe(take(1)).subscribe({
-                    next: () => {
-                        this.toastrService.success("Time estimate was updated!", "Success!");
-                    },
-                    error: err => {
-                        console.error(err);
-                        this.toastrService.error("Error updating time estimate!", "Error!");
-                    }
-                })
-            }, 500);
         }
     }
     
@@ -140,5 +117,9 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     ngOnDestroy() {
         this.destroy$.next(true);
+    }
+    
+    public getStoryId(index: number, item: Story): string {
+        return item.id;
     }
 }

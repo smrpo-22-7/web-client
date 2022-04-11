@@ -1,0 +1,30 @@
+@import "src/styles/variables";
+
+.task-row {
+    height: 50px;
+
+    &:hover {
+        background-color: $grey-50;
+    }
+    .assignment {
+        display: flex;
+        align-items: center;
+
+        fa-icon {
+            font-size: 1.25rem;
+            margin-left: 8px;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .editable {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .row-content {
+        display: inline-block;
+        width: 100%;
+    }
+}

@@ -16,6 +16,7 @@ export interface Story extends BaseType {
     realized: boolean;
     assigned: boolean;
     tests: AcceptanceTest[];
+    projectId: string;
 }
 
 export namespace Story {

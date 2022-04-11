@@ -4,9 +4,10 @@ import {
     ConflictError,
     NameCheckRequest,
     Story,
-    StoryRegisterRequest
+    StoryRegisterRequest,
+    Task,
 } from "@lib";
-import { catchHttpError, mapToVoid } from "@utils";
+import { catchHttpError, mapToType, mapToVoid } from "@utils";
 import { API_URL } from "@injectables";
 import { HttpClient } from "@angular/common/http";
 import { BaseError } from "@mjamsek/prog-utils";
@@ -51,6 +52,22 @@ export class StoryService {
             timeEstimate: newEstimate,
         };
         return this.http.patch(url, payload).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public getStoryTasks(storyId: string): Observable<Task[]> {
+        const url = `${this.apiUrl}/stories/${storyId}/tasks`;
+        return this.http.get(url).pipe(
+            mapToType<Task[]>(),
+            catchHttpError(),
+        );
+    }
+    
+    public createTask(storyId: string, task: Partial<Task>): Observable<void> {
+        const url = `${this.apiUrl}/stories/${storyId}/tasks`;
+        return this.http.post(url, task).pipe(
             mapToVoid(),
             catchHttpError(),
         );

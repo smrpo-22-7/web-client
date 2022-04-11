@@ -1,0 +1,18 @@
+<div>
+    <div class="story-actions">
+        <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
+            Tasks
+        </button>
+    </div>
+    <div>
+        <p>{{story.description}}</p>
+        <div *ngIf="story.tests && story.tests.length > 0">
+            <h5>Acceptance tests</h5>
+            <div>
+                <ul>
+                    <li *ngFor="let test of story.tests">{{test.result}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

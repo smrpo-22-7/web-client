@@ -1,0 +1,44 @@
+<ng-container *ngIf="auth$ | async as auth">
+    <div class="row task-row align-items-center">
+        <div class="col-8">
+            <span *ngIf="!edits.description" (click)="toggleEdits('description')"
+                class="editable row-content">{{task.description}}</span>
+            <span *ngIf="edits.description">
+                <input [(ngModel)]="task.description" type="text"
+                    (click)="markClicked()"
+                    class="form-control"
+                    (ngModelChange)="updateTask($event, 'description')"/>
+            </span>
+        </div>
+        <div class="col-2">
+            <span *ngIf="!edits.estimate" (click)="toggleEdits('estimate')"
+                class="editable row-content">{{task.estimate}} h</span>
+            <span *ngIf="edits.estimate">
+                <input [(ngModel)]="task.estimate" type="text"
+                    (click)="markClicked()"
+                    class="form-control"
+                    (ngModelChange)="updateTask($event, 'estimate')"/>
+            </span>
+        </div>
+        <div class="col-2 assignment">
+            <ng-container *ngIf="task.assignment && task.assignment.assignee">
+                <sc-user-initials-icon [name]="task.assignment.assignee.firstName + ' ' + task.assignment.assignee.lastName"
+                    [showTooltip]="true"
+                ></sc-user-initials-icon>
+                <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
+                    <ng-container *ngIf="auth.userId === task.assignment.assigneeId">
+                        <span *ngIf="task.assignment.pending" tooltip="Accept">
+                            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                        </span>
+                        <span *ngIf="task.assignment.pending" tooltip="Decline">
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                        </span>
+                        <span *ngIf="!task.assignment.pending" tooltip="Cancel">
+                            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                        </span>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>

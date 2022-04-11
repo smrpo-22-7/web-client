@@ -1,0 +1,8 @@
+<div class="user-icon no-select"
+    [class.greyed-out]="disabled"
+    [class.clickable]="isClickable"
+    (click)="whenClicked.emit()"
+    [tooltip]="showTooltip ? name : undefined"
+>
+    <span>{{initials}}</span>
+</div>

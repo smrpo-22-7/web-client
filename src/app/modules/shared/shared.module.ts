@@ -10,6 +10,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { NgForTrackByIdDirective } from './directives/base-type-track-by.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { PrettifyArrayPipe } from './pipes/prettify-array.pipe';
+import { UserInitialsIconComponent } from './components/user-initials-icon/user-initials-icon.component';
 
 @NgModule({
     imports: [
@@ -30,6 +31,7 @@ import { PrettifyArrayPipe } from './pipes/prettify-array.pipe';
         NgForTrackByIdDirective,
         SafeHtmlPipe,
         PrettifyArrayPipe,
+        UserInitialsIconComponent,
     ],
     declarations: [
         ValidationErrorComponent,
@@ -38,6 +40,7 @@ import { PrettifyArrayPipe } from './pipes/prettify-array.pipe';
         NgForTrackByIdDirective,
         SafeHtmlPipe,
         PrettifyArrayPipe,
+        UserInitialsIconComponent,
     ]
 })
 export class SharedModule {

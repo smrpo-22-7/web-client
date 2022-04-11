@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { TokenInfo } from "@lib";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
+import { initialName } from "@utils";
 
 @Component({
     selector: "sc-user-icon",
@@ -24,20 +25,12 @@ export class UserIconComponent implements OnInit {
     }
     
     ngOnInit(): void {
-        this.initials = this.initialsFromName(this.info.name);
+        this.initials = initialName(this.info.name);
     }
     
     public logout() {
         this.dropdownRef.hide();
         this.whenLogoutClicked.next();
-    }
-    
-    private initialsFromName(name: string): string {
-        const nameParts = name.split(" ");
-        if (nameParts.length >= 2) {
-            return nameParts[0][0] + nameParts[1][0];
-        }
-        return name[0];
     }
     
 }

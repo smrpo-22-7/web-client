@@ -24,6 +24,7 @@ type AuthenticatedState = {
     parsedAccessToken: TokenInfo;
     sessionState: string;
     roles: string[];
+    userId: string;
 }
 
 export type AuthState =

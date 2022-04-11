@@ -4,38 +4,10 @@
     margin-bottom: 20px;
 }
 .detail-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     min-height: 45px;
 
-    .story-check {
-        margin-right: 15px;
-        &.check-placeholder {
-            min-width: 14px;
-        }
-    }
-
-    .detail-header-left-group {
-        display: flex;
-        align-items: center;
-    }
-    .detail-header-right-group {
-        display: flex;
-        align-items: center;
-
-        .estimate-input {
-            display: flex;
-            align-items: center;
-
-            label {
-                margin-right: 5px;
-            }
-            input {
-                width: 60px;
-                margin-right: 5px;
-            }
-        }
+    sc-story-list-header {
+        width: 100%;
     }
 }
 .pagination-container {

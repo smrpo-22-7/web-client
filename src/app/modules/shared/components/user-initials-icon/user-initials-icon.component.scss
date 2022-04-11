@@ -1,0 +1,21 @@
+@import "src/styles/variables";
+
+.user-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    font-weight: 600;
+    background-color: $primary-color;
+
+    &.greyed-out {
+        opacity: 0.5;
+    }
+    &.clickable:hover {
+        cursor: pointer;
+    }
+}

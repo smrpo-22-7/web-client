@@ -4,7 +4,7 @@ import {
     ConflictError,
     NameCheckRequest,
     Story,
-    StoryRegisterRequest,
+    StoryRegisterRequest, StoryState,
     Task,
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
@@ -25,6 +25,14 @@ export class StoryService {
         const url = `${this.apiUrl}/projects/${projectId}/stories`;
         return this.http.post(url, request).pipe(
             mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public getStoryState(storyId: string): Observable<StoryState> {
+        const url = `${this.apiUrl}/stories/${storyId}/state`;
+        return this.http.get(url).pipe(
+            mapToType<StoryState>(),
             catchHttpError(),
         );
     }

@@ -19,6 +19,13 @@ export interface Story extends BaseType {
     projectId: string;
 }
 
+export interface StoryState {
+    id: string;
+    inActiveSprint: boolean;
+    realized: boolean;
+    estimated: boolean;
+}
+
 export namespace Story {
     export type Priority = "MUST_HAVE" | "SHOULD_HAVE" | "COULD_HAVE" | "WONT_HAVE_THIS_TIME";
     export const Priority = {

@@ -33,7 +33,8 @@ export {
     Story,
     AcceptanceTest,
     StoryRegisterRequest,
-    isStoryRegisterRequest
+    isStoryRegisterRequest,
+    StoryState,
 } from "./story.types";
 export {
     ProjectDocumentation,

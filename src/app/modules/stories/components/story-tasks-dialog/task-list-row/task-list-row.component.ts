@@ -1,7 +1,20 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { debounceTime, Observable, Subject, take, takeUntil } from "rxjs";
-import { AuthState, AuthStateStatus, Task } from "@lib";
-import { AuthService, StoryService, TaskService } from "@services";
+import {
+    debounceTime,
+    filter,
+    map,
+    Observable,
+    startWith,
+    Subject,
+    switchMap,
+    take,
+    takeUntil,
+    tap,
+} from "rxjs";
+import { AuthState, AuthStateStatus, FieldUpdateEvent, Task, UserProfile } from "@lib";
+import { AuthService, ProjectService, TaskService } from "@services";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+
 
 @Component({
     selector: "sc-task-list-row",
@@ -14,6 +27,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     public storyId: string;
     
     @Input()
+    public projectId: string;
+    
+    @Input()
     public task: Task;
     
     @Output()
@@ -22,38 +38,59 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     public authStates = AuthStateStatus;
     
     public auth$: Observable<AuthState>;
+    public members$: Observable<UserProfile[]>;
+    private update$ = new Subject<FieldUpdateEvent<string>>();
     private destroy$ = new Subject<boolean>();
     public edits = {
         description: false,
         estimate: false,
         assignee: false,
     };
+    public userQueryForm: FormGroup;
     
     private _clickedInside = false;
     
     constructor(private authService: AuthService,
                 private taskService: TaskService,
-                private storyService: StoryService) {
+                private projectService: ProjectService,
+                private fb: FormBuilder) {
     }
     
     ngOnInit(): void {
         this.auth$ = this.authService.getAuthState().pipe(
             takeUntil(this.destroy$),
         );
+        this.registerUpdateHandler();
+        
+        this.userQueryForm = this.fb.group({
+            input: this.fb.control(""),
+        });
+        this.members$ = this.userQueryCtrl.valueChanges.pipe(
+            startWith(""),
+            filter(value => {
+                return value && value.length && value.length > 0;
+            }),
+            switchMap((query: string) => {
+                return this.projectService.queryProjectMembers(this.projectId, query);
+            }),
+            takeUntil(this.destroy$)
+        );
     }
     
     public acceptTask() {
-        this.taskService.acceptTaskRequest(this.task.id).pipe(
-            take(1)
-        ).subscribe({
-            next: () => {
-                this.whenUpdated.emit();
-            }
-        });
+        this.handleAction(this.taskService.acceptTaskRequest(this.task.id));
     }
     
     public declineTask() {
-        this.taskService.declineTaskRequest(this.task.id).pipe(
+        this.handleAction(this.taskService.declineTaskRequest(this.task.id));
+    }
+    
+    public clearAssignee() {
+        this.handleAction(this.taskService.clearAssignee(this.task.id));
+    }
+    
+    private handleAction(action: Observable<void>) {
+        action.pipe(
             take(1)
         ).subscribe({
             next: () => {
@@ -62,21 +99,52 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         });
     }
     
-    public updateTask(newValue: string, field: string) {
-        if (!newValue) {
-            return;
+    public updateTask(newValue: any, field: string) {
+        if (newValue || typeof newValue === "boolean") {
+            this.update$.next({
+                field,
+                item: newValue,
+                requestRefresh: field !== "completed"
+            });
         }
-        const payload = {
-            [field]: field === "estimate" ? parseInt(newValue, 10) : newValue,
-        };
-        this.taskService.updateTask(this.task.id, payload).pipe(
+    }
+    
+    private registerUpdateHandler() {
+        this.update$.pipe(
             debounceTime(250),
-            take(1)
-        ).subscribe({
-            next: () => {
-                this.whenUpdated.emit();
-            },
+            switchMap(($event: FieldUpdateEvent<string>) => {
+                let payload = {
+                    [$event.field]: this.parsePrimitive($event.item),
+                };
+                if ($event.field === "assigneeId") {
+                    payload = {
+                        assignment: {
+                            assigneeId: $event.item,
+                        }
+                    };
+                }
+                return this.taskService.updateTask(this.task.id, payload).pipe(
+                    map(() => {
+                        return $event.requestRefresh ?? true;
+                    }),
+                );
+            }),
+            tap((refresh: boolean) => {
+                if (refresh) {
+                    this.whenUpdated.next();
+                }
+            }),
+            takeUntil(this.destroy$),
+        ).subscribe();
+    }
+    
+    public onUserSelect(user: UserProfile) {
+        this.update$.next({
+            field: "assigneeId",
+            item: user.id,
         });
+        this.userQueryForm.reset();
+        this.edits.assignee = false;
     }
     
     @HostListener("document:click", ["$event"])
@@ -100,11 +168,36 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         });
     }
     
+    public toggleDescriptionEdit(task: Task) {
+        this._clickedInside = true;
+        if (!task.description) {
+            Object.keys(this.edits).forEach((key) => {
+                if (key === "description") {
+                    (this.edits as any)[key] = true;
+                } else {
+                    (this.edits as any)[key] = false;
+                }
+            });
+        }
+    }
+    
     public markClicked() {
         this._clickedInside = true;
     }
     
     ngOnDestroy() {
         this.destroy$.next(true);
+    }
+    
+    private parsePrimitive(value: string) {
+        try {
+            return JSON.parse(value);
+        } catch (ignored) {
+            return value;
+        }
+    }
+    
+    public get userQueryCtrl(): FormControl {
+        return this.userQueryForm.get("input") as FormControl;
     }
 }

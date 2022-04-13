@@ -3,6 +3,10 @@
 .task-row {
     height: 50px;
 
+    .half-col {
+        flex: 0 0 auto;
+        width: 4%;
+    }
     &:hover {
         background-color: $grey-50;
     }
@@ -10,9 +14,34 @@
         display: flex;
         align-items: center;
 
-        fa-icon {
-            font-size: 1.25rem;
-            margin-left: 8px;
+        .assignee-section {
+            margin-right: 15px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .pending-mark {
+            color: $light-grey;
+            margin-left: 5px;
+        }
+
+        .assignee-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            fa-icon {
+                font-size: 1.25rem;
+                margin-left: 8px;
+                &:hover {
+                    cursor: pointer;
+                }
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+        .assign-user-btn {
+            color: $primary-color;
             &:hover {
                 cursor: pointer;
             }

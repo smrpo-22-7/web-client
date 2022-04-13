@@ -21,7 +21,7 @@ import {
     faArrowLeft,
     faChevronRight,
     faDatabase,
-    faSlidersH, faPowerOff, faUser, faCog, faDownload, faUpload, faXmark,
+    faSlidersH, faPowerOff, faUser, faCog, faDownload, faUpload, faXmark, faPersonCircleMinus,
 } from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
@@ -64,6 +64,7 @@ export class IconsModule {
             faUpload,
             faFloppyDisk,
             faXmark,
+            faPersonCircleMinus,
         );
     }
 }

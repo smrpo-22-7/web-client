@@ -30,6 +30,7 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     
     public storyId: string;
     public projectId: string;
+    public storyNumberId: number;
     
     public tasks$: Observable<Task[]>;
     public members$: Observable<UserProfile[]>;
@@ -113,6 +114,10 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
                 this.taskForm.reset();
             }
         });
+    }
+    
+    public refreshData() {
+        this.refresh$.next();
     }
     
     ngOnDestroy() {

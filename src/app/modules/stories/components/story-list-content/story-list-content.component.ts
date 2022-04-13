@@ -23,6 +23,7 @@ export class StoryListContentComponent implements OnInit {
         const initialState = {
             storyId: this.story.id,
             projectId: this.story.projectId,
+            storyNumberId: this.story.numberId,
         };
         this.modalService.openModal(StoryTasksDialogComponent, {
             initialState,

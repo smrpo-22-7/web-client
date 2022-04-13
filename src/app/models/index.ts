@@ -19,4 +19,4 @@ export {
 } from "./nav.types";
 export { ConfirmDialogEvents, ConfirmDialogOptions } from "./modal.models";
 export { StoriesFilter, KeeQuery, WrapOption } from "./filter.types";
-export { CheckboxSelectEvent } from "./form.types";
+export { CheckboxSelectEvent, FieldUpdateEvent, FormUpdateEvent } from "./form.types";

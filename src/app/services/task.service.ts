@@ -29,6 +29,14 @@ export class TaskService {
         );
     }
     
+    public clearAssignee(taskId: string): Observable<void> {
+        const url = `${this.apiUrl}/tasks/${taskId}/assignee`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
     public updateTask(taskId: string, task: Partial<Task>): Observable<void> {
         const url = `${this.apiUrl}/tasks/${taskId}`;
         return this.http.patch(url, task).pipe(

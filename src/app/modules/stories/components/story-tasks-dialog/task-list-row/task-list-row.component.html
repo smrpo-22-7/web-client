@@ -1,44 +1,98 @@
 <ng-container *ngIf="auth$ | async as auth">
     <div class="row task-row align-items-center">
-        <div class="col-8">
+        <div class="half-col">
+            <input class="form-check-input"
+                type="checkbox" [checked]="task.completed"
+                tooltip="Completed"
+                [(ngModel)]="task.completed"
+                (ngModelChange)="updateTask($event, 'completed')"
+            >
+        </div>
+        <div class="col" (click)="toggleDescriptionEdit(task)">
             <span *ngIf="!edits.description" (click)="toggleEdits('description')"
                 class="editable row-content">{{task.description}}</span>
             <span *ngIf="edits.description">
                 <input [(ngModel)]="task.description" type="text"
                     (click)="markClicked()"
                     class="form-control"
+                    required
+                    [class.is-invalid]="!task.description"
                     (ngModelChange)="updateTask($event, 'description')"/>
             </span>
         </div>
-        <div class="col-2">
+        <div class="col-1">
             <span *ngIf="!edits.estimate" (click)="toggleEdits('estimate')"
                 class="editable row-content">{{task.estimate}} h</span>
             <span *ngIf="edits.estimate">
-                <input [(ngModel)]="task.estimate" type="text"
+                <input [(ngModel)]="task.estimate" type="number"
                     (click)="markClicked()"
                     class="form-control"
+                    required
+                    [class.is-invalid]="task.estimate < 0.5"
+                    min="0.5" step="0.1"
                     (ngModelChange)="updateTask($event, 'estimate')"/>
             </span>
         </div>
-        <div class="col-2 assignment">
-            <ng-container *ngIf="task.assignment && task.assignment.assignee">
-                <sc-user-initials-icon [name]="task.assignment.assignee.firstName + ' ' + task.assignment.assignee.lastName"
-                    [showTooltip]="true"
-                ></sc-user-initials-icon>
+        <div class="col-3 assignment">
+            <ng-container *ngIf="task.assignment && task.assignment.assignee; else noAssignee">
+                <span class="assignee-section">
+                    <sc-user-initials-icon [name]="task.assignment.assignee.firstName + ' ' + task.assignment.assignee.lastName"
+                        [showTooltip]="true"
+                        [disabled]="task.assignment.pending"
+                    ></sc-user-initials-icon>
+                    <span *ngIf="task.assignment.pending" class="pending-mark">
+                        (pending)
+                    </span>
+                </span>
                 <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
                     <ng-container *ngIf="auth.userId === task.assignment.assigneeId">
-                        <span *ngIf="task.assignment.pending" tooltip="Accept">
+                        <span *ngIf="task.assignment.pending" (click)="acceptTask()"
+                            tooltip="Accept" class="assignee-btn">
                             <fa-icon [icon]="['fas', 'check']"></fa-icon>
                         </span>
-                        <span *ngIf="task.assignment.pending" tooltip="Decline">
+                        <span *ngIf="task.assignment.pending" (click)="declineTask()"
+                            tooltip="Decline" class="assignee-btn">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
-                        <span *ngIf="!task.assignment.pending" tooltip="Cancel">
+                        <span *ngIf="!task.assignment.pending"
+                            tooltip="Cancel" class="assignee-btn" (click)="clearAssignee()">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
                     </ng-container>
                 </ng-container>
+                <ng-container *ngIf="task.assignment.pending">
+                    <span tooltip="Clear assignee" class="assignee-btn" (click)="clearAssignee()">
+                        <fa-icon [icon]="['fas', 'person-circle-minus']"></fa-icon>
+                    </span>
+                </ng-container>
             </ng-container>
+
+            <ng-template #noAssignee>
+                <ng-container *ngIf="!edits.assignee">
+                    <span class="assign-user-btn" (click)="toggleEdits('assignee')">Assign user</span>
+                </ng-container>
+                <ng-container *ngIf="edits.assignee">
+                    <ng-container [formGroup]="userQueryForm">
+                        <input class="form-control" type="text"
+                            autocomplete="off"
+                            (click)="markClicked()"
+                            formControlName="input"
+                            placeholder="Search users"
+                            [typeaheadAsync]="true"
+                            [typeahead]="members$"
+                            [typeaheadOptionsLimit]="5"
+                            [typeaheadWaitMs]="250"
+                            [typeaheadItemTemplate]="searchResultTemplate"
+                            (typeaheadOnSelect)="onUserSelect($event.item)"
+                            [typeaheadMinLength]="0"
+                        />
+                        <ng-template #searchResultTemplate let-model="item">
+                            <span>{{model.lastName}} {{model.firstName}}</span>
+                        </ng-template>
+                    </ng-container>
+                </ng-container>
+            </ng-template>
+
         </div>
     </div>
 </ng-container>

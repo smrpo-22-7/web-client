@@ -28,16 +28,16 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            margin-left: 8px;
 
             fa-icon {
                 font-size: 1.25rem;
-                margin-left: 8px;
-                &:hover {
-                    cursor: pointer;
-                }
-                &:first-child {
-                    margin-left: 0;
-                }
+            }
+            &:hover {
+                cursor: pointer;
+            }
+            &:first-child {
+                margin-left: 0;
             }
         }
         .assign-user-btn {

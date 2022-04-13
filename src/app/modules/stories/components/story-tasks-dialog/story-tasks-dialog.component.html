@@ -1,28 +1,34 @@
 <div class="modal-content modal-padd">
     <div class="modal-header">
         <h4 id="dialog-sizes-name1" class="modal-title pull-left">Story #{{storyNumberId}}</h4>
-        <button type="button" class="btn-close close pull-right" aria-label="Close">
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="close()">
             <span aria-hidden="true" class="visually-hidden">&times;</span>
         </button>
     </div>
     <div class="modal-body">
         <div class="container">
-            <div class="row">
-                <strong class="col-8">
-                    Task
-                </strong>
-                <strong class="col-1">
-                    Estimate
-                </strong>
-                <strong class="col-3">
-                    Assignee
-                </strong>
-            </div>
             <ng-container *ngIf="tasks$ | async as tasks">
-                <sc-task-list-row *ngFor="let task of tasks" [storyId]="storyId"
-                    [projectId]="projectId" [task]="task"
-                    (whenUpdated)="refreshData()"
-                ></sc-task-list-row>
+                <ng-container *ngIf="tasks.length > 0; else noTasks">
+                    <div class="row">
+                        <strong class="col-8">
+                            Task
+                        </strong>
+                        <strong class="col-1">
+                            Estimate
+                        </strong>
+                        <strong class="col-3">
+                            Assignee
+                        </strong>
+                    </div>
+
+                    <sc-task-list-row *ngFor="let task of tasks" [storyId]="storyId"
+                        [projectId]="projectId" [task]="task"
+                        (whenUpdated)="refreshData()"
+                    ></sc-task-list-row>
+                </ng-container>
+                <ng-template #noTasks>
+                    <p>No tasks added yet! Use form below to add one.</p>
+                </ng-template>
             </ng-container>
         </div>
 

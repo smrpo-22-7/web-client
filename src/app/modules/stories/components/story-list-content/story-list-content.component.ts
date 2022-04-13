@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Story } from "@lib";
+import { NavState, NavStateStatus, Story } from "@lib";
 import { ModalService } from "@services";
 import { StoryTasksDialogComponent } from "../story-tasks-dialog/story-tasks-dialog.component";
+import { ProjectRole } from "@config/roles.config";
 
 @Component({
     selector: "sc-story-list-content",
@@ -12,6 +13,12 @@ export class StoryListContentComponent implements OnInit {
     
     @Input()
     public story: Story;
+    
+    @Input()
+    public nav: NavState;
+    
+    public projectRoles = ProjectRole;
+    public navStates = NavStateStatus;
     
     constructor(private modalService: ModalService) {
     }

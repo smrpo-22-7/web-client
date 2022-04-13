@@ -1,8 +1,12 @@
 <div>
     <div class="story-actions">
-        <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
-            Tasks
-        </button>
+        <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+            <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.PRODUCT_OWNER">
+                <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
+                    Tasks
+                </button>
+            </ng-container>
+        </ng-container>
     </div>
     <div>
         <p>{{story.description}}</p>

@@ -60,6 +60,7 @@
                             <label for="expectedSpeed" class="form-label zgorjirob">Velocity:</label>
                             <input [class.is-invalid]="hasError(sprintForm.get('expectedSpeed'))"
                                 type="number" id="expectedSpeed" class="form-control"
+                                placeholder="10 (pt)"
                                 [class.is-warned]="showVelocityWarning"
                                    formControlName="expectedSpeed"/>
                             <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('expectedSpeed'), 'required')">

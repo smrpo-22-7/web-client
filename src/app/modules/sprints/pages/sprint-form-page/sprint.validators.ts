@@ -34,8 +34,8 @@ export function validateNotBeforeToday(formControl: AbstractControl): Validation
 export function validateSprintDateConflicts(projectId$: Observable<string>, sprintService: SprintService): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
         const request: SprintConflictCheckRequest = {
-            startDate: truncateTime(control.get("startDate")?.value),
-            endDate: truncateTime(control.get("endDate")?.value),
+            startDate: control.get("startDate")?.value,
+            endDate: control.get("endDate")?.value,
         };
         return projectId$.pipe(
             switchMap((projectId: string) => {

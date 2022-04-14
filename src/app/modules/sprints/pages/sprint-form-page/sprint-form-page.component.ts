@@ -19,7 +19,7 @@ import {
     validateSprintDateConflicts
 } from "./sprint.validators";
 import { NavContext } from "@context";
-import { getDaysFromDate, parseUTCDate, truncateTime } from "@utils";
+import { getDaysFromDate } from "@utils";
 
 
 @Component({
@@ -90,8 +90,8 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
     public createSprint(projectId: string) {
         const formValue = this.sprintForm.getRawValue();
         if (isSprintRegisterRequest(formValue)) {
-            formValue["startDate"] = truncateTime(parseUTCDate(formValue["startDate"]));
-            formValue["endDate"] = truncateTime(parseUTCDate(formValue["endDate"]));
+            // formValue["startDate"] = truncateTime(parseUTCDate(formValue["startDate"]));
+            // formValue["endDate"] = truncateTime(parseUTCDate(formValue["endDate"]));
             this.sprintService.createSprint(formValue, projectId).pipe(take(1)).subscribe({
                 next: () => {
                     this.toastrService.success("New sprint was created!", "Success!");

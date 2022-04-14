@@ -17,6 +17,7 @@ $link-hover-decoration: none;
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~ngx-toastr/toastr";
+@import "~ngx-bootstrap/datepicker/bs-datepicker.css";
 
 body {
     margin: 0;
@@ -27,6 +28,7 @@ body {
 }
 
 @import "src/styles/predefines";
+@import "src/styles/datepicker";
 
 .btn-primary, .btn-outline-primary {
     &:hover {

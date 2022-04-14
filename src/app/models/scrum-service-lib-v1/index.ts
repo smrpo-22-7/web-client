@@ -19,6 +19,7 @@ export {
     ProjectMember,
     SprintConflictCheckRequest,
     ProjectQuery,
+    ProjectRolesCount,
 } from "./project.types";
 export { PriorityType } from "./priority.types";
 export { OpenApiDefinition } from "./openapi.types";

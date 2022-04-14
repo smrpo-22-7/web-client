@@ -28,8 +28,8 @@ export function isSprintRegisterRequest(request: unknown): request is SprintRegi
         const obj = request as any;
         if (validateFields(obj,
             { field: "title", type: "string" },
-            { field: "startDate", type: "string" },
-            { field: "endDate", type: "string" },
+            { field: "startDate", type: "object" },
+            { field: "endDate", type: "object" },
             { field: "expectedSpeed", type: "number" },
         )) {
             return true;

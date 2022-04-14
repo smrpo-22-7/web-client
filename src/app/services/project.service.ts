@@ -11,7 +11,7 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost, KeeQuery, WrapOption, UserProfile
+    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost, KeeQuery, WrapOption, UserProfile, ProjectRolesCount
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -176,6 +176,14 @@ export class ProjectService {
         const url = `${this.apiUrl}/projects/${projectId}/posts`;
         return this.http.post(url, post).pipe(
             mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public getProjectRolesCount(projectId: string): Observable<ProjectRolesCount> {
+        const url = `${this.apiUrl}/projects/${projectId}/roles/count`;
+        return this.http.get(url).pipe(
+            mapToType<ProjectRolesCount>(),
             catchHttpError(),
         );
     }

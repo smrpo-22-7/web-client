@@ -24,7 +24,7 @@ export class SprintService {
                 private http: HttpClient) {
     }
     
-    public createSprint(request: SprintRegisterRequest, projectId: string): Observable<void> {
+    public createSprint(request: Partial<Sprint>, projectId: string): Observable<void> {
         const url = `${this.apiUrl}/projects/${projectId}/sprints`;
         return this.http.post(url, request).pipe(
             mapToVoid(),
@@ -81,7 +81,7 @@ export class SprintService {
     
     public checkForConflicts(projectId: string, request: SprintConflictCheckRequest): Observable<boolean> {
         const url = `${this.apiUrl}/projects/${projectId}/sprints/check`;
-        return this.http.post(url, request, { observe: "response" }).pipe(
+        return this.http.post(url, request).pipe(
             map(() => false),
             catchHttpError(),
             catchError((err: BaseError) => {

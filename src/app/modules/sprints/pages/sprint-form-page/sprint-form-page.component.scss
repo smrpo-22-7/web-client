@@ -34,3 +34,17 @@
 ::placeholder{
     color:rgb(211, 211, 211);
 }
+
+.form-actions {
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .btn {
+        margin-right: 15px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

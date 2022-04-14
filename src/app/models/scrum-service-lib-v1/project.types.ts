@@ -34,6 +34,13 @@ export interface ProjectRegisterRequest {
     members:  { userId: string, projectRoleId: string }[];
 }
 
+export interface ProjectRolesCount {
+    projectId: string;
+    membersCount: number;
+    productOwnersCount: number;
+    scrumMastersCount: number;
+}
+
 export function isProjectRegisterRequest(request: unknown): request is ProjectRegisterRequest {
     if (request instanceof Object) {
         const obj = request as any;

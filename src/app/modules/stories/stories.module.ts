@@ -5,7 +5,6 @@ import { SprintsRoutingModule } from "../sprints/sprints-routing.module";
 import { ProjectStoriesPageComponent } from "./pages/project-stories-page/project-stories-page.component";
 import { StoryFormPageComponent } from "./pages/story-form-page/story-form-page.component";
 import { StoriesRoutingModule } from "./stories-routing.module";
-import { AddStoryDialogComponent } from './components/add-story-dialog/add-story-dialog.component';
 import { StoryListHeaderComponent } from './components/story-list-header/story-list-header.component';
 import { StoryListContentComponent } from './components/story-list-content/story-list-content.component';
 import { StoryTasksDialogComponent } from './components/story-tasks-dialog/story-tasks-dialog.component';
@@ -22,11 +21,10 @@ import { TaskListRowComponent } from './components/story-tasks-dialog/task-list-
     declarations: [
         ProjectStoriesPageComponent,
         StoryFormPageComponent,
-        AddStoryDialogComponent,
         StoryListHeaderComponent,
         StoryListContentComponent,
         StoryTasksDialogComponent,
-        TaskListRowComponent
+        TaskListRowComponent,
     ]
 })
 export class StoriesModule {

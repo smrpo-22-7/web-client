@@ -2,6 +2,15 @@
 
 .story-actions {
     margin-bottom: 20px;
+
+    .points-sum {
+        margin-left: 15px;
+
+        .over-limit {
+            color: $danger-color;
+            font-weight: 600;
+        }
+    }
 }
 .detail-header {
     min-height: 45px;

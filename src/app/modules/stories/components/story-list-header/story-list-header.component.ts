@@ -19,7 +19,7 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
     public nav: NavState;
     
     @Output()
-    public whenSelected = new EventEmitter<CheckboxSelectEvent<string>>();
+    public whenSelected = new EventEmitter<CheckboxSelectEvent<Story>>();
     
     private destroy$ = new Subject<boolean>();
     
@@ -40,7 +40,7 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
         const checkboxElement = $event.target as HTMLInputElement;
         this.whenSelected.emit({
             checked: checkboxElement.checked,
-            item: checkboxElement.value,
+            item: this.story,
         });
     }
     

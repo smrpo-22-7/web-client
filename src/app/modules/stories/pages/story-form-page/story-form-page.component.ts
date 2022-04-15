@@ -45,7 +45,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
             description: this.fb.control("", [Validators.required]),
             tests: this.fb.array([]),
             priority: this.fb.control("", [Validators.required]),
-            businessValue: this.fb.control(1, [Validators.min(1)]),
+            businessValue: this.fb.control(1, [Validators.min(1), Validators.max(10)]),
             timeEstimate: this.fb.control(null, [Validators.min(1)]),
         });
         this.testInputCtrl = this.fb.control("");

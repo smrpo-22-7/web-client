@@ -28,7 +28,8 @@ export {
     SprintRegisterRequest,
     isSprintRegisterRequest,
     SprintListResponse,
-    Sprint
+    Sprint,
+    SprintStatus,
 } from "./sprint.types";
 export {
     Story,

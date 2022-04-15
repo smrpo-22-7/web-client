@@ -23,6 +23,16 @@ export interface SprintListResponse {
     futureSprints: Sprint[];
 }
 
+export interface SprintStatus {
+    active: boolean;
+    startDate: Date;
+    endDate: Date;
+    expectedSpeed: number;
+    projectId: string;
+    sprintId: string;
+    assignedPoints: number;
+}
+
 export function isSprintRegisterRequest(request: unknown): request is SprintRegisterRequest {
     if (request instanceof Object) {
         const obj = request as any;

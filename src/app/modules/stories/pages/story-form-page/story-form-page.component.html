@@ -85,7 +85,7 @@
                                 </div>
 
                                 <div>
-                                    <label for="businessValue" class="form-label zgorjirob">Business value:</label>
+                                    <label for="businessValue" class="form-label zgorjirob">Business value (1-10):</label>
                                     <input type="number" id="businessValue" class="form-control"
                                         formControlName="businessValue"
                                         [class.is-invalid]="hasError(storyForm.get('businessValue'))">
@@ -93,10 +93,14 @@
                                         *ngIf="hasError(storyForm.get('businessValue'), 'min')">
                                         Business value has to be positive!
                                     </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="hasError(storyForm.get('businessValue'), 'max')">
+                                        Business value can be at most 10!
+                                    </div>
                                 </div>
 
                                 <div>
-                                    <label for="timeEstimate" class="form-label zgorjirob">Estimated time:</label>
+                                    <label for="timeEstimate" class="form-label zgorjirob">Estimated time (pt):</label>
                                     <input type="number" id="timeEstimate" class="form-control"
                                         formControlName="timeEstimate">
                                 </div>

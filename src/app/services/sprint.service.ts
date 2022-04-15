@@ -1,16 +1,16 @@
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { catchError, map, Observable, of, throwError } from "rxjs";
+import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
 import { API_URL } from "@injectables";
 import {
-    ConflictError,
+    ConflictError, SprintStatus,
     Sprint, SprintConflictCheckRequest,
     SprintListResponse,
-    SprintRegisterRequest, Story
+    Story
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
-import { BaseError, EntityList } from "@mjamsek/prog-utils";
 
 
 @Injectable({
@@ -75,6 +75,22 @@ export class SprintService {
         const url = `${this.apiUrl}/sprints/${sprintId}`;
         return this.http.get(url).pipe(
             mapToType<Sprint>(),
+            catchHttpError(),
+        );
+    }
+    
+    public getActiveProjectsSprint(projectId: string): Observable<SprintStatus> {
+        const url = `${this.apiUrl}/projects/${projectId}/sprints/status`;
+        return this.http.get(url).pipe(
+            mapToType<SprintStatus>(),
+            catchHttpError(),
+        );
+    }
+    
+    public getSprintStatus(sprintId: string): Observable<SprintStatus> {
+        const url = `${this.apiUrl}/sprints/${sprintId}/status`;
+        return this.http.get(url).pipe(
+            mapToType<SprintStatus>(),
             catchHttpError(),
         );
     }

@@ -13,7 +13,20 @@
         <div class="story-actions">
             <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
                 <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                    <button class="btn btn-primary" (click)="openSprintModal()">Add stories to sprint</button>
+                    <ng-container *ngIf="activeSprint$ | async as activeSprint">
+                        <ng-container *ngIf="activeSprint.active">
+                            <button class="btn btn-primary"
+                                [disabled]="(storyPoints + activeSprint.assignedPoints) > activeSprint.expectedSpeed"
+                                (click)="addToSprint(activeSprint.sprintId)">Add stories to sprint</button>
+
+                            <span class="points-sum">
+                                <span>Currently assigned points:</span>
+                                <span [class.over-limit]="(storyPoints + activeSprint.assignedPoints) > activeSprint.expectedSpeed">
+                                    {{storyPoints + activeSprint.assignedPoints}} / {{activeSprint.expectedSpeed}}
+                                </span>
+                            </span>
+                        </ng-container>
+                    </ng-container>
                 </ng-container>
             </ng-container>
         </div>

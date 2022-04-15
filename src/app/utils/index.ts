@@ -10,3 +10,4 @@ export { createPKCEChallenge, parseTokenPayload } from "./oidc.utils";
 export * from "./validators";
 export { getDaysFromDate, truncateTime, parseUTCDate } from "./datetime.utils";
 export { initialName } from "./user.utils";
+export { capitalize } from "./string.utils";

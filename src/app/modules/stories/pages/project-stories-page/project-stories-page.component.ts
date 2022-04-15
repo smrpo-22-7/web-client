@@ -15,12 +15,12 @@ import {
     takeUntil,
 } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
-import { CheckboxSelectEvent, NavState, NavStateStatus, StoriesFilter, Story } from "@lib";
-import { ModalService, ProjectService, StoryService } from "@services";
+import { CheckboxSelectEvent, NavState, NavStateStatus, SprintStatus, StoriesFilter, Story } from "@lib";
+import { ProjectService, SprintService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
-import { AddStoryDialogComponent } from "../../components/add-story-dialog/add-story-dialog.component";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
+import { capitalize } from "@utils";
 
 
 @Component({
@@ -33,7 +33,8 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     private destroy$ = new Subject<boolean>();
     public stories$: Observable<EntityList<Story>>;
     public nav$: Observable<NavState>;
-    private projectId$: Observable<string>;
+    public activeSprint$: Observable<SprintStatus>;
+    public projectId$: Observable<string>;
     public projectRoles = ProjectRole;
     public navStates = NavStateStatus;
     
@@ -44,12 +45,13 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     private refresh$ = new BehaviorSubject<void>(undefined);
     
     public storiesForm: FormArray;
+    private selectedStories: Story[];
     
     constructor(private projectService: ProjectService,
                 private storyService: StoryService,
+                private sprintService: SprintService,
                 private toastrService: ToastrService,
                 private route: ActivatedRoute,
-                private modalService: ModalService,
                 private nav: NavContext,
                 private fb: FormBuilder) {
         super();
@@ -57,6 +59,8 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     ngOnInit(): void {
         this.storiesForm = this.fb.array([]);
+        this.selectedStories = [];
+        
         this.nav$ = this.nav.getNavState().pipe(
             takeUntil(this.destroy$),
         );
@@ -66,6 +70,13 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             map((paramMap: ParamMap) => {
                 return paramMap.get("projectId")!;
             })
+        );
+        
+        this.activeSprint$ = this.projectId$.pipe(
+            switchMap((projectId: string) => {
+                return this.sprintService.getActiveProjectsSprint(projectId);
+            }),
+            takeUntil(this.destroy$),
         );
     
         this.stories$ = combineLatest([this.projectId$, this.filter$, this.offset$, this.limit$, this.refresh$]).pipe(
@@ -77,32 +88,34 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         );
     }
     
-    public onStorySelect($event: CheckboxSelectEvent<string>) {
+    public onStorySelect($event: CheckboxSelectEvent<Story>) {
         if ($event.checked) {
-            this.storiesForm.push(this.fb.control($event.item));
+            this.storiesForm.push(this.fb.control($event.item.id));
+            this.selectedStories.push($event.item);
         } else {
             this.storiesForm.controls.forEach((ctrl: AbstractControl, i: number) => {
-                if (ctrl.value === $event.item) {
+                if (ctrl.value === $event.item.id) {
                     this.storiesForm.removeAt(i);
                     return;
                 }
             });
+            this.selectedStories = this.selectedStories.filter(story => story.id !== $event.item.id);
         }
     }
     
-    public openSprintModal() {
+    public addToSprint(sprintId: string) {
         const storyIds: string[] = this.storiesForm.getRawValue();
-        this.projectId$.pipe(
-            take(1),
+        const storyMessage = storyIds.length === 1 ? "story": "stories";
+        this.sprintService.addStoriesToSprint(sprintId, storyIds).pipe(
+            take(1)
         ).subscribe({
-            next: (projectId: string) => {
-                this.modalService.openModal(AddStoryDialogComponent, {
-                    initialState: {
-                        projectId,
-                        storyIds,
-                    },
-                });
-            }
+            next: () => {
+                this.toastrService.success(`${capitalize(storyMessage)} added to sprint!`, "Success!");
+            },
+            error: err => {
+                this.toastrService.error(`Error adding ${storyMessage} to sprint!`, "Error!");
+                console.error(err);
+            },
         });
     }
     
@@ -121,5 +134,14 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     public getStoryId(index: number, item: Story): string {
         return item.id;
+    }
+    
+    public get storyPoints(): number {
+        if (this.selectedStories.length === 0) {
+            return 0;
+        }
+        return this.selectedStories.reduce((acc, elem) => {
+            return acc + elem.timeEstimate;
+        }, 0);
     }
 }

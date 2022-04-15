@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { AbstractControl, FormArray, FormBuilder } from "@angular/forms";
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -34,6 +34,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     public stories$: Observable<EntityList<Story>>;
     public nav$: Observable<NavState>;
     public activeSprint$: Observable<SprintStatus>;
+    private refreshActiveSprint$ = new BehaviorSubject<void>(undefined);
     public projectId$: Observable<string>;
     public projectRoles = ProjectRole;
     public navStates = NavStateStatus;
@@ -45,7 +46,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     private refresh$ = new BehaviorSubject<void>(undefined);
     
     public storiesForm: FormArray;
-    private selectedStories: Story[];
+    public storyPoints$: Observable<number>;
     
     constructor(private projectService: ProjectService,
                 private storyService: StoryService,
@@ -59,7 +60,6 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     ngOnInit(): void {
         this.storiesForm = this.fb.array([]);
-        this.selectedStories = [];
         
         this.nav$ = this.nav.getNavState().pipe(
             takeUntil(this.destroy$),
@@ -72,13 +72,12 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             })
         );
         
-        this.activeSprint$ = this.projectId$.pipe(
-            switchMap((projectId: string) => {
-                return this.sprintService.getActiveProjectsSprint(projectId);
-            }),
-            takeUntil(this.destroy$),
-        );
+        this.registerActiveSprint();
+        this.registerPaginatedList();
+        this.registerStoryPoints();
+    }
     
+    private registerPaginatedList(): void {
         this.stories$ = combineLatest([this.projectId$, this.filter$, this.offset$, this.limit$, this.refresh$]).pipe(
             switchMap((params: [string, StoriesFilter, number, number, void]) => {
                 const [projectId, filter, offset, limit] = params;
@@ -88,28 +87,59 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         );
     }
     
+    private registerActiveSprint(): void {
+        this.activeSprint$ = combineLatest([
+            this.projectId$,
+            this.refreshActiveSprint$,
+        ]).pipe(
+            switchMap((values: [string, void]) => {
+                const [projectId] = values;
+                return this.sprintService.getActiveProjectsSprint(projectId);
+            }),
+            takeUntil(this.destroy$),
+        );
+    }
+    
+    private registerStoryPoints(): void {
+        this.storyPoints$ = this.storiesForm.valueChanges.pipe(
+            map((values: any) => {
+                if (values.length === 0) {
+                    return 0;
+                }
+                return values.reduce((acc: any, elem: any) => {
+                    return acc + elem.timeEstimate;
+                }, 0);
+            }),
+            takeUntil(this.destroy$),
+        );
+    }
+    
     public onStorySelect($event: CheckboxSelectEvent<Story>) {
         if ($event.checked) {
-            this.storiesForm.push(this.fb.control($event.item.id));
-            this.selectedStories.push($event.item);
+            this.storiesForm.push(this.storyToFormGroup($event.item));
         } else {
             this.storiesForm.controls.forEach((ctrl: AbstractControl, i: number) => {
-                if (ctrl.value === $event.item.id) {
+                const storyId = ctrl.get("id")?.value;
+                if (storyId === $event.item.id) {
                     this.storiesForm.removeAt(i);
                     return;
                 }
             });
-            this.selectedStories = this.selectedStories.filter(story => story.id !== $event.item.id);
         }
     }
     
     public addToSprint(sprintId: string) {
-        const storyIds: string[] = this.storiesForm.getRawValue();
+        const storyIds: string[] = this.storiesForm.controls.map(ctrl => {
+            return ctrl.get("id")?.value;
+        });
         const storyMessage = storyIds.length === 1 ? "story": "stories";
         this.sprintService.addStoriesToSprint(sprintId, storyIds).pipe(
             take(1)
         ).subscribe({
             next: () => {
+                this.refresh$.next();
+                this.refreshActiveSprint$.next();
+                this.storiesForm.clear();
                 this.toastrService.success(`${capitalize(storyMessage)} added to sprint!`, "Success!");
             },
             error: err => {
@@ -136,12 +166,11 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         return item.id;
     }
     
-    public get storyPoints(): number {
-        if (this.selectedStories.length === 0) {
-            return 0;
-        }
-        return this.selectedStories.reduce((acc, elem) => {
-            return acc + elem.timeEstimate;
-        }, 0);
+    private storyToFormGroup(story: Story): FormGroup {
+        return this.fb.group({
+            id: this.fb.control(story.id),
+            timeEstimate: this.fb.control(story.timeEstimate),
+        });
     }
+    
 }

@@ -35,6 +35,12 @@ const routes: Routes = [
                 canActivateChild: [AuthenticatedChildGuard]
             },
             {
+                path: "projects/:projectId/manage",
+                loadChildren: () => import("../project-admin/project-admin.module").then(m => m.ProjectAdminModule),
+                canActivateChild: [AuthenticatedChildGuard],
+                data: {context: "PROJECT"}
+            },
+            {
                 path: "user-profile",
                 loadChildren: () => import("../user-profile/user-profile.module").then(m => m.UserProfileModule),
                 canActivateChild: [AuthenticatedChildGuard]

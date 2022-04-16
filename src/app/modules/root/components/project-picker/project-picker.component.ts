@@ -6,6 +6,7 @@ import { NavContext } from "@context";
 import { AuthService, ProjectService } from "@services";
 import { EntityList } from "@mjamsek/prog-utils";
 import { Router } from "@angular/router";
+import { ProjectRole } from "@config/roles.config";
 
 @Component({
     selector: "sc-project-picker",
@@ -22,6 +23,7 @@ export class ProjectPickerComponent implements OnInit, OnDestroy {
     public projectCtrl: FormControl;
     public authStates = AuthStateStatus;
     public navStates = NavStateStatus;
+    public projectRoles = ProjectRole;
     
     constructor(private fb: FormBuilder,
                 private router: Router,

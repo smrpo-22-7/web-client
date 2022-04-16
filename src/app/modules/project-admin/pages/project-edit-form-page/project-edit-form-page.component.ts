@@ -15,11 +15,14 @@ import { Project, ProjectMember, ProjectRole, User } from "@lib";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModalService, ProjectService, RoleService, UserService } from "@services";
 import { ToastrService } from "ngx-toastr";
-import { validateProject, validateUsersAndRoles } from "@utils";
+import { mapToType, validateProject, validateUsersAndRoles } from "@utils";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole as ProjectRoleConfig } from "@config/roles.config";
 
+type RouteContext = {
+    context: "PROJECT" | "ADMIN";
+}
 
 @Component({
     selector: "sc-project-edit-form-page",
@@ -30,6 +33,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
     
     public roles$: Observable<ProjectRole[]>;
     public users$: Observable<User[]>;
+    private routeContext$: Observable<RouteContext>;
     public projectForm: FormGroup;
     private destroy$ = new Subject<boolean>();
     private projectId$: Observable<string>;
@@ -46,6 +50,11 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
     }
     
     ngOnInit(): void {
+        this.routeContext$ = this.route.data.pipe(
+            startWith(this.route.snapshot.data),
+            mapToType<RouteContext>(),
+        );
+        
         this.projectForm = this.fb.group({
             name: this.fb.control("", [Validators.required]),
             oldName: this.fb.control(""),
@@ -209,10 +218,27 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
         ).subscribe({
             next: () => {
                 this.toastrService.success("Project updated!", "Success!");
+                this.navigateBack();
             },
             error: err => {
                 console.error(err);
                 this.toastrService.success("Error updating project!", "Error!");
+            }
+        });
+    }
+    
+    public navigateBack() {
+        forkJoin([
+            this.routeContext$.pipe(take(1)),
+            this.projectId$.pipe(take(1)),
+        ]).subscribe(values => {
+            const [ctx, projectId] = values;
+            if (ctx.context === "ADMIN") {
+                this.router.navigate(["/admin/projects"])
+            } else if (ctx.context === "PROJECT") {
+                this.router.navigate(["/projects", projectId]);
+            } else {
+                this.router.navigate(["/"]);
             }
         });
     }

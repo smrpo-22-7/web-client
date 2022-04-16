@@ -37,6 +37,14 @@
                                     Documentation
                                 </a>
                             </div>
+
+                            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                                <div class="nav-link">
+                                    <a [routerLink]="['/projects', nav.projectId, 'manage', 'edit']">
+                                        Manage
+                                    </a>
+                                </div>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
                 </ng-container>

@@ -15,6 +15,7 @@ const routes: Routes = [
     {
         path: "projects/:projectId",
         loadChildren: () => import("../project-admin/project-admin.module").then(m => m.ProjectAdminModule),
+        data: {context: "ADMIN"}
     }
 ];
 

@@ -11,11 +11,28 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th class="action-col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let project of projects.entities">
-                        <td>{{project.name}}</td>
+                        <td>
+                            <a [routerLink]="[project.id, 'edit']">
+                                {{project.name}}
+                            </a>
+                        </td>
+                        <td class="action-col">
+                            <ng-container *ngIf="project.status === 'ACTIVE'">
+                                <span class="action-btn" tooltip="Remove" (click)="openDeletePrompt(project)">
+                                    <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="project.status === 'DISABLED'">
+                                <span class="action-btn" tooltip="Reactivate" (click)="openActivatePrompt(project)">
+                                    <fa-icon [icon]="['fas', 'certificate']"></fa-icon>
+                                </span>
+                            </ng-container>
+                        </td>
                     </tr>
                 </tbody>
             </table>

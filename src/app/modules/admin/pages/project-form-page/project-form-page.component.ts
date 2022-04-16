@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { filter, Observable, Subject, switchMap, take, takeUntil } from "rxjs";
+import { Router } from "@angular/router";
 
 import { ProjectRole, User, isProjectRegisterRequest } from "@lib";
 import { ProjectService, RoleService, UserService } from "@services";
-import { validateUniqueProjectName } from "@utils";
+import { validateUniqueProjectName, validateUsersAndRoles } from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
-import { Router } from "@angular/router";
-import { validateUsersAndRoles } from "./formvalidators";
 import { ProjectRole as ProjectRoleConfig } from "@config/roles.config";
 
 @Component({

@@ -1,0 +1,99 @@
+<div class="container-lg">
+    <ng-container *ngIf="roles$ | async as roles">
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-6 ozadje">
+                <div class="text-center rob">
+                    <h2>Edit project</h2>
+                </div>
+                <form [formGroup]="projectForm" (ngSubmit)="updateProject()" class="rob">
+                    <div>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Project name:</label>
+                            <input id="name" class="form-control" formControlName="name"
+                                [class.is-invalid]="hasError(projectForm.get('name')) || hasError(projectForm)"
+                                placeholder="e.g. NewProject"/>
+                            <div class="invalid-feedback" *ngIf="hasError(projectForm.get('name'), 'required')">
+                                Project name is required!
+                            </div>
+                            <div class="invalid-feedback" *ngIf="hasError(projectForm, 'nameExists')">
+                                Project name already exists!
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end form-actions">
+                            <button type="button" class="btn btn-outline-danger" (click)="initializeForm()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="isInvalid(projectForm)">Update</button>
+                        </div>
+
+                        <div>
+                            <div>
+                                <label for="userquery" class="form-label zgorjirob">Add users:</label>
+                                <input id="userquery" class="form-control"
+                                    autocomplete="off"
+                                    formControlName="userQuery"
+                                    placeholder="Search users"
+                                    [typeaheadAsync]="true"
+                                    [typeahead]="users$"
+                                    [typeaheadOptionsLimit]="5"
+                                    [typeaheadWaitMs]="300"
+                                    [typeaheadItemTemplate]="searchResultTemplate"
+                                    (typeaheadOnSelect)="onUserSelect($event.item)"
+                                    [typeaheadMinLength]="1"
+                                />
+                            </div>
+                            <ng-template #searchResultTemplate let-model="item">
+                                <span>{{model.username}}</span>
+                            </ng-template>
+
+                            <table class="table table-light table-hover table-bordered zgorjirob align-middle">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <td>Username</td>
+                                        <td>Role</td>
+                                        <td>Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of usersCtrl.controls; let i = index"
+                                        [formGroup]="$any(user)">
+                                        <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
+                                        <td>
+                                            <select formControlName="projectRoleId" id="projectRoleId"
+                                                class="form-select" (ngModelChange)="updateUserRole($event, user.get('userId')?.value)">
+                                                <option *ngFor="let role of roles" [value]="role.roleId"
+                                                    [disabled]="isDisabled(role.roleId)">
+                                                    {{role.name}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="table-actions">
+                                                <span (click)="removeUser(i, user)" class="remove-btn">
+                                                    <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="invalid-feedback" [class.force-invalid-feedback]="hasErrorNoTouch(projectForm, 'noMembers')">
+                                Project must have at least some members
+                            </div>
+                            <div class="invalid-feedback" [class.force-invalid-feedback]="hasErrorNoTouch(projectForm, 'missingRoles')">
+                                Project lacks required roles! Each project must have at least one product owner, scrum master and one or more members.
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+                <!--<form [formGroup]="userForm" (ngSubmit)="createProject()" class="rob">
+
+                </form>-->
+            </div>
+
+        </div>
+    </ng-container>
+</div>
+

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, of, switchMap, take, tap } from "rxjs";
-import { AuthStateStatus, NavState, NavStateStatus, ProjectRole } from "@lib";
+import { BehaviorSubject, catchError, Observable, of, switchMap, take, tap, throwError } from "rxjs";
+import { AuthStateStatus, ForbiddenError, NavState, NavStateStatus, NotFoundError, ProjectRole } from "@lib";
 import { AuthService, ProjectService } from "@services";
 import { mapToVoid } from "@utils";
 
@@ -56,6 +56,16 @@ export class NavContext {
                 });
             }),
             mapToVoid(),
+            catchError(err => {
+                if (err instanceof ForbiddenError || err instanceof NotFoundError) {
+                    localStorage.removeItem(NavContext.STORAGE_KEY);
+                    this.context$.next({
+                        status: NavStateStatus.NO_CONTEXT,
+                    })
+                    return of(undefined);
+                }
+                return throwError(() => err);
+            }),
             take(1),
         ).subscribe({
             next: () => {

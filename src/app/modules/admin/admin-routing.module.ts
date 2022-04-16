@@ -11,7 +11,11 @@ const routes: Routes = [
     { path: "users", component: UsersListPageComponent },
     { path: "users/new", component: UserFormPageComponent },
     { path: "projects", component: ProjectListPageComponent },
-    { path: "projects/new", component: ProjectFormPageComponent }
+    { path: "projects/new", component: ProjectFormPageComponent },
+    {
+        path: "projects/:projectId",
+        loadChildren: () => import("../project-admin/project-admin.module").then(m => m.ProjectAdminModule),
+    }
 ];
 
 @NgModule({

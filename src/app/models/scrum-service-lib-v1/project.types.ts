@@ -23,6 +23,9 @@ export interface SprintConflictCheckRequest {
 export interface ProjectMember {
     user: User;
     projectRole: ProjectRole;
+    projectId: string;
+    userId: string;
+    projectRoleId: string;
 }
 
 export interface NameCheckRequest {

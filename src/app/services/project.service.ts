@@ -122,6 +122,22 @@ export class ProjectService {
         );
     }
     
+    public removeProject(projectId: string): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/disable`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public activateProject(projectId: string): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/activate`;
+        return this.http.post(url, null).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
     public getProjectMembers(projectId: string, params: KeeQuery, wrapped?: "nowrap"): Observable<ProjectMember[]>;
     public getProjectMembers(projectId: string, params: KeeQuery, wrapped?: "wrap"): Observable<EntityList<ProjectMember>>;
     public getProjectMembers(projectId: string, {
@@ -184,6 +200,38 @@ export class ProjectService {
         const url = `${this.apiUrl}/projects/${projectId}/roles/count`;
         return this.http.get(url).pipe(
             mapToType<ProjectRolesCount>(),
+            catchHttpError(),
+        );
+    }
+    
+    public updateProject(projectId: string, project: Partial<Project>): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}`;
+        return this.http.patch(url, project).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public addUserToProject(projectId: string, membership: Partial<ProjectMember>): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/users`;
+        return this.http.post(url, membership).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public removeUserFromProject(projectId: string, userId: string): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/users/${userId}`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public updateUserProjectRole(projectId: string, userId: string, membership: Partial<ProjectMember>): Observable<void> {
+        const url = `${this.apiUrl}/projects/${projectId}/users/${userId}`;
+        return this.http.patch(url, membership).pipe(
+            mapToVoid(),
             catchHttpError(),
         );
     }

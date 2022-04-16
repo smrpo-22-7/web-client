@@ -20,3 +20,15 @@
         }
     }
 }
+
+table {
+    td.action-col, th.action-col {
+        width: 100px;
+
+        .action-btn {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

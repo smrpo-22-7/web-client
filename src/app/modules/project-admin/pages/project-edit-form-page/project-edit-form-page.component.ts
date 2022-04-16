@@ -11,8 +11,8 @@ import {
     takeUntil,
     tap,
 } from "rxjs";
-import { Project, ProjectMember, ProjectRole, User } from "@lib";
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { isProjectRegisterRequest, Project, ProjectMember, ProjectRole, User } from "@lib";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModalService, ProjectService, RoleService, UserService } from "@services";
 import { ToastrService } from "ngx-toastr";
 import { mapToType, validateProject, validateUsersAndRoles } from "@utils";
@@ -110,9 +110,9 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
                 this.usersCtrl.clear();
                 members.forEach(member => {
                     this.usersCtrl.push(this.createUserFormGroup(
-                        member.user.username,
-                        member.user.id,
-                        member.projectRole.roleId
+                        member.user!.username,
+                        member.user!.id,
+                        member.projectRole!.roleId
                     ));
                 });
             }),
@@ -120,6 +120,8 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
         ).subscribe({
             next: () => {
                 this.projectForm.updateValueAndValidity();
+                this.projectForm.markAsUntouched();
+                this.projectForm.markAsPristine();
             },
         });
     }
@@ -136,95 +138,43 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
         if (existingUser) {
             return;
         }
-        
-        this.projectId$.pipe(
-            switchMap((projectId: string) => {
-                const membership: Partial<ProjectMember> = {
-                    userId: $event.id,
-                    projectRoleId: "member",
-                };
-                return this.projectService.addUserToProject(projectId, membership);
-            }),
-            take(1),
-        ).subscribe({
-            next: () => {
-                this.usersCtrl.push(this.createUserFormGroup($event.username, $event.id));
-            },
-            error: err => {
-                console.error(err);
-            }
-        });
+    
+        this.usersCtrl.push(this.createUserFormGroup($event.username, $event.id));
+        this.usersCtrl.markAsDirty();
+        this.usersCtrl.markAsTouched();
     }
     
-    public removeUser(index: number, userCtrl: AbstractControl): void {
-        const username = userCtrl.get("userName")?.value;
-        const userId = userCtrl.get("userId")?.value;
-        const message = `Are you sure you want to remove user '${username}' from project?`;
-        this.modalService.openConfirmDialog("Are you sure?", message, {
-            onConfirm: ref => {
-                this.projectId$.pipe(
-                    switchMap((projectId: string) => {
-                        return this.projectService.removeUserFromProject(projectId, userId);
-                    }),
-                    take(1),
-                ).subscribe({
-                    next: () => {
-                        this.usersCtrl.removeAt(index);
-                    },
-                    error: err => {
-                        console.error(err);
-                    },
-                    complete: () => {
-                        ref.hide();
-                    },
-                });
-            }
-        }, {
-            decline: {
-                clazz: "btn-outline-secondary"
-            },
-            confirm: {
-                clazz: "btn-danger"
-            },
-        });
-    }
-    
-    public updateUserRole(roleId: string, userId: string) {
-        this.projectId$.pipe(
-            switchMap((projectId: string) => {
-                const membership: Partial<ProjectMember> = {
-                    projectRoleId: roleId,
-                };
-                return this.projectService.updateUserProjectRole(projectId, userId, membership);
-            }),
-            take(1),
-        ).subscribe({
-            next: () => {
-            
-            },
-            error: err => {
-                console.error(err);
-            }
-        });
+    public removeUser(index: number): void {
+        this.usersCtrl.removeAt(index);
+        this.usersCtrl.markAsDirty();
+        this.usersCtrl.markAsTouched();
     }
     
     public updateProject() {
-        this.projectId$.pipe(
-            switchMap((projectId: string) => {
-                const projectName = this.projectForm.get("name")?.value;
-                return this.projectService.updateProject(projectId, { name: projectName });
-            }),
-            take(1),
-        ).subscribe({
-            next: () => {
-                this.toastrService.success("Project updated!", "Success!");
-                this.navigateBack();
-            },
-            error: err => {
-                console.error(err);
-                this.toastrService.success("Error updating project!", "Error!");
-            }
-        });
+        const formValue = this.projectForm.getRawValue();
+        delete formValue["userQuery"];
+        for (let val of formValue["members"]) {
+            delete val.userName;
+        }
+        if (isProjectRegisterRequest(formValue)) {
+            this.projectId$.pipe(
+                switchMap((projectId: string) => {
+                    return this.projectService.updateProject(projectId, formValue);
+                }),
+                take(1),
+            ).subscribe({
+                next: () => {
+                    this.toastrService.success("Project updated!", "Success!");
+                    this.navigateBack();
+                },
+                error: err => {
+                    console.error(err);
+                    this.toastrService.success("Error updating project!", "Error!");
+                }
+            });
+        } else {
+            throw new TypeError("Form does not match the required format!");
+        }
     }
     
     public navigateBack() {

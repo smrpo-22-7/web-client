@@ -3,7 +3,10 @@
 
         <div class="row justify-content-center my-5">
             <div class="col-lg-6 ozadje">
-                <div class="text-center rob">
+                <div class="text-center header">
+                    <span (click)="navigateBack()">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    </span>
                     <h2>Edit project</h2>
                 </div>
                 <form [formGroup]="projectForm" (ngSubmit)="updateProject()" class="rob">
@@ -19,11 +22,6 @@
                             <div class="invalid-feedback" *ngIf="hasError(projectForm, 'nameExists')">
                                 Project name already exists!
                             </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end form-actions">
-                            <button type="button" class="btn btn-outline-danger" (click)="navigateBack()">Cancel</button>
-                            <button type="submit" class="btn btn-primary" [disabled]="isInvalid(projectForm)">Update</button>
                         </div>
 
                         <div>
@@ -60,7 +58,7 @@
                                         <td class="align-content-center">{{$any(user).controls['userName'].value}}</td>
                                         <td>
                                             <select formControlName="projectRoleId" id="projectRoleId"
-                                                class="form-select" (ngModelChange)="updateUserRole($event, user.get('userId')?.value)">
+                                                class="form-select">
                                                 <option *ngFor="let role of roles" [value]="role.roleId"
                                                     [disabled]="isDisabled(role.roleId)">
                                                     {{role.name}}
@@ -69,7 +67,7 @@
                                         </td>
                                         <td>
                                             <span class="table-actions">
-                                                <span (click)="removeUser(i, user)" class="remove-btn">
+                                                <span (click)="removeUser(i)" class="remove-btn">
                                                     <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
                                                 </span>
                                             </span>
@@ -85,14 +83,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="d-flex justify-content-end form-actions">
+                        <button type="button" class="btn btn-outline-danger" (click)="navigateBack()">Cancel</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="initializeForm()">Reset</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="isInvalid(projectForm) || !projectForm.dirty">Update</button>
+                    </div>
                 </form>
-
-
-                <!--<form [formGroup]="userForm" (ngSubmit)="createProject()" class="rob">
-
-                </form>-->
             </div>
-
         </div>
     </ng-container>
 </div>

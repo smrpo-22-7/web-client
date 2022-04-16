@@ -13,7 +13,7 @@ export { SysRole } from "./role.types";
 export {
     ProjectRole,
     NameCheckRequest,
-    ProjectRegisterRequest,
+    ProjectRequest,
     Project,
     isProjectRegisterRequest,
     ProjectMember,

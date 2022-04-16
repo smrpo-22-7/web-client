@@ -68,6 +68,8 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
         }
         
         this.usersCtrl.push(this.createUserFormGroup($event.username, $event.id));
+        this.usersCtrl.markAsDirty();
+        this.usersCtrl.markAsTouched();
     }
     
     private createUserFormGroup(username: string, userId: string): FormGroup {
@@ -80,6 +82,8 @@ export class ProjectFormPageComponent extends FormBaseComponent implements OnIni
     
     public removeUser(index: number): void {
         this.usersCtrl.removeAt(index);
+        this.usersCtrl.markAsDirty();
+        this.usersCtrl.markAsTouched();
     }
     
     public createProject() {

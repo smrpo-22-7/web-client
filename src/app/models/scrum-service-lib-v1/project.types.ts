@@ -21,9 +21,9 @@ export interface SprintConflictCheckRequest {
 }
 
 export interface ProjectMember {
-    user: User;
-    projectRole: ProjectRole;
-    projectId: string;
+    user?: User;
+    projectRole?: ProjectRole;
+    projectId?: string;
     userId: string;
     projectRoleId: string;
 }
@@ -32,9 +32,9 @@ export interface NameCheckRequest {
     value: string;
 }
 
-export interface ProjectRegisterRequest {
+export interface ProjectRequest {
     name: string;
-    members:  { userId: string, projectRoleId: string }[];
+    members: ProjectMember[];
 }
 
 export interface ProjectRolesCount {
@@ -44,7 +44,7 @@ export interface ProjectRolesCount {
     scrumMastersCount: number;
 }
 
-export function isProjectRegisterRequest(request: unknown): request is ProjectRegisterRequest {
+export function isProjectRegisterRequest(request: unknown): request is ProjectRequest {
     if (request instanceof Object) {
         const obj = request as any;
         if (validateFields(obj,

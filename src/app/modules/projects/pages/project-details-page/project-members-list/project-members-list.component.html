@@ -12,8 +12,8 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let member of members.entities">
-                        <td>{{member.user.lastName}} {{member.user.firstName}}</td>
-                        <td class="role-col">{{member.projectRole.name}}</td>
+                        <td>{{member?.user?.lastName}} {{member?.user?.firstName}}</td>
+                        <td class="role-col">{{member?.projectRole?.name}}</td>
                     </tr>
                 </tbody>
             </table>

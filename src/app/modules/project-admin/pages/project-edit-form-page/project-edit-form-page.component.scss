@@ -1,5 +1,21 @@
 
+.header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
 
+    span {
+        margin-right: 20px;
+        font-size: 1.75rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    h2 {
+        margin-bottom: 0;
+    }
+}
 .form-actions {
     .btn {
         margin-right: 15px;

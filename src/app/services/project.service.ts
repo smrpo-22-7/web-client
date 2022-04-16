@@ -6,7 +6,7 @@ import { BaseError, EntityList } from "@mjamsek/prog-utils";
 import { API_URL } from "@injectables";
 import {
     ConflictError,
-    ProjectRegisterRequest,
+    ProjectRequest,
     NameCheckRequest,
     Project,
     ProjectRole,
@@ -61,7 +61,7 @@ export class ProjectService {
         );
     }
     
-    public createProject(request: ProjectRegisterRequest): Observable<void> {
+    public createProject(request: ProjectRequest): Observable<void> {
         const url = `${this.apiUrl}/projects`;
         return this.http.post(url, request).pipe(
             mapToVoid(),
@@ -204,9 +204,9 @@ export class ProjectService {
         );
     }
     
-    public updateProject(projectId: string, project: Partial<Project>): Observable<void> {
+    public updateProject(projectId: string, request: ProjectRequest): Observable<void> {
         const url = `${this.apiUrl}/projects/${projectId}`;
-        return this.http.patch(url, project).pipe(
+        return this.http.put(url, request).pipe(
             mapToVoid(),
             catchHttpError(),
         );

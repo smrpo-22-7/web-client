@@ -8,3 +8,11 @@ export interface KeeQuery {
 }
 
 export type WrapOption = "wrap" | "nowrap";
+
+export type ProjectStoriesParams = {
+    numberIdSort?: "ASC" | "DESC";
+    filterRealized?: boolean;
+    filterAssigned?: boolean;
+    limit?: number;
+    offset?: number;
+}

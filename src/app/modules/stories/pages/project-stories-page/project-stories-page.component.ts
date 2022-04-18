@@ -15,7 +15,7 @@ import {
     takeUntil,
 } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
-import { CheckboxSelectEvent, NavState, NavStateStatus, SprintStatus, StoriesFilter, Story } from "@lib";
+import { CheckboxSelectEvent, NavState, NavStateStatus, SprintStatus, Story } from "@lib";
 import { ProjectService, SprintService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole } from "@config/roles.config";
@@ -41,8 +41,9 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
-    public filter$ = new BehaviorSubject<StoriesFilter>("ALL");
-    public totalPages = 0;
+    public sort$ = new BehaviorSubject<"ASC" | "DESC">("ASC");
+    public filterRealized$ = new BehaviorSubject<boolean>(false);
+    public filterAssigned$ = new BehaviorSubject<boolean>(false);
     private refresh$ = new BehaviorSubject<void>(undefined);
     
     public storiesForm: FormArray;
@@ -78,10 +79,24 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     }
     
     private registerPaginatedList(): void {
-        this.stories$ = combineLatest([this.projectId$, this.filter$, this.offset$, this.limit$, this.refresh$]).pipe(
-            switchMap((params: [string, StoriesFilter, number, number, void]) => {
-                const [projectId, filter, offset, limit] = params;
-                return this.projectService.getProjectStories(projectId, filter, offset, limit);
+        this.stories$ = combineLatest([
+            this.projectId$,
+            this.sort$,
+            this.filterRealized$,
+            this.filterAssigned$,
+            this.offset$,
+            this.limit$,
+            this.refresh$,
+        ]).pipe(
+            switchMap((params: [string, "ASC" | "DESC", boolean, boolean, number, number, void]) => {
+                const [projectId, sort, filterRealized, filterAssigned, offset, limit] = params;
+                return this.projectService.getProjectStoriesExtended(projectId, {
+                    limit: limit,
+                    offset: offset,
+                    filterAssigned: filterAssigned,
+                    filterRealized: filterRealized,
+                    numberIdSort: sort,
+                });
             }),
             takeUntil(this.destroy$)
         );
@@ -153,8 +168,13 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         this.offset$.next(($event.page - 1) * $event.itemsPerPage);
     }
     
-    public applyFilter(filter: StoriesFilter): void {
-        this.filter$.next(filter);
+    public toggleSort() {
+        this.sort$.next(this.oppositeSort);
+        this.offset$.next(0);
+    }
+    
+    public toggleFilter(value: boolean, filter: BehaviorSubject<boolean>) {
+        filter.next(value);
         this.offset$.next(0);
     }
     
@@ -171,6 +191,10 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             id: this.fb.control(story.id),
             timeEstimate: this.fb.control(story.timeEstimate),
         });
+    }
+    
+    public get oppositeSort(): "ASC" | "DESC" {
+        return this.sort$.value === "ASC" ? "DESC" : "ASC";
     }
     
 }

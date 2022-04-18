@@ -37,6 +37,7 @@ export {
     StoryRegisterRequest,
     isStoryRegisterRequest,
     StoryState,
+    ExtendedStory,
 } from "./story.types";
 export {
     ProjectDocumentation,

@@ -28,20 +28,9 @@
 .story-filters {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 
     .filter {
         margin-right: 15px;
-        color: $primary-color;
-
-        &:hover {
-            cursor: pointer;
-        }
-        &:last-child {
-            margin-right: 0;
-        }
-        &.applied {
-            color: $secondary-color;
-        }
     }
 }

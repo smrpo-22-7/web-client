@@ -19,7 +19,7 @@ import {
     WrapOption,
     UserProfile,
     ProjectRolesCount,
-    SprintStatus
+    SprintStatus, ExtendedStory, ProjectStoriesParams
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -119,7 +119,21 @@ export class ProjectService {
                 );
             }),
             catchHttpError(),
-        )
+        );
+    }
+    
+    public getProjectStoriesExtended(projectId: string, params: ProjectStoriesParams): Observable<EntityList<ExtendedStory>> {
+        const url = `${this.apiUrl}/projects/${projectId}/stories/full`;
+        return this.http.get(url, { params, observe: "response" }).pipe(
+            mapToType<HttpResponse<ExtendedStory[]>>(),
+            map((res: HttpResponse<ExtendedStory[]>) => {
+                return EntityList.of(
+                    res.body!,
+                    parseInt(res.headers.get("x-total-count")!),
+                );
+            }),
+            catchHttpError(),
+        );
     }
     
     public getUserRole(projectId: string): Observable<ProjectRole> {

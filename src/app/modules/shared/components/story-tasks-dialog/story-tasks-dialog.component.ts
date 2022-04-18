@@ -31,6 +31,7 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     public storyId: string;
     public projectId: string;
     public storyNumberId: number;
+    public allowTaskEdit: boolean;
     
     public tasks$: Observable<Task[]>;
     public members$: Observable<UserProfile[]>;

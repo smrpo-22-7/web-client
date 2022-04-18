@@ -17,6 +17,9 @@ export class StoryListContentComponent implements OnInit {
     @Input()
     public nav: NavState;
     
+    @Input()
+    public allowTaskEdit: boolean = true;
+    
     public projectRoles = ProjectRole;
     public navStates = NavStateStatus;
     
@@ -31,6 +34,7 @@ export class StoryListContentComponent implements OnInit {
             storyId: this.story.id,
             projectId: this.story.projectId,
             storyNumberId: this.story.numberId,
+            allowTaskEdit: this.allowTaskEdit,
         };
         this.modalService.openModal(StoryTasksDialogComponent, {
             initialState,

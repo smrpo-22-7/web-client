@@ -6,6 +6,7 @@ import { SprintFormPageComponent } from "./pages/sprint-form-page/sprint-form-pa
 import { ProjectSprintsListPageComponent } from "./pages/project-sprints-list-page/project-sprints-list-page.component";
 import { SprintRowComponent } from './components/sprint-row/sprint-row.component';
 import { SprintDetailsPageComponent } from './pages/sprint-details-page/sprint-details-page.component';
+import { SprintBacklogPageComponent } from './pages/sprint-backlog-page/sprint-backlog-page.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { SprintDetailsPageComponent } from './pages/sprint-details-page/sprint-d
         ProjectSprintsListPageComponent,
         SprintFormPageComponent,
         SprintRowComponent,
-        SprintDetailsPageComponent
+        SprintDetailsPageComponent,
+        SprintBacklogPageComponent
     ]
 })
 export class SprintsModule {

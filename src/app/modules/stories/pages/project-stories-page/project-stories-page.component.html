@@ -1,6 +1,6 @@
 <div *ngIf="nav$ | async as nav">
     <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
-        <h1 class="mb-0">Project stories</h1>
+        <h1 class="mb-0">Product backlog</h1>
 
         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER || nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">

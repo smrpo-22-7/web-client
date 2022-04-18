@@ -18,6 +18,9 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
     @Input()
     public nav: NavState;
     
+    @Input()
+    public allowSelection: boolean = true;
+    
     @Output()
     public whenSelected = new EventEmitter<CheckboxSelectEvent<Story>>();
     

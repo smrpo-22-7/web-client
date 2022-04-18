@@ -2,7 +2,7 @@
     <div class="detail-header-left-group">
         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned; else checkPlaceholder">
+                <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned && allowSelection; else checkPlaceholder">
                     <div class="story-check">
                         <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
                     </div>

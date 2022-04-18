@@ -1,0 +1,62 @@
+<div *ngIf="nav$ | async as nav">
+    <div class="mt-4 mb-2 d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">Sprint backlog</h1>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="all-sprints-btn">
+            <a routerLink="all">
+                All sprints
+            </a>
+        </span>
+    </div>
+    <div>
+        <ng-container *ngIf="sprint$ | async as sprint">
+            <ng-container *ngIf="sprint.active; else noActiveSprint">
+                <div>
+                    <h3>Active sprint: {{sprint.startDate | date: "dd.MM.yyyy"}}
+                        - {{sprint.endDate | date: "dd.MM.yyyy"}}</h3>
+                    <p>Assigned points / Velocity: {{sprint.assignedPoints}} / {{sprint.expectedSpeed}}</p>
+                </div>
+                <div>
+                    <ng-container *ngIf="stories$ | async as stories">
+                        <ng-container *ngIf="stories.entities.length > 0; else noStories">
+                            <div>
+                                <accordion [isAnimated]="true">
+                                    <accordion-group *ngFor="let story of stories.entities">
+                                        <div accordion-heading class="detail-header">
+                                            <sc-story-list-header
+                                                [nav]="nav"
+                                                [story]="story"
+                                                [allowSelection]="false"
+                                            >
+                                            </sc-story-list-header>
+                                        </div>
+                                        <div>
+                                            <sc-story-list-content
+                                                [nav]="nav"
+                                                [story]="story"
+                                            ></sc-story-list-content>
+                                        </div>
+                                    </accordion-group>
+                                </accordion>
+                            </div>
+                            <div class="pagination-container">
+                                <pagination
+                                    [itemsPerPage]="limit$.value"
+                                    [totalItems]="stories.count"
+                                    (pageChanged)="newPage($event)"
+                                ></pagination>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #noStories>
+                        <p>Sprint has no assigned stories!</p>
+                    </ng-template>
+                </div>
+            </ng-container>
+            <ng-template #noActiveSprint>
+                <p>There is currently no active sprints!</p>
+            </ng-template>
+        </ng-container>
+    </div>
+</div>

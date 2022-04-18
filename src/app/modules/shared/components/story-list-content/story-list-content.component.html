@@ -1,7 +1,7 @@
 <div>
     <div class="story-actions">
         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-            <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.PRODUCT_OWNER">
+            <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.PRODUCT_OWNER && allowTaskEdit">
                 <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
                     Tasks
                 </button>

@@ -11,7 +11,15 @@ import {
     Project,
     ProjectRole,
     Story,
-    ProjectMember, StoriesFilter, SimpleStatus, ProjectWallPost, KeeQuery, WrapOption, UserProfile, ProjectRolesCount
+    ProjectMember,
+    StoriesFilter,
+    SimpleStatus,
+    ProjectWallPost,
+    KeeQuery,
+    WrapOption,
+    UserProfile,
+    ProjectRolesCount,
+    SprintStatus
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -43,6 +51,14 @@ export class ProjectService {
                     parseInt(resp.headers.get("x-total-count")!),
                 );
             }),
+            catchHttpError(),
+        );
+    }
+    
+    public getProjectActiveSprint(projectId: string): Observable<SprintStatus> {
+        const url = `${this.apiUrl}/projects/${projectId}/sprints/status`;
+        return this.http.get(url).pipe(
+            mapToType<SprintStatus>(),
             catchHttpError(),
         );
     }
@@ -207,30 +223,6 @@ export class ProjectService {
     public updateProject(projectId: string, request: ProjectRequest): Observable<void> {
         const url = `${this.apiUrl}/projects/${projectId}`;
         return this.http.put(url, request).pipe(
-            mapToVoid(),
-            catchHttpError(),
-        );
-    }
-    
-    public addUserToProject(projectId: string, membership: Partial<ProjectMember>): Observable<void> {
-        const url = `${this.apiUrl}/projects/${projectId}/users`;
-        return this.http.post(url, membership).pipe(
-            mapToVoid(),
-            catchHttpError(),
-        );
-    }
-    
-    public removeUserFromProject(projectId: string, userId: string): Observable<void> {
-        const url = `${this.apiUrl}/projects/${projectId}/users/${userId}`;
-        return this.http.delete(url).pipe(
-            mapToVoid(),
-            catchHttpError(),
-        );
-    }
-    
-    public updateUserProjectRole(projectId: string, userId: string, membership: Partial<ProjectMember>): Observable<void> {
-        const url = `${this.apiUrl}/projects/${projectId}/users/${userId}`;
-        return this.http.patch(url, membership).pipe(
             mapToVoid(),
             catchHttpError(),
         );

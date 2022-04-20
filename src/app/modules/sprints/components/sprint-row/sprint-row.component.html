@@ -1,5 +1,5 @@
 <div>
-    <a [routerLink]="sprint.id">
+    <a [routerLink]="['..', sprint.id]">
         Sprint:
         <strong>{{sprint.startDate | date: "dd.MM.yyyy"}}</strong>
         <strong> - </strong>

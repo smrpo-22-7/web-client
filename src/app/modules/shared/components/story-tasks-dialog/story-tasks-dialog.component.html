@@ -13,7 +13,7 @@
                         <strong class="col-8">
                             Task
                         </strong>
-                        <strong class="col-1">
+                        <strong class="col-2">
                             Estimate
                         </strong>
                         <strong class="col-3">
@@ -51,7 +51,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label>Time estimate (h):</label>
-                            <input class="form-control" formControlName="estimate" type="number"
+                            <input class="form-control" formControlName="estimate" type="number" min="0.5"
                                 [class.is-invalid]="hasError(taskForm.get('estimate'))"/>
                             <div class="invalid-feedback" *ngIf="hasError(taskForm.get('estimate'), 'min')">
                                 Time estimate cannot be zero or negative!

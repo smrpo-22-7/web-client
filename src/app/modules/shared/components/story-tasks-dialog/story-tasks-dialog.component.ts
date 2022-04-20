@@ -58,7 +58,7 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
         this.taskForm = this.fb.group({
             userQuery: this.fb.control(""),
             description: this.fb.control("", [Validators.required]),
-            estimate: this.fb.control(1, [Validators.min(0)]),
+            estimate: this.fb.control(1, [Validators.min(0.5)]),
             assignment: this.fb.group({
                 assigneeId: this.fb.control(null),
                 assigneeName: this.fb.control(null),

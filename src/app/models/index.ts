@@ -26,4 +26,11 @@ export {
     WrapOption,
     ProjectStoriesParams,
 } from "./filter.types";
-export { CheckboxSelectEvent, FieldUpdateEvent, FormUpdateEvent } from "./form.types";
+export {
+    CheckboxSelectEvent,
+    FieldUpdateEvent,
+    FormUpdateEvent,
+    FieldType,
+    FieldValidators,
+    FormValidationResult,
+} from "./form.types";

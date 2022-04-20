@@ -12,10 +12,20 @@ import {
     takeUntil,
     tap, throwError,
 } from "rxjs";
-import { AuthState, AuthStateStatus, ExtendedStory, FieldUpdateEvent, Task, UserProfile, ValidationError } from "@lib";
+import {
+    AuthState,
+    AuthStateStatus,
+    ExtendedStory,
+    FieldUpdateEvent,
+    FieldValidators,
+    Task,
+    UserProfile,
+    ValidationError
+} from "@lib";
 import { AuthService, ProjectService, TaskService } from "@services";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { BaseError } from "@mjamsek/prog-utils";
+import { validateField } from "@utils";
 
 
 @Component({
@@ -52,6 +62,19 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         assignee: false,
     };
     public userQueryForm: FormGroup;
+    private fieldsValidators: FieldValidators = {
+        estimate: {
+            type: "number",
+            min: 0.5,
+        },
+        description: {
+            type: "string",
+            required: true,
+        },
+        completed: {
+            type: "boolean",
+        }
+    }
     
     private _clickedInside = false;
     
@@ -105,12 +128,15 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public updateTask(newValue: any, field: string) {
-        if (newValue || typeof newValue === "boolean") {
-            this.update$.next({
-                field,
-                item: newValue,
-                requestRefresh: field !== "completed" && field !== "estimate",
-            });
+        const result = validateField(field, newValue, this.fieldsValidators[field]);
+        if (result === null) {
+            if (newValue || typeof newValue === "boolean") {
+                this.update$.next({
+                    field,
+                    item: newValue,
+                    requestRefresh: false,
+                });
+            }
         }
     }
     

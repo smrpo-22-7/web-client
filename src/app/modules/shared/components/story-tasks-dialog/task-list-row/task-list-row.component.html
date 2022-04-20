@@ -21,7 +21,7 @@
                     (ngModelChange)="updateTask($event, 'description')"/>
             </span>
         </div>
-        <div class="col-1">
+        <div class="col-2">
             <span *ngIf="!edits.estimate" (click)="toggleEdits('estimate')"
                 class="editable row-content">{{task.estimate}} h</span>
             <span *ngIf="edits.estimate">

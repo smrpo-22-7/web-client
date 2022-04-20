@@ -70,7 +70,11 @@
 
             <ng-template #noAssignee>
                 <ng-container *ngIf="!edits.assignee && allowEdit">
-                    <span class="assign-user-btn" (click)="toggleEdits('assignee')">Assign user</span>
+                    Assign:&#160;
+                    <span class="assign-user-btn" (click)="toggleEdits('assignee')">user</span>
+                    <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
+                        &#160;|&#160;<span class="assign-user-btn" (click)="assignUser(auth.userId)">yourself</span>
+                    </ng-container>
                 </ng-container>
                 <ng-container *ngIf="edits.assignee && allowEdit">
                     <ng-container [formGroup]="userQueryForm">

@@ -28,6 +28,7 @@
             <input class="form-control form-control-sm"
                 min="1"
                 step="1"
+                [disabled]="story.realized || story.inActiveSprint"
                 (click)="preventExpand($event)"
                 (ngModelChange)="onEstimateUpdate($event, story.id)"
                 [class.is-invalid]="story.timeEstimate <= 0"

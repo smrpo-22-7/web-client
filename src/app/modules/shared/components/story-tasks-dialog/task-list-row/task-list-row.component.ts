@@ -1,19 +1,21 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import {
+    catchError,
     debounceTime,
     filter,
     map,
-    Observable,
+    Observable, of,
     startWith,
     Subject,
     switchMap,
     take,
     takeUntil,
-    tap,
+    tap, throwError,
 } from "rxjs";
-import { AuthState, AuthStateStatus, ExtendedStory, FieldUpdateEvent, Task, UserProfile } from "@lib";
+import { AuthState, AuthStateStatus, ExtendedStory, FieldUpdateEvent, Task, UserProfile, ValidationError } from "@lib";
 import { AuthService, ProjectService, TaskService } from "@services";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { BaseError } from "@mjamsek/prog-utils";
 
 
 @Component({
@@ -107,7 +109,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
             this.update$.next({
                 field,
                 item: newValue,
-                requestRefresh: field !== "completed"
+                requestRefresh: field !== "completed" && field !== "estimate",
             });
         }
     }
@@ -127,6 +129,12 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
                     };
                 }
                 return this.taskService.updateTask(this.task.id, payload).pipe(
+                    catchError((err: BaseError) => {
+                        if (err instanceof ValidationError) {
+                            return of(undefined);
+                        }
+                        return throwError(() => err);
+                    }),
                     map(() => {
                         return $event.requestRefresh ?? true;
                     }),
@@ -142,9 +150,13 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public onUserSelect(user: UserProfile) {
+        this.assignUser(user.id);
+    }
+    
+    public assignUser(userId: string) {
         this.update$.next({
             field: "assigneeId",
-            item: user.id,
+            item: userId,
         });
         this.userQueryForm.reset();
         this.edits.assignee = false;

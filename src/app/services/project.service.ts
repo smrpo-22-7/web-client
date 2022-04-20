@@ -102,29 +102,9 @@ export class ProjectService {
         );
     }
     
-    public getProjectStories(projectId: string, filter: StoriesFilter, offset: number = 0, limit: number = 10): Observable<EntityList<Story>> {
-        const url = `${this.apiUrl}/projects/${projectId}/stories`;
-        const params = this.buildKeeParams({
-            offset,
-            limit,
-            order: "numberId ASC",
-            filter: this.buildFilterString(filter)
-        });
-        return this.http.get(url, { params, observe: "response" }).pipe(
-            mapToType<HttpResponse<Story[]>>(),
-            map((res: HttpResponse<Story[]>) => {
-                return EntityList.of(
-                    res.body!,
-                    parseInt(res.headers.get("x-total-count")!),
-                );
-            }),
-            catchHttpError(),
-        );
-    }
-    
     public getProjectStoriesExtended(projectId: string, params: ProjectStoriesParams): Observable<EntityList<ExtendedStory>> {
-        const url = `${this.apiUrl}/projects/${projectId}/stories/full`;
-        return this.http.get(url, { params, observe: "response" }).pipe(
+        const url = `${this.apiUrl}/projects/${projectId}/stories`;
+        return this.http.get(url, { params: this.parseParams(params), observe: "response" }).pipe(
             mapToType<HttpResponse<ExtendedStory[]>>(),
             map((res: HttpResponse<ExtendedStory[]>) => {
                 return EntityList.of(
@@ -134,6 +114,21 @@ export class ProjectService {
             }),
             catchHttpError(),
         );
+    }
+    
+    private parseParams(params: ProjectStoriesParams): HttpParams {
+        let p = new HttpParams();
+        p = p.set("limit", params.limit!);
+        p = p.set("offset", params.offset!);
+        p = p.set("numberIdSort", params.numberIdSort!);
+        
+        if (params.filterRealized !== null) {
+            p = p.set("filterRealized", params.filterRealized!);
+        }
+        if (params.filterAssigned !== null) {
+            p = p.set("filterAssigned", params.filterAssigned!);
+        }
+        return p;
     }
     
     public getUserRole(projectId: string): Observable<ProjectRole> {

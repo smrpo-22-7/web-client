@@ -2,7 +2,7 @@
     <div class="detail-header-left-group">
         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned && allowSelection; else checkPlaceholder">
+                <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned && allowSelection && !story.inActiveSprint; else checkPlaceholder">
                     <div class="story-check">
                         <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
                     </div>
@@ -12,8 +12,14 @@
                 </ng-template>
             </ng-container>
         </ng-container>
-        <div>
+        <div class="story-meta">
             {{story.title}} (#{{story.numberId}})
+            <ng-container *ngIf="story.realized">
+                <span class="badge bg-success">Realized</span>
+            </ng-container>
+            <ng-container *ngIf="showInSprintBadge && story.inActiveSprint">
+                <span class="badge bg-info">In active sprint</span>
+            </ng-container>
         </div>
     </div>
     <div class="detail-header-right-group">

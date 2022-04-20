@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { CheckboxSelectEvent, NavState, NavStateStatus, Story } from "@lib";
+import { CheckboxSelectEvent, ExtendedStory, NavState, NavStateStatus } from "@lib";
 import { Subject, take } from "rxjs";
 import { ProjectRole } from "@config/roles.config";
 import { StoryService } from "@services";
@@ -13,7 +13,7 @@ import { ToastrService } from "ngx-toastr";
 export class StoryListHeaderComponent implements OnInit, OnDestroy {
     
     @Input()
-    public story: Story;
+    public story: ExtendedStory;
     
     @Input()
     public nav: NavState;
@@ -21,8 +21,11 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
     @Input()
     public allowSelection: boolean = true;
     
+    @Input()
+    public showInSprintBadge: boolean = true;
+    
     @Output()
-    public whenSelected = new EventEmitter<CheckboxSelectEvent<Story>>();
+    public whenSelected = new EventEmitter<CheckboxSelectEvent<ExtendedStory>>();
     
     private destroy$ = new Subject<boolean>();
     

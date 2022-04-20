@@ -38,39 +38,33 @@
             <div class="story-filters">
                 <div class="btn-group filter">
                     <button class="btn btn-sm"
-                        [class.btn-secondary]="filterRealized$.value"
-                        [class.btn-outline-secondary]="!filterRealized$.value"
-                        (click)="toggleFilter(true, filterRealized$)"
+                        [class.btn-secondary]="filterRealized$.value === 'true'"
+                        [class.btn-outline-secondary]="filterRealized$.value === 'false' || !filterAssigned$.value"
+                        (click)="toggleFilter('true', filterRealized$)"
                     >Realized</button>
                     <button class="btn btn-sm"
-                        [class.btn-secondary]="!filterRealized$.value"
-                        [class.btn-outline-secondary]="filterRealized$.value"
-                        (click)="toggleFilter(false, filterRealized$)"
+                        [class.btn-secondary]="filterRealized$.value === 'false'"
+                        [class.btn-outline-secondary]="filterRealized$.value === 'true' || !filterAssigned$.value"
+                        (click)="toggleFilter('false', filterRealized$)"
                     >Not realized</button>
                 </div>
 
                 <div class="btn-group filter">
                     <button class="btn btn-sm"
-                        [class.btn-secondary]="filterAssigned$.value"
-                        [class.btn-outline-secondary]="!filterAssigned$.value"
-                        (click)="toggleFilter(true, filterAssigned$)"
+                        [class.btn-secondary]="filterAssigned$.value === 'true'"
+                        [class.btn-outline-secondary]="filterAssigned$.value  === 'false' || !filterAssigned$.value"
+                        (click)="toggleFilter('true', filterAssigned$)"
                     >Assigned</button>
                     <button class="btn btn-sm"
-                        [class.btn-secondary]="!filterAssigned$.value"
-                        [class.btn-outline-secondary]="filterAssigned$.value"
-                        (click)="toggleFilter(false, filterAssigned$)"
+                        [class.btn-secondary]="filterAssigned$.value === 'false'"
+                        [class.btn-outline-secondary]="filterAssigned$.value === 'true' || !filterAssigned$.value"
+                        (click)="toggleFilter('false', filterAssigned$)"
                     >Not assigned</button>
                 </div>
 
                 <div class="btn-group filter">
                     <button class="btn btn-sm btn-outline-secondary" (click)="toggleSort()">Sort {{this.oppositeSort}}</button>
                 </div>
-
-                <!--span class="filter" [class.applied]="'true' === 'ALL'" (click)="applyFilter('ALL')">All</span>
-                <span class="filter" [class.applied]="'false' === 'NOT_REALIZED'" (click)="applyFilter('NOT_REALIZED')">Not realized</span>
-                <span class="filter" [class.applied]="'false' === 'REALIZED'" (click)="applyFilter('REALIZED')">Realized</span>
-                <span class="filter" [class.applied]="'false' === 'ESTIMATED'" (click)="applyFilter('ESTIMATED')">Estimated</span>
-                <span class="filter" [class.applied]="'false' === 'NOT_ESTIMATED'" (click)="applyFilter('NOT_ESTIMATED')">Not estimated</span-->
             </div>
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
                 <div>

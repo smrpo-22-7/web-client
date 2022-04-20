@@ -8,10 +8,9 @@ import {
     switchMap,
     takeUntil,
     tap,
-    combineLatest,
-    filter
+    combineLatest
 } from "rxjs";
-import { NavState, SprintStatus, Story } from "@lib";
+import { ExtendedStory, NavState, SortOrder, SprintStatus } from "@lib";
 import { EntityList } from "@mjamsek/prog-utils";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { ProjectService, SprintService } from "@services";
@@ -30,9 +29,10 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
     private sprintId$ = new BehaviorSubject<string | null>(null);
     public nav$: Observable<NavState>;
     public sprint$: Observable<SprintStatus>;
-    public stories$: Observable<EntityList<Story>>;
+    public stories$: Observable<EntityList<ExtendedStory>>;
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
+    public sort$ = new BehaviorSubject<SortOrder>(SortOrder.ASC);
     private destroy$ = new Subject<boolean>();
     
     constructor(private route: ActivatedRoute,
@@ -65,19 +65,19 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
         );
         
-        this.stories$ = combineLatest([this.sprintId$, this.offset$, this.limit$]).pipe(
-            filter((values: [string | null, number, number]) => {
-                const [sprintId] = values;
-                return sprintId !== null;
-            }),
-            switchMap((values: [string | null, number, number]) => {
-                const [sprintId, offset, limit] = values;
-                return this.sprintService.getSprintStories(sprintId!, offset, limit);
+        this.stories$ = combineLatest([this.projectId$, this.sort$, this.offset$, this.limit$]).pipe(
+            switchMap((values: [string, SortOrder, number, number]) => {
+                const [projectId, sort, offset, limit] = values;
+                return this.projectService.getProjectStoriesExtended(projectId, {
+                    limit: limit,
+                    offset: offset,
+                    filterAssigned: "true",
+                    filterRealized: null,
+                    numberIdSort: sort,
+                });
             }),
             takeUntil(this.destroy$),
         );
-        
-        
     }
     
     public newPage($event: PageChangedEvent): void {

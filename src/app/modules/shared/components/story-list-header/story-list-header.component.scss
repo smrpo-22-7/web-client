@@ -17,6 +17,12 @@
     .detail-header-left-group {
         display: flex;
         align-items: center;
+
+        .story-meta {
+            .badge {
+                margin-left: 8px;
+            }
+        }
     }
     .detail-header-right-group {
         display: flex;

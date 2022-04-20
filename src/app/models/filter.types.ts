@@ -9,10 +9,19 @@ export interface KeeQuery {
 
 export type WrapOption = "wrap" | "nowrap";
 
+export type SortOrder = "ASC" | "DESC";
+export const SortOrder = {
+    ASC: "ASC" as SortOrder,
+    DESC: "DESC" as SortOrder,
+};
+
+export type BoolOptFilter = "true" | "false" | null;
+
 export type ProjectStoriesParams = {
-    numberIdSort?: "ASC" | "DESC";
-    filterRealized?: boolean;
-    filterAssigned?: boolean;
+    numberIdSort?: SortOrder;
+    filterRealized?: BoolOptFilter;
+    filterAssigned?: BoolOptFilter;
     limit?: number;
     offset?: number;
 }
+

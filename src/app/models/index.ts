@@ -18,5 +18,12 @@ export {
     NavState,
 } from "./nav.types";
 export { ConfirmDialogEvents, ConfirmDialogOptions } from "./modal.models";
-export { StoriesFilter, KeeQuery, WrapOption, ProjectStoriesParams } from "./filter.types";
+export {
+    StoriesFilter,
+    KeeQuery,
+    SortOrder,
+    BoolOptFilter,
+    WrapOption,
+    ProjectStoriesParams,
+} from "./filter.types";
 export { CheckboxSelectEvent, FieldUpdateEvent, FormUpdateEvent } from "./form.types";

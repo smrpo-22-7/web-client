@@ -15,7 +15,16 @@ import {
     takeUntil,
 } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
-import { CheckboxSelectEvent, NavState, NavStateStatus, SprintStatus, Story } from "@lib";
+import {
+    BoolOptFilter,
+    CheckboxSelectEvent,
+    ExtendedStory,
+    NavState,
+    NavStateStatus,
+    SortOrder,
+    SprintStatus,
+    Story
+} from "@lib";
 import { ProjectService, SprintService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole } from "@config/roles.config";
@@ -31,7 +40,7 @@ import { capitalize } from "@utils";
 export class ProjectStoriesPageComponent extends FormBaseComponent implements OnInit, OnDestroy {
     
     private destroy$ = new Subject<boolean>();
-    public stories$: Observable<EntityList<Story>>;
+    public stories$: Observable<EntityList<ExtendedStory>>;
     public nav$: Observable<NavState>;
     public activeSprint$: Observable<SprintStatus>;
     private refreshActiveSprint$ = new BehaviorSubject<void>(undefined);
@@ -41,9 +50,9 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
-    public sort$ = new BehaviorSubject<"ASC" | "DESC">("ASC");
-    public filterRealized$ = new BehaviorSubject<boolean>(false);
-    public filterAssigned$ = new BehaviorSubject<boolean>(false);
+    public sort$ = new BehaviorSubject<SortOrder>(SortOrder.ASC);
+    public filterRealized$ = new BehaviorSubject<BoolOptFilter>(null);
+    public filterAssigned$ = new BehaviorSubject<BoolOptFilter>(null);
     private refresh$ = new BehaviorSubject<void>(undefined);
     
     public storiesForm: FormArray;
@@ -88,7 +97,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             this.limit$,
             this.refresh$,
         ]).pipe(
-            switchMap((params: [string, "ASC" | "DESC", boolean, boolean, number, number, void]) => {
+            switchMap((params: [string, SortOrder, BoolOptFilter, BoolOptFilter, number, number, void]) => {
                 const [projectId, sort, filterRealized, filterAssigned, offset, limit] = params;
                 return this.projectService.getProjectStoriesExtended(projectId, {
                     limit: limit,
@@ -147,7 +156,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         const storyIds: string[] = this.storiesForm.controls.map(ctrl => {
             return ctrl.get("id")?.value;
         });
-        const storyMessage = storyIds.length === 1 ? "story": "stories";
+        const storyMessage = storyIds.length === 1 ? "story" : "stories";
         this.sprintService.addStoriesToSprint(sprintId, storyIds).pipe(
             take(1)
         ).subscribe({
@@ -173,8 +182,12 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         this.offset$.next(0);
     }
     
-    public toggleFilter(value: boolean, filter: BehaviorSubject<boolean>) {
-        filter.next(value);
+    public toggleFilter(value: BoolOptFilter, filter: BehaviorSubject<BoolOptFilter>) {
+        if (filter.value === value) {
+            filter.next(null);
+        } else {
+            filter.next(value);
+        }
         this.offset$.next(0);
     }
     
@@ -193,8 +206,8 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         });
     }
     
-    public get oppositeSort(): "ASC" | "DESC" {
-        return this.sort$.value === "ASC" ? "DESC" : "ASC";
+    public get oppositeSort(): SortOrder {
+        return this.sort$.value === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC;
     }
     
 }

@@ -17,6 +17,7 @@ export interface Story extends BaseType {
     assigned: boolean;
     tests: AcceptanceTest[];
     projectId: string;
+    rejectComment?: string;
 }
 
 export interface ExtendedStory extends Story {

@@ -24,6 +24,9 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
     @Input()
     public showInSprintBadge: boolean = true;
     
+    @Input()
+    public showRejectedBadge: boolean = true;
+    
     @Output()
     public whenSelected = new EventEmitter<CheckboxSelectEvent<ExtendedStory>>();
     

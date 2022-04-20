@@ -20,6 +20,9 @@
             <ng-container *ngIf="showInSprintBadge && story.inActiveSprint">
                 <span class="badge bg-info">In active sprint</span>
             </ng-container>
+            <ng-container *ngIf="showRejectedBadge && story.rejectComment">
+                <span class="badge bg-danger" [title]="story.rejectComment">Rejected</span>
+            </ng-container>
         </div>
     </div>
     <div class="detail-header-right-group">

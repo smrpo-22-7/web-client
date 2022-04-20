@@ -11,7 +11,7 @@ import {
     takeUntil,
     tap,
 } from "rxjs";
-import { AuthState, AuthStateStatus, FieldUpdateEvent, Task, UserProfile } from "@lib";
+import { AuthState, AuthStateStatus, ExtendedStory, FieldUpdateEvent, Task, UserProfile } from "@lib";
 import { AuthService, ProjectService, TaskService } from "@services";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
@@ -25,6 +25,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     @Input()
     public storyId: string;
+    
+    @Input()
+    public story: ExtendedStory;
     
     @Input()
     public projectId: string;
@@ -68,7 +71,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         this.members$ = this.userQueryCtrl.valueChanges.pipe(
             startWith(""),
             filter(value => {
-                return value && value.length && value.length > 0;
+                return value && value.length && value.length > 0 && value !== "[object Object]";
             }),
             switchMap((query: string) => {
                 return this.projectService.queryProjectMembers(this.projectId, query);
@@ -159,13 +162,15 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     public toggleEdits(field: string) {
         this._clickedInside = true;
-        Object.keys(this.edits).forEach((key) => {
-            if (key === field) {
-                (this.edits as any)[key] = true;
-            } else {
-                (this.edits as any)[key] = false;
-            }
-        });
+        if (this.allowEdit) {
+            Object.keys(this.edits).forEach((key) => {
+                if (key === field) {
+                    (this.edits as any)[key] = true;
+                } else {
+                    (this.edits as any)[key] = false;
+                }
+            });
+        }
     }
     
     public toggleDescriptionEdit(task: Task) {
@@ -199,5 +204,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     public get userQueryCtrl(): FormControl {
         return this.userQueryForm.get("input") as FormControl;
+    }
+    
+    public get allowEdit(): boolean {
+        return !this.story.realized && this.story.inActiveSprint;
     }
 }

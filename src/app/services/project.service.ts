@@ -10,7 +10,6 @@ import {
     NameCheckRequest,
     Project,
     ProjectRole,
-    Story,
     ProjectMember,
     StoriesFilter,
     SimpleStatus,

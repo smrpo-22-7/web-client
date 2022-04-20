@@ -1,25 +1,23 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BsModalRef } from "ngx-bootstrap/modal";
+import { ActivatedRoute } from "@angular/router";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 import {
-    BehaviorSubject, debounce,
-    debounceTime,
+    BehaviorSubject,
     filter,
-    map,
     Observable,
     startWith,
     Subject,
     switchMap,
     take,
-    takeUntil
+    takeUntil,
 } from "rxjs";
 import { ProjectService, StoryService } from "@services";
-import { ProjectMember, Task, User, UserProfile } from "@lib";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { EntityList } from "@mjamsek/prog-utils";
+import { ExtendedStory, Task, UserProfile } from "@lib";
 import { initialName } from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
-import { ToastrService } from "ngx-toastr";
+
 
 @Component({
     selector: "sc-story-tasks-dialog",
@@ -29,6 +27,7 @@ import { ToastrService } from "ngx-toastr";
 export class StoryTasksDialogComponent extends FormBaseComponent implements OnInit, OnDestroy {
     
     public storyId: string;
+    public story: ExtendedStory;
     public projectId: string;
     public storyNumberId: number;
     public allowTaskEdit: boolean;
@@ -66,10 +65,11 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
                 assigneeInitials: this.fb.control(null),
             }),
         });
+        
         this.members$ = this.userQueryCtrl.valueChanges.pipe(
             startWith(""),
             filter(value => {
-                return value && value.length && value.length > 0;
+                return value && value.length && value.length > 0 && value !== "[object Object]";
             }),
             switchMap((query: string) => {
                 return this.projectService.queryProjectMembers(this.projectId, query);
@@ -79,17 +79,17 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     }
     
     public onUserSelect($event: UserProfile): void {
-        this.userQueryCtrl.reset();
+        this.userQueryCtrl.reset("");
         this.taskForm.get("assignment.assigneeId")?.setValue($event.id);
         this.taskForm.get("assignment.assigneeName")?.setValue($event.lastName + " " + $event.firstName);
         this.taskForm.get("assignment.assigneeInitials")?.setValue(initialName($event.lastName + " " + $event.firstName));
     }
     
     public clearAssignee() {
-        this.userQueryCtrl.reset();
-        this.taskForm.get("assignment.assigneeId")?.reset();
-        this.taskForm.get("assignment.assigneeName")?.reset();
-        this.taskForm.get("assignment.assigneeInitials")?.reset();
+        this.userQueryCtrl.reset("");
+        this.taskForm.get("assignment.assigneeId")?.reset(null);
+        this.taskForm.get("assignment.assigneeName")?.reset(null);
+        this.taskForm.get("assignment.assigneeInitials")?.reset(null);
     }
     
     public close() {

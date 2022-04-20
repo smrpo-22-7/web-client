@@ -4,6 +4,7 @@
             <input class="form-check-input"
                 type="checkbox" [checked]="task.completed"
                 tooltip="Completed"
+                [disabled]="!allowEdit"
                 [(ngModel)]="task.completed"
                 (ngModelChange)="updateTask($event, 'completed')"
             >
@@ -45,7 +46,7 @@
                     </span>
                 </span>
                 <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
-                    <ng-container *ngIf="auth.userId === task.assignment.assigneeId">
+                    <ng-container *ngIf="auth.userId === task.assignment.assigneeId && allowEdit">
                         <span *ngIf="task.assignment.pending" (click)="acceptTask()"
                             tooltip="Accept" class="assignee-btn">
                             <fa-icon [icon]="['fas', 'check']"></fa-icon>
@@ -60,7 +61,7 @@
                         </span>
                     </ng-container>
                 </ng-container>
-                <ng-container *ngIf="task.assignment.pending">
+                <ng-container *ngIf="task.assignment.pending && allowEdit">
                     <span tooltip="Clear assignee" class="assignee-btn" (click)="clearAssignee()">
                         <fa-icon [icon]="['fas', 'person-circle-minus']"></fa-icon>
                     </span>
@@ -68,10 +69,10 @@
             </ng-container>
 
             <ng-template #noAssignee>
-                <ng-container *ngIf="!edits.assignee">
+                <ng-container *ngIf="!edits.assignee && allowEdit">
                     <span class="assign-user-btn" (click)="toggleEdits('assignee')">Assign user</span>
                 </ng-container>
-                <ng-container *ngIf="edits.assignee">
+                <ng-container *ngIf="edits.assignee && allowEdit">
                     <ng-container [formGroup]="userQueryForm">
                         <input class="form-control" type="text"
                             autocomplete="off"
@@ -81,7 +82,7 @@
                             [typeaheadAsync]="true"
                             [typeahead]="members$"
                             [typeaheadOptionsLimit]="5"
-                            [typeaheadWaitMs]="250"
+                            [typeaheadWaitMs]="500"
                             [typeaheadItemTemplate]="searchResultTemplate"
                             (typeaheadOnSelect)="onUserSelect($event.item)"
                             [typeaheadMinLength]="0"

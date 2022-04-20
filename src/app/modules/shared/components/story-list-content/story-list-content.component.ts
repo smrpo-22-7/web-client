@@ -32,6 +32,7 @@ export class StoryListContentComponent implements OnInit {
     public openTasksDialog() {
         const initialState = {
             storyId: this.story.id,
+            story: this.story,
             projectId: this.story.projectId,
             storyNumberId: this.story.numberId,
             allowTaskEdit: this.allowTaskEdit,

@@ -27,16 +27,20 @@
     </div>
     <div class="detail-header-right-group">
         <div class="estimate-input">
-            <ng-container *ngIf="!story.realized && !story.inActiveSprint; else noEstimateEdit">
-                <label>Time estimate:</label>
-                <input class="form-control form-control-sm"
-                    min="1"
-                    step="1"
-                    (click)="preventExpand($event)"
-                    (ngModelChange)="onEstimateUpdate($event, story.id)"
-                    [class.is-invalid]="story.timeEstimate <= 0"
-                    [(ngModel)]="story.timeEstimate"/>
-                <span>(pt)</span>
+            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER; else noEstimateEdit">
+                    <ng-container *ngIf="!story.realized && !story.inActiveSprint; else noEstimateEdit">
+                        <label>Time estimate:</label>
+                        <input class="form-control form-control-sm"
+                            min="1"
+                            step="1"
+                            (click)="preventExpand($event)"
+                            (ngModelChange)="onEstimateUpdate($event, story.id)"
+                            [class.is-invalid]="story.timeEstimate <= 0"
+                            [(ngModel)]="story.timeEstimate"/>
+                        <span>(pt)</span>
+                    </ng-container>
+                </ng-container>
             </ng-container>
             <ng-template #noEstimateEdit>
                 <div>

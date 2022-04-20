@@ -27,16 +27,24 @@
     </div>
     <div class="detail-header-right-group">
         <div class="estimate-input">
-            <label>Time estimate:</label>
-            <input class="form-control form-control-sm"
-                min="1"
-                step="1"
-                [disabled]="story.realized || story.inActiveSprint"
-                (click)="preventExpand($event)"
-                (ngModelChange)="onEstimateUpdate($event, story.id)"
-                [class.is-invalid]="story.timeEstimate <= 0"
-                [(ngModel)]="story.timeEstimate"/>
-            <span>(pt)</span>
+            <ng-container *ngIf="!story.realized && !story.inActiveSprint; else noEstimateEdit">
+                <label>Time estimate:</label>
+                <input class="form-control form-control-sm"
+                    min="1"
+                    step="1"
+                    (click)="preventExpand($event)"
+                    (ngModelChange)="onEstimateUpdate($event, story.id)"
+                    [class.is-invalid]="story.timeEstimate <= 0"
+                    [(ngModel)]="story.timeEstimate"/>
+                <span>(pt)</span>
+            </ng-container>
+            <ng-template #noEstimateEdit>
+                <div>
+                    <span>Time estimate:</span>
+                    {{story.timeEstimate}}
+                    <span>pt</span>
+                </div>
+            </ng-template>
         </div>
     </div>
 </div>

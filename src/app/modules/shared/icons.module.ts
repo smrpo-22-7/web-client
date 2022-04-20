@@ -30,7 +30,7 @@ import {
     faXmark,
     faPersonCircleMinus,
     faCertificate,
-    faLeftLong,
+    faLeftLong, faPeopleArrowsLeftRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
@@ -76,6 +76,7 @@ export class IconsModule {
             faPersonCircleMinus,
             faCertificate,
             faLeftLong,
+            faPeopleArrowsLeftRight,
         );
     }
 }

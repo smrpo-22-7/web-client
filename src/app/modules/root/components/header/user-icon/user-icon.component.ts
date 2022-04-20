@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angu
 import { TokenInfo } from "@lib";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { initialName } from "@utils";
+import { AuthService } from "@services";
 
 @Component({
     selector: "sc-user-icon",
@@ -21,7 +22,7 @@ export class UserIconComponent implements OnInit {
     
     public initials: string = "U";
     
-    constructor() {
+    constructor(private auth: AuthService) {
     }
     
     ngOnInit(): void {
@@ -33,4 +34,8 @@ export class UserIconComponent implements OnInit {
         this.whenLogoutClicked.next();
     }
     
+    public switchUser() {
+        this.auth.silentLogout();
+        this.auth.login();
+    }
 }

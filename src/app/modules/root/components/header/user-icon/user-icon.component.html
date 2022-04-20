@@ -35,6 +35,12 @@
             </a>
         </li>
         <li role="menuitem">
+            <span class="dropdown-item logout-btn" (click)="switchUser()">
+                <fa-icon [icon]="['fas', 'people-arrows-left-right']"></fa-icon>
+                Switch user
+            </span>
+        </li>
+        <li role="menuitem">
             <span class="dropdown-item logout-btn" (click)="logout()">
                 <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                 Logout

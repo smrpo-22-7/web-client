@@ -108,6 +108,15 @@ export class AuthService {
             "?post_logout_redirect_uri=" + window.location.origin + window.location.pathname;
     }
     
+    public silentLogout(): void {
+        this.auth.onLogout();
+        this.http.post(this.authConfig.endSessionUrl, null, { withCredentials: true }).pipe(
+            take(1),
+        ).subscribe(() => {
+        
+        });
+    }
+    
     public getAuthState(): Observable<AuthState> {
         return this.auth.getAuthState();
     }

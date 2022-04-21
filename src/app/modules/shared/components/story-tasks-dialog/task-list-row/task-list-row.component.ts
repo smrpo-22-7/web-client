@@ -22,7 +22,7 @@ import {
     UserProfile,
     ValidationError
 } from "@lib";
-import { AuthService, ProjectService, TaskService } from "@services";
+import { AuthService, ModalService, ProjectService, TaskService } from "@services";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { BaseError } from "@mjamsek/prog-utils";
 import { validateField } from "@utils";
@@ -81,6 +81,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     constructor(private authService: AuthService,
                 private taskService: TaskService,
                 private projectService: ProjectService,
+                private modalService: ModalService,
                 private fb: FormBuilder) {
     }
     
@@ -115,6 +116,23 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     public clearAssignee() {
         this.handleAction(this.taskService.clearAssignee(this.task.id));
+    }
+    
+    public openDeleteDialog(task: Task) {
+        const message = `Are you sure you want to delete task?`;
+        this.modalService.openConfirmDialog("Are you sure?", message, {
+            onConfirm: ref => {
+                this.handleAction(this.taskService.deleteTask(task.id));
+                ref.hide();
+            }
+        }, {
+            confirm: {
+                clazz: "btn-danger",
+            },
+            decline: {
+                clazz: "btn-outline-primary",
+            }
+        });
     }
     
     private handleAction(action: Observable<void>) {

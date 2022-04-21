@@ -3,6 +3,7 @@ import { TokenInfo } from "@lib";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { initialName } from "@utils";
 import { AuthService } from "@services";
+import { take } from "rxjs";
 
 @Component({
     selector: "sc-user-icon",
@@ -35,7 +36,8 @@ export class UserIconComponent implements OnInit {
     }
     
     public switchUser() {
-        this.auth.silentLogout();
-        this.auth.login();
+        this.auth.silentLogout().pipe(take(1)).subscribe(() => {
+            this.auth.login();
+        });
     }
 }

@@ -95,7 +95,9 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">Add</button>
+                    <button class="btn btn-primary"
+                        [disabled]="isInvalid(taskForm)"
+                        type="submit">Add</button>
                 </div>
             </form>
         </div>

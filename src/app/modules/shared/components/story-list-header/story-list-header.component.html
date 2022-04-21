@@ -32,6 +32,7 @@
                     <ng-container *ngIf="!story.realized && !story.inActiveSprint; else noEstimateEdit">
                         <label>Time estimate:</label>
                         <input class="form-control form-control-sm"
+                            [numbersOnly]="true"
                             min="1"
                             step="1"
                             (click)="preventExpand($event)"

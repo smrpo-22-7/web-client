@@ -88,6 +88,7 @@
                                     <label for="businessValue" class="form-label zgorjirob">Business value (1-10):</label>
                                     <input type="number" id="businessValue" class="form-control"
                                         formControlName="businessValue"
+                                        [numbersOnly]="true"
                                         [class.is-invalid]="hasError(storyForm.get('businessValue'))">
                                     <div class="invalid-feedback"
                                         *ngIf="hasError(storyForm.get('businessValue'), 'min')">
@@ -97,12 +98,22 @@
                                         *ngIf="hasError(storyForm.get('businessValue'), 'max')">
                                         Business value can be at most 10!
                                     </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="hasError(storyForm.get('businessValue'), 'pattern')">
+                                        Business value must be whole number!
+                                    </div>
                                 </div>
 
                                 <div>
                                     <label for="timeEstimate" class="form-label zgorjirob">Estimated time (pt):</label>
                                     <input type="number" id="timeEstimate" class="form-control"
+                                        [numbersOnly]="true"
+                                        [class.is-invalid]="hasError(storyForm.get('timeEstimate'))"
                                         formControlName="timeEstimate">
+                                    <div class="invalid-feedback"
+                                        *ngIf="hasError(storyForm.get('timeEstimate'), 'pattern')">
+                                        Estimated time must be whole number!
+                                    </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end mt-2">

@@ -5,3 +5,8 @@ export {
     validateUsersAndRoles,
     validateProject,
 } from "./project.validator";
+export {
+    validateFloat,
+    validateInt,
+    validateNumber,
+} from "./type.validator";

@@ -15,6 +15,7 @@ import { StoryListHeaderComponent } from "./components/story-list-header/story-l
 import { StoryListContentComponent } from "./components/story-list-content/story-list-content.component";
 import { StoryTasksDialogComponent } from "./components/story-tasks-dialog/story-tasks-dialog.component";
 import { TaskListRowComponent } from "./components/story-tasks-dialog/task-list-row/task-list-row.component";
+import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 
 @NgModule({
     imports: [
@@ -40,6 +41,7 @@ import { TaskListRowComponent } from "./components/story-tasks-dialog/task-list-
         StoryListContentComponent,
         StoryTasksDialogComponent,
         TaskListRowComponent,
+        NumbersOnlyDirective,
     ],
     declarations: [
         ValidationErrorComponent,
@@ -53,6 +55,7 @@ import { TaskListRowComponent } from "./components/story-tasks-dialog/task-list-
         StoryListContentComponent,
         StoryTasksDialogComponent,
         TaskListRowComponent,
+        NumbersOnlyDirective,
     ]
 })
 export class SharedModule {

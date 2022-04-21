@@ -61,6 +61,7 @@
                             <input [class.is-invalid]="hasError(sprintForm.get('expectedSpeed'))"
                                 type="number" id="expectedSpeed" class="form-control"
                                 placeholder="10 (pt)"
+                                [numbersOnly]="true"
                                 [class.is-warned]="showVelocityWarning"
                                    formControlName="expectedSpeed"/>
                             <div class="invalid-feedback" *ngIf="hasError(sprintForm.get('expectedSpeed'), 'required')">

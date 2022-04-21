@@ -51,6 +51,12 @@
         &:hover {
             cursor: pointer;
         }
+        &.disabled {
+            color: $light-grey;
+            &:hover {
+                cursor: default;
+            }
+        }
     }
     .editable {
         &:hover {

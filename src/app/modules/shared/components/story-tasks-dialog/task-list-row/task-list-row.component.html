@@ -99,7 +99,10 @@
             </ng-template>
         </div>
         <div class="col-1">
-            <span class="delete-btn" (click)="openDeleteDialog()" tooltip="Remove task">
+            <span
+                [class.disabled]="!allowDelete"
+                class="delete-btn" (click)="openDeleteDialog()" tooltip="Remove task"
+                [isDisabled]="!allowDelete">
                 <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </span>
         </div>

@@ -119,6 +119,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public openDeleteDialog() {
+        if (!this.allowDelete) {
+            return;
+        }
         const message = `Are you sure you want to delete task?`;
         this.modalService.openConfirmDialog("Are you sure?", message, {
             onConfirm: ref => {
@@ -264,5 +267,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     public get allowEdit(): boolean {
         return !this.story.realized && this.story.inActiveSprint;
+    }
+    
+    public get allowDelete(): boolean {
+        return this.task.assignment.pending || !this.task.assignment.assigneeId;
     }
 }

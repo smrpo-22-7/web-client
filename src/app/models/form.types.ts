@@ -18,6 +18,7 @@ export interface FormUpdateEvent {
 
 export interface FieldType {
     type: "string" | "number" | "boolean" | "object";
+    subtype?: "float" | "integer",
     min?: number;
     max?: number;
     required?: boolean;

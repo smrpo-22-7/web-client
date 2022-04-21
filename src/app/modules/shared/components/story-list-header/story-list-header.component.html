@@ -36,7 +36,7 @@
                             step="1"
                             (click)="preventExpand($event)"
                             (ngModelChange)="onEstimateUpdate($event, story.id)"
-                            [class.is-invalid]="story.timeEstimate <= 0"
+                            [class.is-invalid]="timeEstimateError !== null"
                             [(ngModel)]="story.timeEstimate"/>
                         <span>(pt)</span>
                     </ng-container>

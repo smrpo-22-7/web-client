@@ -6,14 +6,30 @@ export function validateField(fieldName: string, value: any, validator: FieldTyp
         return null;
     }
     
-    if (typeof value !== validator.type) {
-        return {
-            invalidType: true,
-        };
-    }
-    
     const errors: Record<string, boolean> = {};
     let hasErrors = false;
+    
+    if (typeof value !== validator.type) {
+        if (validator.type === "number") {
+            if (isNaN(Number(value))) {
+                return {
+                    invalidType: true,
+                }
+            } else {
+                if (validator.subtype === "integer") {
+                    if (!Number.isInteger(parseFloat(value))) {
+                        return {
+                            invalidSubtype: true,
+                        }
+                    }
+                }
+            }
+        } else {
+            return {
+                invalidType: true,
+            };
+        }
+    }
     
     if (validator.required) {
         if (!value && typeof value !== "boolean") {

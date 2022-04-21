@@ -116,7 +116,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
                     ));
                 });
             }),
-            take(1),
+            takeUntil(this.destroy$),
         ).subscribe({
             next: () => {
                 this.projectForm.updateValueAndValidity();

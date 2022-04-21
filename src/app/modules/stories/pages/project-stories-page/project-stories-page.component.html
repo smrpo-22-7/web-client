@@ -39,12 +39,12 @@
                 <div class="btn-group filter">
                     <button class="btn btn-sm"
                         [class.btn-secondary]="filterRealized$.value === 'true'"
-                        [class.btn-outline-secondary]="filterRealized$.value === 'false' || !filterAssigned$.value"
+                        [class.btn-outline-secondary]="filterRealized$.value === 'false' || !filterRealized$.value"
                         (click)="toggleFilter('true', filterRealized$)"
                     >Realized</button>
                     <button class="btn btn-sm"
                         [class.btn-secondary]="filterRealized$.value === 'false'"
-                        [class.btn-outline-secondary]="filterRealized$.value === 'true' || !filterAssigned$.value"
+                        [class.btn-outline-secondary]="filterRealized$.value === 'true' || !filterRealized$.value"
                         (click)="toggleFilter('false', filterRealized$)"
                     >Not realized</button>
                 </div>

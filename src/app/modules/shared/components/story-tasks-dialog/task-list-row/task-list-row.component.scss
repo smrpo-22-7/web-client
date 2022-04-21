@@ -47,6 +47,11 @@
             }
         }
     }
+    .delete-btn {
+        &:hover {
+            cursor: pointer;
+        }
+    }
     .editable {
         &:hover {
             cursor: pointer;

@@ -10,7 +10,7 @@
             <ng-container *ngIf="tasks$ | async as tasks">
                 <ng-container *ngIf="tasks.length > 0; else noTasks">
                     <div class="row">
-                        <strong class="col-8">
+                        <strong class="col-6">
                             Task
                         </strong>
                         <strong class="col-2">
@@ -18,6 +18,9 @@
                         </strong>
                         <strong class="col-3">
                             Assignee
+                        </strong>
+                        <strong class="col-1">
+                            Actions
                         </strong>
                     </div>
 

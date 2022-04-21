@@ -19,14 +19,14 @@ export class CodebookService {
 
     //
     public getCodebook(codebook: string): Observable<string[]> {
-        if (codebook === Codebooks.SimpleStatus) {
+        /*if (codebook === Codebooks.SimpleStatus) {
             return of(["ACTIVE", "DISABLED"]);
         } else if (codebook === Codebooks.StoryPriority) {
             return of(["MUST_HAVE", "SHOULD_HAVE", "COULD_HAVE", "WONT_HAVE_THIS_TIME"]);
         } else {
             throw new Error("Codebook not found!");
-        }
-        /*return this.oas$.pipe(
+        }*/
+        return this.oas$.pipe(
             switchMap((openapi) => {
                 if (openapi === null) {
                     return this.http.get(this.schemaUrl).pipe(
@@ -44,7 +44,7 @@ export class CodebookService {
                 }
                 throw new Error("Codebook not found!");
             }),
-        );*/
+        );
     }
     
 }

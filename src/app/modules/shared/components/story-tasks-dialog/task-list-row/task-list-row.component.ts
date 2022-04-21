@@ -118,11 +118,11 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         this.handleAction(this.taskService.clearAssignee(this.task.id));
     }
     
-    public openDeleteDialog(task: Task) {
+    public openDeleteDialog() {
         const message = `Are you sure you want to delete task?`;
         this.modalService.openConfirmDialog("Are you sure?", message, {
             onConfirm: ref => {
-                this.handleAction(this.taskService.deleteTask(task.id));
+                this.handleAction(this.taskService.deleteTask(this.task.id));
                 ref.hide();
             }
         }, {

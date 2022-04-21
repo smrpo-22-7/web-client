@@ -169,7 +169,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
                 },
                 error: err => {
                     console.error(err);
-                    this.toastrService.success("Error updating project!", "Error!");
+                    this.toastrService.error("Error updating project!", "Error!");
                 }
             });
         } else {

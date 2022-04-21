@@ -4,7 +4,7 @@
             <input class="form-check-input"
                 type="checkbox" [checked]="task.completed"
                 tooltip="Completed"
-                [disabled]="!allowEdit"
+                [disabled]="!allowEdit || !storyIsAssigned"
                 [(ngModel)]="task.completed"
                 (ngModelChange)="updateTask($event, 'completed')"
             >

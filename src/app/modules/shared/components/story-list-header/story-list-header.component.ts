@@ -71,9 +71,7 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
         if (this.timeEstimateError === null) {
             setTimeout(() => {
                 this.storyService.updateStoryTimeEstimate(storyId, newValue).pipe(take(1)).subscribe({
-                    next: () => {
-                        this.toastrService.success("Time estimate was updated!", "Success!");
-                    },
+                    next: () => { },
                     error: err => {
                         console.error(err);
                         this.toastrService.error("Error updating time estimate!", "Error!");

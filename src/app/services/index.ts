@@ -8,6 +8,7 @@ export { AuthService } from "./auth.service";
 export { UserService } from "./user.service";
 export { RoleService } from "./role.service";
 export { ProjectService } from "./project.service";
+export { ProjectWallService } from "./project-wall.service";
 export { ErrorService } from "./error.service";
 export { StoryService } from "./story.service";
 export { CodebookService } from "./codebook.service";

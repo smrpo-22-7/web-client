@@ -1,0 +1,88 @@
+<ng-container *ngIf="nav$ | async as nav">
+    <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+        <div class="post-container">
+            <ng-container *ngIf="post$ | async as post">
+                <div>
+                    <span class="back-btn" (click)="closeDetails()">
+                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                    </span>
+                    <span>
+                        Posted
+                        <span [tooltip]="createdDate">{{post.createdAt | friendlyDate}}</span>
+                    </span>
+                </div>
+                <ng-template #createdDate>
+                    <span>{{post.createdAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>
+                </ng-template>
+                <div class="post-content">
+                    <div [innerHTML]="post.htmlContent"></div>
+                </div>
+                <div class="post-meta">
+                    <span>Posted by:</span>
+                    <sc-user-initials-icon [name]="post.author.firstName + ' ' + post.author.lastName">
+                    </sc-user-initials-icon>
+                    <span>{{post.author.firstName + ' ' + post.author.lastName}}</span>
+                </div>
+            </ng-container>
+        </div>
+        <div class="comments-container">
+            <h5>Comments</h5>
+            <ng-container *ngIf="comments$ | async as comments">
+                <ng-container *ngIf="comments.entities.length > 0; else noComments">
+                    <div class="comments">
+                        <div *ngFor="let comment of comments.entities" class="comment">
+                            <div class="comment-meta">
+                                <div class="comment-author">
+                                    <sc-user-initials-icon [name]="comment.author.firstName + ' ' + comment.author.lastName"
+                                        [showTooltip]="true"
+                                    ></sc-user-initials-icon>
+                                    <span [tooltip]="createdDate">{{comment.createdAt | friendlyDate}}</span>
+                                    <ng-template #createdDate>
+                                        <span>{{comment.createdAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>
+                                    </ng-template>
+                                </div>
+                                <div class="comment-actions">
+                                    <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                                        <span class="comment-action" tooltip="Remove comment" (click)="openDeleteCommentDialog(comment)">
+                                            <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <div [innerHTML]="comment.htmlContent"></div>
+                        </div>
+                    </div>
+                    <div class="pagination-container">
+                        <pagination
+                            previousText="Prev"
+                            [itemsPerPage]="limit$.value"
+                            [totalItems]="comments.count"
+                            (pageChanged)="newPage($event)"
+                        ></pagination>
+                    </div>
+                </ng-container>
+                <ng-template #noComments>
+                    <p>No comments yet!</p>
+                </ng-template>
+            </ng-container>
+            <div class="comment-form">
+                <form [formGroup]="commentForm" class="short-mde-editor" (ngSubmit)="addComment()">
+                    <textarea formControlName="markdownContent" #mdEditor></textarea>
+
+                    <div class="actions">
+                        <button type="reset" class="btn btn-outline-danger" (click)="resetForm()">
+                            <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-primary" [disabled]="isInvalid(commentForm)">
+                            <fa-icon [icon]="['fas', 'floppy-disk']"></fa-icon>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

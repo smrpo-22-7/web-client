@@ -12,9 +12,8 @@ import {
 import { Observable, Subject, switchMap, take } from "rxjs";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import SimpleMDE from "simplemde";
-import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { ProjectService } from "@services";
+import { ProjectService, ProjectWallService } from "@services";
 import { ProjectWallPost } from "@lib";
 
 @Component({
@@ -41,6 +40,7 @@ export class WallPostFormComponent implements OnInit, AfterViewInit, OnDestroy {
     
     constructor(private fb: FormBuilder,
                 private projectService: ProjectService,
+                private projectWallService: ProjectWallService,
                 private toastrService: ToastrService) {
     }
     
@@ -63,7 +63,7 @@ export class WallPostFormComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.projectId$.pipe(
             switchMap((projectId: string) => {
-                return this.projectService.addProjectWallPost(projectId, post);
+                return this.projectWallService.addProjectWallPost(projectId, post);
             }),
             take(1),
         ).subscribe({

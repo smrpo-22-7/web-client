@@ -11,9 +11,7 @@ import {
     Project,
     ProjectRole,
     ProjectMember,
-    StoriesFilter,
     SimpleStatus,
-    ProjectWallPost,
     KeeQuery,
     WrapOption,
     UserProfile,
@@ -197,28 +195,6 @@ export class ProjectService {
         );
     }
     
-    public getProjectWallPosts(projectId: string, offset: number = 0, limit: number = 0, order: string = "DESC"): Observable<EntityList<ProjectWallPost>> {
-        const url = `${this.apiUrl}/projects/${projectId}/posts`;
-        const params = this.buildKeeParams({ offset, limit, order: `createdAt ${order}` });
-        return this.http.get(url, { params, observe: "response" }).pipe(
-            mapToType<HttpResponse<ProjectWallPost[]>>(),
-            map((res: HttpResponse<ProjectWallPost[]>) => {
-                return EntityList.of(
-                    res.body!,
-                    parseInt(res.headers.get("x-total-count")!),
-                );
-            }),
-            catchHttpError(),
-        );
-    }
-    
-    public addProjectWallPost(projectId: string, post: Partial<ProjectWallPost>): Observable<void> {
-        const url = `${this.apiUrl}/projects/${projectId}/posts`;
-        return this.http.post(url, post).pipe(
-            mapToVoid(),
-            catchHttpError(),
-        );
-    }
     
     public getProjectRolesCount(projectId: string): Observable<ProjectRolesCount> {
         const url = `${this.apiUrl}/projects/${projectId}/roles/count`;
@@ -249,16 +225,4 @@ export class ProjectService {
         return params;
     }
     
-    private buildFilterString(filter: StoriesFilter): string {
-        if (filter === "REALIZED") {
-            return "realized:EQ:true"
-        } else if (filter === "NOT_REALIZED") {
-            return "realized:EQ:false or realized:ISNULL"
-        } else if (filter === "NOT_ESTIMATED") {
-            return "timeEstimate:ISNULL"
-        } else if (filter === "ESTIMATED") {
-            return "timeEstimate:ISNOTNULL"
-        }
-        return "";
-    }
 }

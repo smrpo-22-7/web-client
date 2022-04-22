@@ -6,6 +6,9 @@ import { ProjectDetailsPageComponent } from './pages/project-details-page/projec
 import { ProjectMembersListComponent } from './pages/project-details-page/project-members-list/project-members-list.component';
 import { ProjectWallComponent } from './pages/project-details-page/project-wall/project-wall.component';
 import { WallPostFormComponent } from './pages/project-details-page/project-wall/wall-post-form/wall-post-form.component';
+import {
+    WallPostDetailsComponent
+} from "./pages/project-details-page/project-wall/wall-post-details/wall-post-details.component";
 
 @NgModule({
     imports: [
@@ -17,7 +20,8 @@ import { WallPostFormComponent } from './pages/project-details-page/project-wall
       ProjectDetailsPageComponent,
       ProjectMembersListComponent,
       ProjectWallComponent,
-      WallPostFormComponent
+      WallPostFormComponent,
+      WallPostDetailsComponent
     ]
 })
 export class ProjectsModule {

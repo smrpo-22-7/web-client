@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable, Subject, switchMap, takeUntil } from "rxjs";
-import { ProjectService } from "@services";
+import { ProjectService, ProjectWallService } from "@services";
 import { EntityList } from "@mjamsek/prog-utils";
 import { ProjectWallPost } from "@lib";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
@@ -21,19 +21,22 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
     public refresh$ = new BehaviorSubject<void>(undefined);
-    public sort$ = new BehaviorSubject<SortOrder>("DESC");
+    public sort$ = new BehaviorSubject<SortOrder>("ASC");
     private destroy$ = new Subject<boolean>();
     
     public showForm: boolean = false;
+    public showDetails: boolean = false;
+    public selectedPostId: string | null = null;
     
-    constructor(private projectService: ProjectService) {
+    constructor(private projectService: ProjectService,
+                private projectWallService: ProjectWallService) {
     }
     
     ngOnInit(): void {
         this.posts$ = combineLatest([this.projectId$, this.offset$, this.limit$, this.sort$, this.refresh$]).pipe(
             switchMap((routeParams: [string, number, number, SortOrder, void]) => {
                 const [projectId, offset, limit, order] = routeParams;
-                return this.projectService.getProjectWallPosts(projectId, offset, limit, order);
+                return this.projectWallService.getProjectWallPosts(projectId, offset, limit, order);
             }),
             takeUntil(this.destroy$)
         );
@@ -41,6 +44,11 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     
     public toggleForm() {
         this.showForm = true;
+    }
+    
+    public toggleDetails(post: ProjectWallPost): void {
+        this.selectedPostId = post.id;
+        this.showDetails = true;
     }
     
     public newPage($event: PageChangedEvent): void {
@@ -54,6 +62,10 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     
     public onPostCancel() {
         this.showForm = false;
+    }
+    
+    public onDetailsClose() {
+        this.showDetails = false;
     }
     
     public setOrder(order: SortOrder) {

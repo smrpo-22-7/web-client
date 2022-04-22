@@ -7,8 +7,15 @@
         >
         </sc-wall-post-form>
     </ng-container>
+    <ng-container *ngIf="showDetails && selectedPostId !== null">
+        <sc-wall-post-details
+            [postId]="selectedPostId"
+            (whenClosed)="onDetailsClose()"
+        >
+        </sc-wall-post-details>
+    </ng-container>
 
-    <ng-container *ngIf="!showForm">
+    <ng-container *ngIf="!showForm && !showDetails">
         <div class="actions">
             <button class="btn btn-outline-primary" (click)="toggleForm()">
                 <fa-icon [icon]="['fas', 'plus']"></fa-icon>
@@ -26,7 +33,19 @@
             <ng-container *ngIf="posts.entities.length > 0; else noPosts">
                 <div class="card" *ngFor="let post of posts.entities">
                     <div class="card-body">
-                        <h6 class="card-title">{{post.createdAt | date: "dd.MM.yyyy HH:mm:ss"}} - {{post.author.firstName}} {{post.author.lastName}}</h6>
+                        <h6 class="card-title post-header">
+                            <span class="comment-title" (click)="toggleDetails(post)">
+                                <span [tooltip]="createdDate">{{post.createdAt | friendlyDate}}</span>
+                                 - {{post.author.firstName}} {{post.author.lastName}}
+                                <ng-template #createdDate>
+                                    <span>{{post.createdAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>
+                                </ng-template>
+                            </span>
+                            <span class="comment-icon" [tooltip]="post.numOfComments + ' comments'">
+                                {{post.numOfComments}}
+                                <fa-icon [icon]="['far', 'comment']"></fa-icon>
+                            </span>
+                        </h6>
                         <p class="card-text" [innerHTML]="post.htmlContent"></p>
                     </div>
                 </div>

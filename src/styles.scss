@@ -58,3 +58,10 @@ a {
 .tasks-dialog {
     max-width: 1280px !important;
 }
+
+.short-mde-editor {
+    .CodeMirror {
+        height: 200px;
+        min-height: 200px;
+    }
+}

@@ -71,7 +71,8 @@
             <ng-container *ngIf="stories.entities.length > 0; else noStories">
                 <div>
                     <accordion [isAnimated]="true">
-                        <accordion-group *ngFor="let story of stories.entities; trackBy: getStoryId">
+                        <accordion-group *ngFor="let story of stories.entities; trackBy: getStoryId"
+                            [panelClass]="story.inActiveSprint && !story.realized ? 'story-row active-story' : 'story-row'">
                             <div accordion-heading class="detail-header">
                                 <sc-story-list-header
                                     [nav]="nav"

@@ -1,0 +1,22 @@
+@import "./variables";
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.btn-primary, .btn-outline-primary {
+    &:hover {
+        color: $white;
+    }
+}
+.btn-danger, .btn-outline-danger {
+    &:hover {
+        color: $white;
+    }
+}
+.btn-primary, .btn-danger {
+    color: $white;
+    &:disabled, &:focus {
+        color: $white;
+    }
+}

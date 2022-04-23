@@ -22,7 +22,8 @@
                         <ng-container *ngIf="stories.entities.length > 0; else noStories">
                             <div>
                                 <accordion [isAnimated]="true">
-                                    <accordion-group *ngFor="let story of stories.entities">
+                                    <accordion-group *ngFor="let story of stories.entities"
+                                            panelClass="story-row">
                                         <div accordion-heading class="detail-header">
                                             <sc-story-list-header
                                                 [nav]="nav"

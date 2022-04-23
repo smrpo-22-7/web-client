@@ -1,0 +1,18 @@
+@import "../variables";
+
+.story-row {
+    margin-bottom: 5px;
+    background-color: $white;
+
+    &.active-story {
+        background-color: #e6fce7;
+    }
+    &:not(.active-story) {
+        .panel-heading {
+            background-color: $white;
+        }
+    }
+    .panel-body {
+        background-color: $white;
+    }
+}

@@ -28,8 +28,10 @@ import {
     faDownload,
     faUpload,
     faXmark,
+    faUserPen,
     faPersonCircleMinus,
     faCertificate,
+    faPen,
     faLeftLong, faPeopleArrowsLeftRight,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -69,8 +71,10 @@ export class IconsModule {
             faSlidersH,
             faPowerOff,
             faUser,
+            faUserPen,
             faDownload,
             faUpload,
+            faPen,
             faFloppyDisk,
             faXmark,
             faPersonCircleMinus,

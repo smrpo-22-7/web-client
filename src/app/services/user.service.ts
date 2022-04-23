@@ -140,4 +140,53 @@ export class UserService {
             catchHttpError(),
         );
     }
+
+    //vse metode za userja by id
+
+    public removeUser(userId: string): Observable<void> {
+        const url = `${this.apiUrl}/users/${userId}/disable`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+
+    public getUserById(userId: string): Observable<UserProfile> {
+        const url = `${this.apiUrl}/users/${userId}`;
+        return this.http.get(url).pipe(
+            mapToType<UserProfile>(),
+            catchHttpError(),
+        );
+    }
+
+    public adminUpdateUserProfile(userId: string, userProfile: UserProfile): Observable<void> {
+        const url = `${this.apiUrl}/users/${userId}`;
+        return this.http.patch(url, userProfile).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public updateUserCredentialsbyId(password: string, newPassword: string, userId: string): Observable<void> {
+        const url = `${this.apiUrl}/users/${userId}/update-credentials`;
+        const payload: ChangePasswordRequest = {
+            password,
+            newPassword,
+        };
+        return this.http.post(url, payload).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public activateUser(userId: string): Observable<void> {
+        const url = `${this.apiUrl}/users/${userId}/activate`;
+        return this.http.post(url, null).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+
 }

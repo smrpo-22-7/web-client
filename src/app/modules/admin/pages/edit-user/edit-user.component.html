@@ -1,0 +1,159 @@
+<div class="container-lg" >
+
+    <ng-container *ngIf="roles$ | async as roles"  >
+
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-6 ozadje">
+            <div class="text-center rob">
+                <h2>Edit User</h2>
+            </div>
+            <form [formGroup]="editUserForm" (ngSubmit)="updateUserProfile()" class="rob">
+                <div>
+                    <div>
+                        <label for="username" class="form-label">Username:</label>
+                        <input id="username" class="form-control" formControlName="username"
+                               [class.is-invalid]="hasError(editUserForm.get('username'))"
+                               placeholder="e.g. NewUser" />
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('username'), 'required')">
+                            Username is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('username'), 'usernameExists')">
+                            Username already exists!
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="firstname" class="form-label zgorjirob">First name:</label>
+                        <input id="firstname" class="form-control" formControlName="firstName" [class.is-invalid]="hasError(editUserForm.get('firstName'))" placeholder="e.g. John"/>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('firstName'), 'required')">
+                            First name is required!
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="lastname" class="form-label zgorjirob">Last name:</label>
+                        <input id="lastname" class="form-control" formControlName="lastName" [class.is-invalid]="hasError(editUserForm.get('lastName'))" placeholder="e.g. Doe"/>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('lastName'), 'required')">
+                            Last name is required!
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="email" class="form-label zgorjirob">Email address:</label>
+                        <input id="email" class="form-control" formControlName="email"
+                               placeholder="e.g. JohnDoe@example.com"
+                               [class.is-invalid]="hasError(editUserForm.get('email'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('email'), 'required')">
+                            Email address is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('email'), 'email')">
+                            Invalid email address!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone number</label>
+                        <input class="form-control" formControlName="phoneNumber"
+                               [class.is-invalid]="hasError(editUserForm.get('phoneNumber'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('phoneNumber'), 'pattern')">
+                            Invalid phone number!
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="zgorjirob">Roles:</label>
+                        <div class="levirob">
+                            <div *ngFor="let role of roles; let i = index" class="form-check">
+                                <input class="form-check-input" type="checkbox" id="role-input-{{i}}"
+                                       [value]="role.roleId" (change)="onRoleSelect($event)"
+                                       [class.is-invalid]="hasErrorNoTouch(editUserForm.get('grantedRoles'))"
+                                       [checked]="sysRolesCtrl.value.includes(role.roleId)"
+
+
+                                />
+                                <!-- [checked]="sysRolesCtrlOld.getRawValue().includes(role.roleId)" -->
+                                <!--[checked]="true" dela!!-->
+                                <label class="form-check-label" for="role-input-{{i}}">
+                                    {{role.name}}
+                                </label>
+                                <div class="invalid-feedback" *ngIf="i !== 0 && hasErrorNoTouch(editUserForm.get('grantedRoles'), 'sysRolesRequired')">
+                                    At least one role must be granted!
+                                </div>
+                                <div class="invalid-feedback" *ngIf="i !== 0 && hasErrorNoTouch(editUserForm.get('grantedRoles'), 'sysRolesAdmin')">
+                                    Admin users require 'user' role as well.
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary"
+                            [disabled]="isInvalid(editUserForm) || !editUserForm.dirty"
+                            type="submit">Update profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </ng-container>
+</div>
+
+<div class="container-lg" >
+    <ng-container *ngIf="roles$ | async as roles"  >
+
+        <div class="row justify-content-center my-5">
+            <div class="col-lg-6 ozadje">
+                <div class="text-center rob">
+                    <h2>Change Password</h2>
+                </div>
+                <form [formGroup]="passwordForm" (ngSubmit)="updatePasswords()" class="rob">
+                    <div class="form-group">
+                        <label>Current password:</label>
+                        <input type="password" formControlName="password" class="form-control"
+                               autocomplete="off" [class.is-invalid]="hasError(passwordForm.get('password'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('password'), 'required')">
+                            Field is required!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New password:</label>
+                        <input type="password" formControlName="newPassword" class="form-control" autocomplete="off"
+                               [class.is-invalid]="hasError(passwordForm.get('newPassword')) || hasError(passwordForm)"
+                        />
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'required')">
+                            Field is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'minlength')">
+                            New password must be at least 12 characters long!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('newPassword'), 'maxlength')">
+                            New password must be at most 128 characters long!
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm new password:</label>
+                        <input type="password" formControlName="confirmNewPassword" class="form-control" autocomplete="off"
+                               [class.is-invalid]="hasError(passwordForm.get('confirmNewPassword')) || hasError(passwordForm)"
+                        />
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm.get('confirmNewPassword'), 'required')">
+                            Field is required!
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError(passwordForm, 'passwordMismatch')">
+                            Passwords do not match!
+                        </div>
+                    </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" [disabled]="isInvalid(passwordForm)">Update Password</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</div>

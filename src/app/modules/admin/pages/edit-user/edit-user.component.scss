@@ -1,0 +1,33 @@
+@import "src/styles/variables";
+
+.ozadje{
+    background-color: rgba(255, 255, 255, 0.9);
+    border-style: solid;
+    border-color: rgb(211, 211, 211);
+    border-radius: 2%;
+    border-width: 1px;
+}
+
+.rob{
+    margin: 5%;
+}
+
+.zgorjirob{
+    margin-top: 3%;
+}
+
+.gumb{
+    background-color: $secondary-color;
+    border: none;
+    border-radius: 5%;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+
+::placeholder{
+    color:rgb(211, 211, 211);
+}

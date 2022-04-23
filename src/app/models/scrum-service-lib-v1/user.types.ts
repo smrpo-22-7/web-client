@@ -1,4 +1,4 @@
-import { BaseType } from "@lib";
+import { BaseType, SimpleStatus } from "@lib";
 import { validateFields } from "./common.types";
 
 export interface User extends BaseType {
@@ -8,6 +8,7 @@ export interface User extends BaseType {
     email: string;
     phoneNumber: string;
     avatar: string;
+    status: SimpleStatus;
 }
 
 export interface UserProfile {
@@ -17,6 +18,7 @@ export interface UserProfile {
     lastName: string;
     email: string;
     phoneNumber: string;
+    grantedRoles: string[];
 }
 
 export interface ChangePasswordRequest {
@@ -77,7 +79,6 @@ export function isUserProfile(profile: unknown): profile is UserProfile {
             { field: "firstName", type: "string" },
             { field: "lastName", type: "string" },
             { field: "email", type: "string" },
-            { field: "phoneNumber", type: "string" },
         )) {
             return true;
         }

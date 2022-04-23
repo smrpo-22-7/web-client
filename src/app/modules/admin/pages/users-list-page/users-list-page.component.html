@@ -11,12 +11,30 @@
                 <thead>
                     <tr>
                         <th>Username</th>
-
+                        <th class="action-col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let user of users.entities">
                         <td>{{user.lastName}} {{user.firstName}}</td>
+                        <td class="action-col">
+                            <ng-container *ngIf="user.status === 'ACTIVE'">
+                                <span class="action-btn" tooltip="Remove" (click)="openDeletePrompt(user)">
+                                    <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="user.status === 'ACTIVE'">
+                                <a class="action-btn" tooltip="Edit" [routerLink]="[user.id,'edit']"  style="margin-left: 10px">
+                                    <fa-icon [icon]="['fas', 'user-pen']"></fa-icon>
+                                </a>
+                            </ng-container>
+                            <ng-container *ngIf="user.status === 'DISABLED'">
+                                <span class="action-btn" tooltip="Reactivate" (click)="openActivatePrompt(user)">
+                                    <fa-icon [icon]="['fas', 'certificate']"></fa-icon>
+                                </span>
+                            </ng-container>
+                        </td>
+
 
                     </tr>
                 </tbody>

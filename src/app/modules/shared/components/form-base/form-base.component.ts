@@ -7,6 +7,7 @@ export abstract class FormBaseComponent {
         if (!control) {
             return true;
         }
+        console.log(error);
         if (error) {
             return control.errors && control.errors[error] && control.touched;
         }

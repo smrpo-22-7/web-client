@@ -31,3 +31,11 @@
 ::placeholder{
     color:rgb(211, 211, 211);
 }
+.back-btn {
+    font-size: 1.5rem;
+    margin-right: 15px;
+
+    &:hover{
+        cursor: pointer;
+    }
+}

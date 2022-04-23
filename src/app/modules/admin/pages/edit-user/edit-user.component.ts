@@ -1,33 +1,32 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {map, Observable, startWith, Subject, switchMap, take, takeUntil, tap} from "rxjs";
-import {isUserProfile, SysRole, UnauthorizedError, UserProfile, ValidationError} from "@lib";
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService, RoleService, UserService} from "@services";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {ToastrService} from "ngx-toastr";
-import {PHONE_NUMBER_REGEX, validateUniqueUsername} from "@utils";
-import {validateUserForm, validateUserRoles} from "../user-form-page/validators";
-import {FormBaseComponent} from "@shared/components/form-base/form-base.component";
-import {validatePasswords} from "../../../user-profile/pages/user-profile-page/password.validators";
-import {BaseError} from "@mjamsek/prog-utils";
-import {validateUsernameProfile} from "../../../user-profile/pages/user-profile-page/validators";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { map, Observable, startWith, Subject, switchMap, take, takeUntil, tap } from "rxjs";
+import { isUserProfile, SysRole, UnauthorizedError, UserProfile, ValidationError } from "@lib";
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService, RoleService, UserService } from "@services";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
+import { PHONE_NUMBER_REGEX } from "@utils";
+import { validateUserRoles } from "../user-form-page/validators";
+import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+import { validatePasswords } from "../../../user-profile/pages/user-profile-page/password.validators";
+import { BaseError } from "@mjamsek/prog-utils";
+import { validateUsernameProfile } from "../../../user-profile/pages/user-profile-page/validators";
 
 
 @Component({
-  selector: 'sc-edit-user',
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.scss']
+    selector: "sc-edit-user",
+    templateUrl: "./edit-user.component.html",
+    styleUrls: ["./edit-user.component.scss"]
 })
 export class EditUserComponent extends FormBaseComponent implements OnInit, OnDestroy {
-
-    public userId: string;
+    
+    public userId$: Observable<string>;
     public roles$: Observable<SysRole[]>;
+    private destroy$ = new Subject<boolean>();
+    
     public editUserForm: FormGroup;
     public passwordForm: FormGroup;
-    private destroy$ = new Subject<boolean>();
-    public userProfile$: Observable<UserProfile>;
-
-
+    
     constructor(private fb: FormBuilder,
                 private route: ActivatedRoute,
                 private roleService: RoleService,
@@ -37,7 +36,7 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
                 private auth: AuthService,) {
         super();
     }
-
+    
     ngOnInit(): void {
         this.editUserForm = this.fb.group({
             username: this.fb.control("", [Validators.required]),
@@ -48,22 +47,25 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             grantedRoles: this.fb.array([], [validateUserRoles]),
             phoneNumber: this.fb.control("", [Validators.pattern(PHONE_NUMBER_REGEX)]),
         }, { asyncValidators: [validateUsernameProfile(this.userService)] });
-
+        
         this.passwordForm = this.fb.group({
             password: this.fb.control("", [Validators.required]),
             newPassword: this.fb.control("", [Validators.required, Validators.minLength(12), Validators.maxLength(128)]),
             confirmNewPassword: this.fb.control("", [Validators.required]),
         }, { validators: [validatePasswords] });
-
+        
         this.roles$ = this.roleService.getAllSysRoles().pipe(
             takeUntil(this.destroy$)
         );
-
-        this.route.paramMap.pipe(
+        
+        this.userId$ = this.route.paramMap.pipe(
             startWith(this.route.snapshot.paramMap),
-            map((paramap: ParamMap) => {
-                return paramap.get("userId") as string;
+            map((paramMap: ParamMap) => {
+                return paramMap.get("userId") as string;
             }),
+        );
+        
+        this.userId$.pipe(
             switchMap((userId: string) => {
                 return this.userService.getUserById(userId);
             }),
@@ -72,16 +74,11 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
                     ...profile,
                     oldUsername: profile.username
                 }, { emitEvent: false });
-                const roles = profile.grantedRoles;
+                
                 this.sysRolesCtrl.clear();
-                roles.forEach(role => {
-                    // this.oldSysRolesCtrl.push(this.createRoleFormGroup(
-                    // role
-                    //)
-                    //);
+                profile.grantedRoles.forEach(role => {
                     this.sysRolesCtrl.push(this.fb.control(role));
                 });
-
             }),
             takeUntil(this.destroy$)
         ).subscribe(() => {
@@ -89,16 +86,8 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             this.editUserForm.markAsUntouched();
             this.editUserForm.markAsPristine();
         });
-
-
-
     }
-
-
-
-
-
-
+    
     public onRoleSelect($event: Event): void {
         const checkboxElement = $event.target as HTMLInputElement;
         if (checkboxElement.checked) {
@@ -114,22 +103,20 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
         this.sysRolesCtrl.markAsDirty();
         this.sysRolesCtrl.markAsTouched();
     }
-
-
-
+    
     public updateUserProfile() {
         const formValues: Record<string, any> = this.editUserForm.getRawValue();
-        delete formValues["oldRoles"];
-        //delete formValues["password"];
-        //delete formValues["confirmPassword"];
         if (isUserProfile(formValues)) {
-            this.userService.adminUpdateUserProfile(this.userId, formValues).pipe(
+            this.userId$.pipe(
+                switchMap((userId: string) => {
+                    return this.userService.adminUpdateUserProfile(userId, formValues)
+                }),
                 take(1),
             ).subscribe({
                 next: () => {
                     this.toastrService.success("User profile updated!", "Success!");
                     this.auth.refreshTokens().pipe(take(1)).subscribe(() => {
-
+                    
                     });
                 },
                 error: (err: BaseError) => {
@@ -145,13 +132,18 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             throw new TypeError("Not a user profile type!");
         }
     }
-
+    
     public updatePasswords(): void {
-        this.userService.updateUserCredentialsbyId(
-            this.passwordCtrl.value,
-            this.newPasswordCtrl.value,
-            this.userId
-        ).pipe(take(1)).subscribe({
+        this.userId$.pipe(
+            switchMap((userId: string) => {
+                return this.userService.updateUserCredentialsbyId(
+                    this.passwordCtrl.value,
+                    this.newPasswordCtrl.value,
+                    userId
+                );
+            }),
+            take(1)
+        ).subscribe({
             next: () => {
                 this.toastrService.success("Password changed!", "Success!");
                 this.passwordForm.reset();
@@ -169,27 +161,27 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             }
         });
     }
-
-
-
+    
+    public goBack() {
+        this.router.navigate(["/admin/users"]);
+    }
+    
     ngOnDestroy() {
         this.destroy$.next(true);
     }
-
+    
     public get sysRolesCtrl(): FormArray {
-        console.log(this.editUserForm.controls["grantedRoles"]);
         return this.editUserForm.controls["grantedRoles"] as FormArray;
     }
-
-
+    
+    
     public get passwordCtrl(): FormControl {
         return this.passwordForm.controls["password"] as FormControl;
     }
-
+    
     public get newPasswordCtrl(): FormControl {
         return this.passwordForm.controls["newPassword"] as FormControl;
     }
-
-
-
+    
+    
 }

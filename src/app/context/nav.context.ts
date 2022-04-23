@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, of, switchMap, take, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, filter, Observable, of, switchMap, take, tap, throwError } from "rxjs";
 import { AuthStateStatus, ForbiddenError, NavState, NavStateStatus, NotFoundError, ProjectRole } from "@lib";
 import { AuthService, ProjectService } from "@services";
 import { mapToVoid } from "@utils";
@@ -46,7 +46,19 @@ export class NavContext {
     }
     
     public setContext(projectId: string): void {
-        this.projectService.getUserRole(projectId).pipe(
+        this.fetchContext(projectId).pipe(
+            take(1),
+        ).subscribe({
+            next: () => {
+            },
+            error: err => {
+                console.error(err);
+            },
+        });
+    }
+    
+    private fetchContext(projectId: string): Observable<void> {
+        return this.projectService.getUserRole(projectId).pipe(
             tap((role: ProjectRole) => {
                 localStorage.setItem(NavContext.STORAGE_KEY, projectId);
                 this.context$.next({
@@ -66,14 +78,22 @@ export class NavContext {
                 }
                 return throwError(() => err);
             }),
+        );
+    }
+    
+    public updateContext(): void {
+        this.context$.pipe(
+            filter((context: NavState) => {
+                return context.status === NavStateStatus.IN_CONTEXT;
+            }),
+            switchMap((context: NavState) => {
+                if (context.status === NavStateStatus.IN_CONTEXT) {
+                    return this.fetchContext(context.projectId);
+                }
+                throw Error("Invalid state!");
+            }),
             take(1),
-        ).subscribe({
-            next: () => {
-            },
-            error: err => {
-                console.error(err);
-            },
-        });
+        ).subscribe(() => {});
     }
     
     public clearContext(): void {

@@ -19,6 +19,7 @@ import { mapToType, validateProject, validateUsersAndRoles } from "@utils";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole as ProjectRoleConfig } from "@config/roles.config";
+import { NavContext } from "@context";
 
 type RouteContext = {
     context: "PROJECT" | "ADMIN";
@@ -39,6 +40,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
     private projectId$: Observable<string>;
     
     constructor(private fb: FormBuilder,
+                private nav: NavContext,
                 private roleService: RoleService,
                 private projectService: ProjectService,
                 private userService: UserService,
@@ -164,6 +166,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
                 take(1),
             ).subscribe({
                 next: () => {
+                    this.nav.updateContext();
                     this.toastrService.success("Project updated!", "Success!");
                     this.navigateBack();
                 },

@@ -11,6 +11,7 @@
         <sc-wall-post-details
             [postId]="selectedPostId"
             (whenClosed)="onDetailsClose()"
+            (whenPostDeleted)="onPostDelete()"
         >
         </sc-wall-post-details>
     </ng-container>

@@ -21,7 +21,7 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
     public refresh$ = new BehaviorSubject<void>(undefined);
-    public sort$ = new BehaviorSubject<SortOrder>("ASC");
+    public sort$ = new BehaviorSubject<SortOrder>("DESC");
     private destroy$ = new Subject<boolean>();
     
     public showForm: boolean = false;
@@ -66,6 +66,11 @@ export class ProjectWallComponent implements OnInit, OnDestroy {
     
     public onDetailsClose() {
         this.showDetails = false;
+    }
+    
+    public onPostDelete() {
+        this.showDetails = false;
+        this.refresh$.next();
     }
     
     public setOrder(order: SortOrder) {

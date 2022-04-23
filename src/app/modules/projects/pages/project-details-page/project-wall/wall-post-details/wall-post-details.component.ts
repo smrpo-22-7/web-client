@@ -36,6 +36,9 @@ export class WallPostDetailsComponent extends FormBaseComponent implements OnIni
     @Output()
     public whenClosed = new EventEmitter<void>();
     
+    @Output()
+    public whenPostDeleted = new EventEmitter<void>();
+    
     public post$: Observable<ProjectWallPost>;
     public comments$: Observable<EntityList<ProjectWallComment>>;
     public limit$ = new BehaviorSubject<number>(10);
@@ -122,6 +125,34 @@ export class WallPostDetailsComponent extends FormBaseComponent implements OnIni
                     error: err => {
                         console.error(err);
                         this.toastrService.error("Error removing comment!", "Error!");
+                    },
+                    complete: () => {
+                        ref.hide();
+                    },
+                });
+            }
+        }, {
+            confirm: {
+                clazz: "btn-danger",
+            },
+            decline: {
+                clazz: "btn-outline-primary",
+            },
+        });
+    }
+    
+    public openDeletePostDialog(post: ProjectWallPost) {
+        const message = `Are you sure you want to delete post by ${post.author.firstName} ${post.author.lastName}?`;
+        this.modalService.openConfirmDialog("Are you sure?", message, {
+            onConfirm: ref => {
+                this.projectWallService.removePost(post.id).pipe(take(1)).subscribe({
+                    next: () => {
+                        this.toastrService.warning("Post removed!", "Success!");
+                        this.whenPostDeleted.emit();
+                    },
+                    error: err => {
+                        console.error(err);
+                        this.toastrService.error("Error removing post!", "Error!");
                     },
                     complete: () => {
                         ref.hide();

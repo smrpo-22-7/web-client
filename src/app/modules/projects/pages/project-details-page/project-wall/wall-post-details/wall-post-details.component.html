@@ -2,14 +2,23 @@
     <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
         <div class="post-container">
             <ng-container *ngIf="post$ | async as post">
-                <div>
-                    <span class="back-btn" (click)="closeDetails()">
-                        <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
-                    </span>
-                    <span>
-                        Posted
-                        <span [tooltip]="createdDate">{{post.createdAt | friendlyDate}}</span>
-                    </span>
+                <div class="post-header">
+                    <div>
+                        <span class="back-btn" (click)="closeDetails()">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                        </span>
+                        <span>
+                            Posted
+                            <span [tooltip]="createdDate">{{post.createdAt | friendlyDate}}</span>
+                        </span>
+                    </div>
+                    <div>
+                        <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
+                            <button class="btn btn-sm btn-outline-danger" (click)="openDeletePostDialog(post)">
+                                Delete
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
                 <ng-template #createdDate>
                     <span>{{post.createdAt | date: "dd.MM.yyyy HH:mm:ss"}}</span>

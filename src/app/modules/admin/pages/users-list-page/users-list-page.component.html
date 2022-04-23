@@ -24,9 +24,9 @@
                                 </span>
                             </ng-container>
                             <ng-container *ngIf="user.status === 'ACTIVE'">
-                                <span class="action-btn" tooltip="Edit" (click)="openEditPrompt(user)" style="margin-left: 10px">
+                                <a class="action-btn" tooltip="Edit" [routerLink]="[user.id,'edit']"  style="margin-left: 10px">
                                     <fa-icon [icon]="['fas', 'user-pen']"></fa-icon>
-                                </span>
+                                </a>
                             </ng-container>
                             <ng-container *ngIf="user.status === 'DISABLED'">
                                 <span class="action-btn" tooltip="Reactivate" (click)="openActivatePrompt(user)">

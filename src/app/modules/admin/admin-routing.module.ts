@@ -10,9 +10,9 @@ import { EditUserComponent } from "./pages/edit-user/edit-user.component";
 const routes: Routes = [
     { path: "", pathMatch: "full", component: AdminPanelPageComponent },
     { path: "users", component: UsersListPageComponent },
+    { path: "users/:userId/edit", component: EditUserComponent },
     { path: "users/new", component: UserFormPageComponent },
     { path: "projects", component: ProjectListPageComponent },
-    { path: "users/edit", component: EditUserComponent },
     { path: "projects/new", component: ProjectFormPageComponent },
     {
         path: "projects/:projectId",

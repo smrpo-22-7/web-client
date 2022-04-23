@@ -1,5 +1,4 @@
 <div class="container-lg" >
-    <ng-container *ngIf="userProfile$ | async">
 
     <ng-container *ngIf="roles$ | async as roles"  >
 
@@ -52,6 +51,15 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label>Phone number</label>
+                        <input class="form-control" formControlName="phoneNumber"
+                               [class.is-invalid]="hasError(editUserForm.get('phoneNumber'))"/>
+                        <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('phoneNumber'), 'pattern')">
+                            Invalid phone number!
+                        </div>
+                    </div>
+
                     <div>
                         <label class="zgorjirob">Roles:</label>
                         <div class="levirob">
@@ -59,7 +67,7 @@
                                 <input class="form-check-input" type="checkbox" id="role-input-{{i}}"
                                        [value]="role.roleId" (change)="onRoleSelect($event)"
                                        [class.is-invalid]="hasErrorNoTouch(editUserForm.get('grantedRoles'))"
-                                       [checked]="sysRolesCtrlOld.value.includes(role.roleId)"
+                                       [checked]="sysRolesCtrl.value.includes(role.roleId)"
 
 
                                 />
@@ -85,18 +93,16 @@
                 </div>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-primary"
-                            [disabled]="isInvalid(editUserForm)"
+                            [disabled]="isInvalid(editUserForm) || !editUserForm.dirty"
                             type="submit">Update profile</button>
                 </div>
             </form>
         </div>
     </div>
     </ng-container>
-</ng-container>
 </div>
 
 <div class="container-lg" >
-    <ng-container *ngIf="userProfile$ | async">
     <ng-container *ngIf="roles$ | async as roles"  >
 
         <div class="row justify-content-center my-5">
@@ -149,6 +155,5 @@
                 </form>
             </div>
         </div>
-    </ng-container>
     </ng-container>
 </div>

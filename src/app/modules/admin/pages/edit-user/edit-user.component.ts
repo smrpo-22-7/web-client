@@ -1,15 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject, take, takeUntil, tap} from "rxjs";
+import {map, Observable, startWith, Subject, switchMap, take, takeUntil, tap} from "rxjs";
 import {isUserProfile, SysRole, UnauthorizedError, UserProfile, ValidationError} from "@lib";
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService, RoleService, UserService} from "@services";
-import {Router} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
-import {validateUniqueUsername} from "@utils";
+import {PHONE_NUMBER_REGEX, validateUniqueUsername} from "@utils";
 import {validateUserForm, validateUserRoles} from "../user-form-page/validators";
 import {FormBaseComponent} from "@shared/components/form-base/form-base.component";
 import {validatePasswords} from "../../../user-profile/pages/user-profile-page/password.validators";
 import {BaseError} from "@mjamsek/prog-utils";
+import {validateUsernameProfile} from "../../../user-profile/pages/user-profile-page/validators";
 
 
 @Component({
@@ -28,6 +29,7 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
 
 
     constructor(private fb: FormBuilder,
+                private route: ActivatedRoute,
                 private roleService: RoleService,
                 private router: Router,
                 private userService: UserService,
@@ -38,13 +40,14 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
 
     ngOnInit(): void {
         this.editUserForm = this.fb.group({
-            username: this.fb.control("", [Validators.required], [validateUniqueUsername(this.userService)]),
+            username: this.fb.control("", [Validators.required]),
+            oldUsername: this.fb.control(""),
             firstName: this.fb.control("", [Validators.required]),
             lastName: this.fb.control("", [Validators.required]),
             email: this.fb.control("", [Validators.required, Validators.email]),
             grantedRoles: this.fb.array([], [validateUserRoles]),
-            oldRoles: this.fb.array([], [validateUserRoles]),
-        }, );
+            phoneNumber: this.fb.control("", [Validators.pattern(PHONE_NUMBER_REGEX)]),
+        }, { asyncValidators: [validateUsernameProfile(this.userService)] });
 
         this.passwordForm = this.fb.group({
             password: this.fb.control("", [Validators.required]),
@@ -56,35 +59,44 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             takeUntil(this.destroy$)
         );
 
-        this.userProfile$ = this.userService.getUserById(this.userId).pipe(
+        this.route.paramMap.pipe(
+            startWith(this.route.snapshot.paramMap),
+            map((paramap: ParamMap) => {
+                return paramap.get("userId") as string;
+            }),
+            switchMap((userId: string) => {
+                return this.userService.getUserById(userId);
+            }),
             tap((profile: UserProfile) => {
                 this.editUserForm.patchValue({
                     ...profile,
+                    oldUsername: profile.username
                 }, { emitEvent: false });
                 const roles = profile.grantedRoles;
-                this.oldSysRolesCtrl.clear();
+                this.sysRolesCtrl.clear();
                 roles.forEach(role => {
                     // this.oldSysRolesCtrl.push(this.createRoleFormGroup(
                     // role
                     //)
-                //);
-                    this.oldSysRolesCtrl.push(this.fb.control(role));
+                    //);
+                    this.sysRolesCtrl.push(this.fb.control(role));
                 });
 
             }),
-            take(1),
-        );
-
-
-    }
-
-
-
-    private createRoleFormGroup(roleId: string): FormGroup {
-        return this.fb.group({
-            idRole: this.fb.control(roleId),
+            takeUntil(this.destroy$)
+        ).subscribe(() => {
+            this.editUserForm.updateValueAndValidity();
+            this.editUserForm.markAsUntouched();
+            this.editUserForm.markAsPristine();
         });
+
+
+
     }
+
+
+
+
 
 
     public onRoleSelect($event: Event): void {
@@ -99,6 +111,8 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
                 }
             });
         }
+        this.sysRolesCtrl.markAsDirty();
+        this.sysRolesCtrl.markAsTouched();
     }
 
 
@@ -163,12 +177,10 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
     }
 
     public get sysRolesCtrl(): FormArray {
+        console.log(this.editUserForm.controls["grantedRoles"]);
         return this.editUserForm.controls["grantedRoles"] as FormArray;
     }
 
-    public get oldSysRolesCtrl(): FormArray {
-        return this.editUserForm.controls["oldRoles"] as FormArray;
-    }
 
     public get passwordCtrl(): FormControl {
         return this.passwordForm.controls["password"] as FormControl;
@@ -178,8 +190,6 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
         return this.passwordForm.controls["newPassword"] as FormControl;
     }
 
-    public get sysRolesCtrlOld(): FormArray {
-        return this.editUserForm.controls["oldRoles"] as FormArray;
-    }
+
 
 }

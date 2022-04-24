@@ -5,7 +5,7 @@ import {
     NameCheckRequest,
     Story,
     StoryRegisterRequest, StoryState,
-    Task,
+    Task, UserProfile,
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 import { API_URL } from "@injectables";
@@ -80,5 +80,29 @@ export class StoryService {
             catchHttpError(),
         );
     }
-    
+
+
+    public removeStory(storyId: string): Observable<void> {
+        const url = `${this.apiUrl}/stories/${storyId}`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public getStoryById(storyId: string): Observable<StoryRegisterRequest> {
+        const url = `${this.apiUrl}/stories/${storyId}`;
+        return this.http.get(url).pipe(
+            mapToType<StoryRegisterRequest>(),
+            catchHttpError(),
+        );
+    }
+
+    public editStory(request: StoryRegisterRequest, storyId: string): Observable<void> {
+        const url = `${this.apiUrl}/stories/${storyId}`;
+        return this.http.patch(url, request).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
 }

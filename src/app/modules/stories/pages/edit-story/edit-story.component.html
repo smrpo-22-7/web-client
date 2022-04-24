@@ -1,0 +1,133 @@
+<div class="container-lg">
+
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-6 ozadje">
+            <div class="text-center rob">
+                <h2>Edit story</h2>
+            </div>
+            <ng-container *ngIf="nav$ | async as nav">
+                <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                    <ng-container *ngIf="priorities$ | async as priorities">
+                        <form [formGroup]="storyForm" class="rob" (ngSubmit)="editStory(nav.projectId)">
+                            <div>
+                                <div>
+                                    <label for="title" class="form-label">Story title:</label>
+                                    <input id="title" class="form-control" formControlName="title"
+                                           [class.is-invalid]="hasError(storyForm.get('title'))"/>
+                                    <div class="invalid-feedback" *ngIf="hasError(storyForm.get('title'), 'required')">
+                                        Title is required!
+                                    </div>
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('title'), 'titleExists')">
+                                        Story with this title already exists!
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="description" class="form-label zgorjirob">Description:</label>
+                                    <textarea id="description" class="form-control" formControlName="description"
+                                              [class.is-invalid]="hasError(storyForm.get('description'))"></textarea>
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('description'), 'required')">
+                                        Description is required!
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+
+                                    <label for="result" class="form-label zgorjirob">Add tests:</label>
+                                    <div class="input-group">
+                                        <input id="result" class="form-control"
+                                               [formControl]="testInputCtrl"
+                                               (keyup.enter)="addTest()"
+                                        />
+                                        <div class="input-group-addon">
+                                            <span (click)="addTest()" class="input-group-text">
+                                                Add
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-light table-hover table-bordered">
+                                    <thead>
+                                    <tr class="table-dark">
+                                        <td class="test-desc">Test</td>
+                                        <td>Actions</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let test of sysTestsCtrl.controls; let i = index">
+                                        <td class="test-desc">{{test.value}}</td>
+                                        <td>
+                                                <span class="action-cell">
+                                                    <span (click)="removeTest(i)" class="remove-btn">
+                                                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                                                    </span>
+                                                </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <label for="priority" class="form-label zgorjirob">Priority: </label>
+                                    <select id="priority" class="form-select" formControlName="priority"
+                                            [class.is-invalid]="hasError(storyForm.get('priority'))">
+                                        <option value="" disabled selected>Select one...</option>
+                                        <option *ngFor="let priority of priorities" [value]="priority">
+                                            {{priorityLabels[priority]}}
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('priority'), 'required')">
+                                        Priority is required!
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="businessValue" class="form-label zgorjirob">Business value (1-10):</label>
+                                    <input type="number" id="businessValue" class="form-control"
+                                           formControlName="businessValue"
+                                           [numbersOnly]="true"
+                                           [class.is-invalid]="hasError(storyForm.get('businessValue'))">
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('businessValue'), 'min')">
+                                        Business value has to be positive!
+                                    </div>
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('businessValue'), 'max')">
+                                        Business value can be at most 10!
+                                    </div>
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('businessValue'), 'pattern')">
+                                        Business value must be whole number!
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="timeEstimate" class="form-label zgorjirob">Estimated time (pt):</label>
+                                    <input type="number" id="timeEstimate" class="form-control"
+                                           [numbersOnly]="true"
+                                           [class.is-invalid]="hasError(storyForm.get('timeEstimate'))"
+                                           formControlName="timeEstimate">
+                                    <div class="invalid-feedback"
+                                         *ngIf="hasError(storyForm.get('timeEstimate'), 'pattern')">
+                                        Estimated time must be whole number!
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button type="submit" class="btn btn-primary"
+                                            [disabled]="isInvalid(storyForm)"
+                                    >Create
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+
+</div>

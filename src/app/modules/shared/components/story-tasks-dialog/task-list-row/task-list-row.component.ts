@@ -270,7 +270,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public get allowDelete(): boolean {
-        return !this.storyIsAssigned;
+        return !this.task.assignment.assigneeId;
     }
     
     public get storyIsAssigned(): boolean {

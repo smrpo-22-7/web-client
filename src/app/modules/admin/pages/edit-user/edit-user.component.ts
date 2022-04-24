@@ -109,7 +109,7 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
         if (isUserProfile(formValues)) {
             this.userId$.pipe(
                 switchMap((userId: string) => {
-                    return this.userService.adminUpdateUserProfile(userId, formValues)
+                    return this.userService.adminUpdateUserProfile(userId, formValues);
                 }),
                 take(1),
             ).subscribe({

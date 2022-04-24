@@ -209,5 +209,9 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     public get oppositeSort(): SortOrder {
         return this.sort$.value === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC;
     }
+
+    public updateData(): void {
+        this.refresh$.next();
+    }
     
 }

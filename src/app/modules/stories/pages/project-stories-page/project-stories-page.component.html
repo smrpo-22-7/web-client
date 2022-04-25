@@ -33,6 +33,23 @@
         </ng-container>
     </ng-container>
 
+    <!--
+        <ng-container *ngIf="storiesForm.length > 0">
+            <div class="story-actions">
+                <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                    <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
+                        <ng-container *ngIf="activeSprint$ | async as activeSprint">
+                            <ng-container *ngIf="activeSprint.active ">
+                                <button class="btn btn-primary"
+                                        (click)="addToRealized()">Realize stories</button>
+
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+    -->
     <div>
         <ng-container *ngIf="stories$ | async as stories">
             <div class="story-filters">

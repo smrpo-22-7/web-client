@@ -11,6 +11,18 @@
                     <div class="story-check check-placeholder"></div>
                 </ng-template>
             </ng-container>
+            <!--
+            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
+                <ng-container *ngIf="!story.realized && story.inActiveSprint; else checkPlaceholder">
+                    <div class="story-check">
+                        <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
+                    </div>
+                </ng-container>
+                <ng-template #checkPlaceholder>
+                    <div class="story-check check-placeholder"></div>
+                </ng-template>
+            </ng-container>
+            -->
         </ng-container>
         <div class="story-meta">
             {{story.title}} (#{{story.numberId}})

@@ -21,8 +21,39 @@
                         </a>
 
                 <!-- link do komponente edit-story naredi novo komponento-->
+                </ng-container>
             </ng-container>
+
+            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
+                <!--dodaj se v pogoje da zgodba more biti zakljucena in da ni zavrnjena-->
+                <ng-container *ngIf="!story.realized && story.inActiveSprint">
+
+                    <!-- DELETE naredi button kot tam-->
+                    <button class="btn btn-sm btn-secondary" (click)="realizeStory(story)" style="margin-left: 0.5%">
+                        Approve
+                    </button>
+
+                </ng-container>
+                <!-- zavrnjene zgodbe so tiste zgodbe ki se niso bile realizirane in so v aktivnem sprintu in (niso zakljucene ali ne dosegajo testov) - ko jih zavrnes jih vrni
+                  v product log (torej niso vec v aktivnem sprintu) in lahko dodas komentar-->
+<!--                <ng-container *ngIf="!story.realized && story.inActiveSprint && !tests(story)">-->
+
+<!--                    &lt;!&ndash; DELETE naredi button kot tam&ndash;&gt;-->
+<!--                    <button class="btn btn-sm btn-secondary" (click)="rejectStory(story)" style="margin-left: 0.5%; background-color: green">-->
+<!--                        Approve-->
+<!--                    </button>-->
+
+<!--                </ng-container>-->
+<!--                <ng-container *ngIf="story.realized && story.inActiveSprint">-->
+
+<!--                    &lt;!&ndash; DELETE naredi button kot tam&ndash;&gt;-->
+<!--                    <button class="btn btn-sm btn-secondary" (click)="derealizeStory(story)" style="margin-left: 0.5%; background-color: green">-->
+<!--                        disApprove-->
+<!--                    </button>-->
+
+<!--                </ng-container>-->
             </ng-container>
+
         </ng-container>
     </div>
     <div>

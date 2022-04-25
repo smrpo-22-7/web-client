@@ -162,7 +162,6 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
         ).subscribe({
             next: () => {
                 this.refresh$.next();
-                this.refreshActiveSprint$.next();
                 this.storiesForm.clear();
                 this.toastrService.success(`${capitalize(storyMessage)} added to sprint!`, "Success!");
             },
@@ -172,6 +171,27 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             },
         });
     }
+
+    // public addToRealized() {
+    //     const storyIds: string[] = this.storiesForm.controls.map(ctrl => {
+    //         return ctrl.get("id")?.value;
+    //     });
+    //     const storyMessage = storyIds.length === 1 ? "story" : "stories";
+    //     this.storyService.addStoriesToSprint(storyIds).pipe(
+    //         take(1)
+    //     ).subscribe({
+    //         next: () => {
+    //             this.refresh$.next();
+    //             this.refreshActiveSprint$.next();
+    //             this.storiesForm.clear();
+    //             this.toastrService.success(`${capitalize(storyMessage)} added to sprint!`, "Success!");
+    //         },
+    //         error: err => {
+    //             this.toastrService.error(`Error adding ${storyMessage} to sprint!`, "Error!");
+    //             console.error(err);
+    //         },
+    //     });
+    // }
     
     public newPage($event: PageChangedEvent): void {
         this.offset$.next(($event.page - 1) * $event.itemsPerPage);

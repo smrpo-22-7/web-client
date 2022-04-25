@@ -31,6 +31,9 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
     
     @Output()
     public whenSelected = new EventEmitter<CheckboxSelectEvent<ExtendedStory>>();
+
+    //@Output()
+    //public whenSelectedToRealize = new EventEmitter<CheckboxSelectEvent<ExtendedStory>>();
     
     private destroy$ = new Subject<boolean>();
     
@@ -61,6 +64,16 @@ export class StoryListHeaderComponent implements OnInit, OnDestroy {
             item: this.story,
         });
     }
+    //
+    // public onStorySelectToRealize($event: Event) {
+    //     $event.stopPropagation();
+    //
+    //     const checkboxElement = $event.target as HTMLInputElement;
+    //     this.whenSelectedToRealize.emit({
+    //         checked: checkboxElement.checked,
+    //         item: this.story,
+    //     });
+    // }
     
     public preventExpand($event: Event) {
         $event.stopPropagation();

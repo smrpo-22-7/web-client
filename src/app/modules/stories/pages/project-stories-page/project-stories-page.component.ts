@@ -51,7 +51,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
     public sort$ = new BehaviorSubject<SortOrder>(SortOrder.ASC);
-    public filterRealized$ = new BehaviorSubject<BoolOptFilter>(null);
+    public filterRealized$ = new BehaviorSubject<BoolOptFilter>("false");
     public filterAssigned$ = new BehaviorSubject<BoolOptFilter>(null);
     private refresh$ = new BehaviorSubject<void>(undefined);
     

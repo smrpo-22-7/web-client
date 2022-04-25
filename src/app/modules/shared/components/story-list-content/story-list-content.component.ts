@@ -84,7 +84,7 @@ export class StoryListContentComponent implements OnInit {
         const message = `Are you sure you want to approve story '${story.title}'?`;
         this.modalService.openConfirmDialog("Are you sure?", message, {
             onConfirm: ref => {
-                this.storyService.realizeStoryOne(story.id, { realized: true } ).pipe(take(1)).subscribe({
+                this.storyService.realizeStoryOne(story.id, { storyStatus: "REALIZED" } ).pipe(take(1)).subscribe({
                     next: () => {
                         this.whenUpdated.emit();
                         this.toastrService.success("Story realized!", "Success!");

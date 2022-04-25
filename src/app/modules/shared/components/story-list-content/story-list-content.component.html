@@ -26,7 +26,7 @@
 
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
                 <!--dodaj se v pogoje da zgodba more biti zakljucena in da ni zavrnjena-->
-                <ng-container *ngIf="!story.realized && story.inActiveSprint">
+                <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
 
                     <!-- DELETE naredi button kot tam-->
                     <button class="btn btn-sm btn-secondary" (click)="realizeStory(story)" style="margin-left: 0.5%">

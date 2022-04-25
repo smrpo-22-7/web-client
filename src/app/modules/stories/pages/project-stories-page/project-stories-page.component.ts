@@ -130,8 +130,8 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
                 if (values.length === 0) {
                     return 0;
                 }
-                return values.reduce((acc: any, elem: any) => {
-                    return acc + elem.timeEstimate;
+                return values.reduce((acc: number, elem: any) => {
+                    return acc + parseInt(elem.timeEstimate);
                 }, 0);
             }),
             takeUntil(this.destroy$),
@@ -202,7 +202,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
     private storyToFormGroup(story: Story): FormGroup {
         return this.fb.group({
             id: this.fb.control(story.id),
-            timeEstimate: this.fb.control(story.timeEstimate),
+            timeEstimate: this.fb.control(parseInt(story.timeEstimate as any)),
         });
     }
     

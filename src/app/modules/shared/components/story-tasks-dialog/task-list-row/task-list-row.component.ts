@@ -266,7 +266,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public get allowEdit(): boolean {
-        return !this.story.realized && this.story.inActiveSprint;
+        return this.story.storyStatus !== 'REALIZED' && this.story.inActiveSprint;
     }
     
     public get allowDelete(): boolean {

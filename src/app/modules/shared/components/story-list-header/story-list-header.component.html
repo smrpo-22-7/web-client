@@ -2,7 +2,7 @@
     <div class="detail-header-left-group">
         <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
-                <ng-container *ngIf="story.timeEstimate && !story.realized && !story.assigned && allowSelection && !story.inActiveSprint; else checkPlaceholder">
+                <ng-container *ngIf="story.timeEstimate && story.storyStatus !== 'REALIZED' && !story.assigned && allowSelection && !story.inActiveSprint; else checkPlaceholder">
                     <div class="story-check">
                         <input type="checkbox" [value]="story.id" (click)="onStorySelect($event)"/>
                     </div>
@@ -14,7 +14,7 @@
         </ng-container>
         <div class="story-meta">
             {{story.title}} (#{{story.numberId}})
-            <ng-container *ngIf="story.realized">
+            <ng-container *ngIf="story.storyStatus === 'REALIZED'">
                 <span class="badge bg-success">Realized</span>
             </ng-container>
             <ng-container *ngIf="showInSprintBadge && story.inActiveSprint">
@@ -29,7 +29,7 @@
         <div class="estimate-input">
             <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
                 <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER; else noEstimateEdit">
-                    <ng-container *ngIf="!story.realized && !story.inActiveSprint; else noEstimateEdit">
+                    <ng-container *ngIf="story.storyStatus !== 'REALIZED' && !story.inActiveSprint; else noEstimateEdit">
                         <label>Time estimate:</label>
                         <input class="form-control form-control-sm"
                             [numbersOnly]="true"

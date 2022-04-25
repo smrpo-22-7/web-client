@@ -30,16 +30,16 @@
                     ></sc-task-list-row>
                 </ng-container>
                 <ng-template #noTasks>
-                    <p *ngIf="!story.realized && story.inActiveSprint">No tasks added yet! Use form below to add one.</p>
-                    <p *ngIf="story.realized">This story had no tasks!</p>
-                    <p *ngIf="!story.realized && !story.inActiveSprint">This story is not in active sprint and therefore was not assigned any tasks yet!</p>
+                    <p *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">No tasks added yet! Use form below to add one.</p>
+                    <p *ngIf="story.storyStatus === 'REALIZED'">This story had no tasks!</p>
+                    <p *ngIf="story.storyStatus !== 'REALIZED' && !story.inActiveSprint">This story is not in active sprint and therefore was not assigned any tasks yet!</p>
                 </ng-template>
             </ng-container>
         </div>
 
         <div class="mt-4">
 
-            <form [formGroup]="taskForm" (ngSubmit)="addTask()" *ngIf="!story.realized && story.inActiveSprint">
+            <form [formGroup]="taskForm" (ngSubmit)="addTask()" *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
                 <h5>Add new task</h5>
                 <div class="form-group">
                     <label>Description:</label>

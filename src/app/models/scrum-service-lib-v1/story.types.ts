@@ -13,7 +13,7 @@ export interface Story extends BaseType {
     businessValue: number;
     timeEstimate: number;
     priority: Story.Priority;
-    realized: boolean;
+    storyStatus: Story.Status;
     assigned: boolean;
     tests: AcceptanceTest[];
     projectId: string;
@@ -39,6 +39,12 @@ export namespace Story {
         SHOULD_HAVE: "SHOULD_HAVE",
         COULD_HAVE: "COULD_HAVE",
         WONT_HAVE_THIS_TIME: "WONT_HAVE_THIS_TIME",
+    };
+    export type Status = "REALIZED" | "WAITING" | "REJECTED";
+    export const Status = {
+        REALIZED: "REALIZED" as Status,
+        WAITING: "WAITING" as Status,
+        REJECTED: "REJECTED" as Status,
     };
 }
 

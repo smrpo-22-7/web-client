@@ -5,7 +5,7 @@
     background-color: $white;
 
     &.active-story {
-        background-color: #f5ffe2;
+        background-color: $blue-100;
     }
     &:not(.active-story) {
         .panel-heading {

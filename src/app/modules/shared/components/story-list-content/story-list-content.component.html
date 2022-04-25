@@ -25,14 +25,15 @@
             </ng-container>
 
             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
-                <!--dodaj se v pogoje da zgodba more biti zakljucena in da ni zavrnjena-->
+                <ng-container *ngIf="story.storyStatus === 'WAITING' && story.inActiveSprint">
+                    <button class="btn btn-sm btn-outline-danger" (click)="rejectStory(story)">
+                        Reject
+                    </button>
+                </ng-container>
                 <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
-
-                    <!-- DELETE naredi button kot tam-->
                     <button class="btn btn-sm btn-secondary" (click)="realizeStory(story)" style="margin-left: 0.5%">
                         Approve
                     </button>
-
                 </ng-container>
                 <!-- zavrnjene zgodbe so tiste zgodbe ki se niso bile realizirane in so v aktivnem sprintu in (niso zakljucene ali ne dosegajo testov) - ko jih zavrnes jih vrni
                   v product log (torej niso vec v aktivnem sprintu) in lahko dodas komentar-->

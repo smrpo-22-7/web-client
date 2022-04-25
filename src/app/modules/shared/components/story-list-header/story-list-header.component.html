@@ -29,11 +29,11 @@
             <ng-container *ngIf="story.storyStatus === 'REALIZED'">
                 <span class="badge bg-success">Realized</span>
             </ng-container>
+            <ng-container *ngIf="story.storyStatus === 'REJECTED' && story.rejectComment">
+                <span class="badge bg-danger" [tooltip]="story.rejectComment">Rejected</span>
+            </ng-container>
             <ng-container *ngIf="showInSprintBadge && story.inActiveSprint">
                 <span class="badge bg-info">In active sprint</span>
-            </ng-container>
-            <ng-container *ngIf="showRejectedBadge && story.rejectComment">
-                <span class="badge bg-danger" [title]="story.rejectComment">Rejected</span>
             </ng-container>
         </div>
     </div>

@@ -106,7 +106,7 @@ export class StoryService {
         );
     }
 
-    public realizeStoryOne(storyId: string, request: Partial<Story>): Observable<void> {
+    public updateStoryStatus(storyId: string, request: Partial<Story>): Observable<void> {
         const url = `${this.apiUrl}/stories/${storyId}/realized`;
         return this.http.patch(url, request).pipe(
             mapToVoid(),

@@ -8,7 +8,7 @@ import {
     ConflictError, SprintStatus,
     Sprint, SprintConflictCheckRequest,
     SprintListResponse,
-    Story
+    Story, SprintRegisterRequest
 } from "@lib";
 import { catchHttpError, mapToType, mapToVoid } from "@utils";
 
@@ -91,6 +91,30 @@ export class SprintService {
         const url = `${this.apiUrl}/sprints/${sprintId}/status`;
         return this.http.get(url).pipe(
             mapToType<SprintStatus>(),
+            catchHttpError(),
+        );
+    }
+
+    public editSprint(request: SprintRegisterRequest, sprintId: string): Observable<void> {
+        const url = `${this.apiUrl}/sprints/${sprintId}`;
+        return this.http.patch(url, request).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public removeSprint(sprintId: string): Observable<void> {
+        const url = `${this.apiUrl}/sprints/${sprintId}`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+
+    public getSprintById(sprintId: string): Observable<SprintRegisterRequest> {
+        const url = `${this.apiUrl}/sprints/${sprintId}`;
+        return this.http.get(url).pipe(
+            mapToType<SprintRegisterRequest>(),
             catchHttpError(),
         );
     }

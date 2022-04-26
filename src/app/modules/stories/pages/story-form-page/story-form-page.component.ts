@@ -57,6 +57,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
         this.nav$ = this.nav.getNavState().pipe(
             takeUntil(this.destroy$)
         );
+
     }
     
     public addTest() {
@@ -76,7 +77,7 @@ export class StoryFormPageComponent extends FormBaseComponent implements OnInit,
                 next: () => {
                     this.toastrService.success("New story was added!", "Success!");
                     this.storyForm.reset();
-                    this.router.navigate(["/projects", projectId, "stories"])
+                    this.router.navigate(["/projects", projectId, "stories"]);
                 },
                 error: err => {
                     console.error(err);

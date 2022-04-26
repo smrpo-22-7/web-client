@@ -15,7 +15,7 @@ export function mapToType<T>() {
         return source.pipe(
             map(val => val as unknown as T)
         );
-    }
+    };
 }
 
 export function mapToVoid() {
@@ -23,7 +23,7 @@ export function mapToVoid() {
         return source.pipe(
             map(() => undefined)
         );
-    }
+    };
 }
 
 export function mapToEntityList<T>() {
@@ -40,24 +40,24 @@ export function mapToEntityList<T>() {
                 throw TypeError("Response body is empty! Unable to map to EntityList.");
             })
         );
-    }
+    };
 }
 
 export function mapHttpError(err: HttpErrorResponse) {
     if (err.status === 400) {
-        return throwError(() => new BadRequestError(err.message, err))
+        return throwError(() => new BadRequestError(err.message, err));
     } else if (err.status === 401) {
-        return throwError(() => new UnauthorizedError(err.message, err))
+        return throwError(() => new UnauthorizedError(err.message, err));
     } else if (err.status === 403) {
-        return throwError(() => new ForbiddenError(err.message, err))
+        return throwError(() => new ForbiddenError(err.message, err));
     } else if (err.status === 404) {
-        return throwError(() => new NotFoundError(err.message, err))
+        return throwError(() => new NotFoundError(err.message, err));
     } else if (err.status === 409) {
-        return throwError(() => new ConflictError(err.message, err))
+        return throwError(() => new ConflictError(err.message, err));
     } else if (err.status === 422) {
-        return throwError(() => new ValidationError(err.message, err))
+        return throwError(() => new ValidationError(err.message, err));
     } else if (err.status === 500) {
-        return throwError(() => new InternalServerError(err.message, err))
+        return throwError(() => new InternalServerError(err.message, err));
     }
     return throwError(() => new UnknownError(err.message, err));
 }
@@ -67,5 +67,5 @@ export function catchHttpError() {
         return source.pipe(
             catchError(mapHttpError),
         );
-    }
+    };
 }

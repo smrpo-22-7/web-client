@@ -10,7 +10,7 @@ import { mapToVoid } from "@utils";
 })
 export class NavContext {
     
-    private static readonly STORAGE_KEY = "scrum.nav.project"
+    private static readonly STORAGE_KEY = "scrum.nav.project";
     
     private context$ = new BehaviorSubject<NavState>({
         status: NavStateStatus.NO_CONTEXT,

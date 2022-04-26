@@ -86,7 +86,7 @@ export function parseTokenPayload(token: string): TokenInfo {
         throw new Error("Malformed token!");
     }
     try {
-        const decodedPayload = base64UrlDecode(tokenParts[1])
+        const decodedPayload = base64UrlDecode(tokenParts[1]);
         const parsedPayload = JSON.parse(decodedPayload);
         
         return {
@@ -99,7 +99,7 @@ export function parseTokenPayload(token: string): TokenInfo {
             sessionState: parsedPayload["session_state"],
             roles: parsedPayload["roles"],
             lastLogin: parsedPayload["llog"],
-        }
+        };
     } catch (err) {
         console.error(err);
         throw err;

@@ -5,7 +5,7 @@ import { UserProfilePageComponent } from "./pages/user-profile-page/user-profile
 
 const routes: Routes = [
     { path: "", pathMatch: "full", component: UserProfilePageComponent },
-]
+];
 
 @NgModule({
     imports: [

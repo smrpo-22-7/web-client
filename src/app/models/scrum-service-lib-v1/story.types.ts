@@ -23,6 +23,7 @@ export interface Story extends BaseType {
 export interface ExtendedStory extends Story {
     inActiveSprint: boolean;
     assignedSprintId?: string | null;
+    completed: boolean;
 }
 
 export interface StoryState {

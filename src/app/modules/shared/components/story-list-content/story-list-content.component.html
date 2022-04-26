@@ -31,9 +31,13 @@
                     </button>
                 </ng-container>
                 <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
-                    <button class="btn btn-sm btn-secondary" (click)="realizeStory(story)" style="margin-left: 0.5%">
-                        Approve
-                    </button>
+                    <span tooltip="Not all tasks are completed yet!" [tooltipEnable]="!story.completed">
+                        <button class="btn btn-sm btn-secondary"
+                            [disabled]="!story.completed"
+                            (click)="realizeStory(story)" style="margin-left: 0.5%">
+                            Approve
+                        </button>
+                    </span>
                 </ng-container>
                 <!-- zavrnjene zgodbe so tiste zgodbe ki se niso bile realizirane in so v aktivnem sprintu in (niso zakljucene ali ne dosegajo testov) - ko jih zavrnes jih vrni
                   v product log (torej niso vec v aktivnem sprintu) in lahko dodas komentar-->

@@ -99,10 +99,10 @@ export class StoryListContentComponent implements OnInit {
             }
         }, {
             confirm: {
-                clazz: "btn-danger",
+                clazz: "btn-primary",
             },
             decline: {
-                clazz: "btn-outline-secondary",
+                clazz: "btn-outline-danger",
             }
         });
         

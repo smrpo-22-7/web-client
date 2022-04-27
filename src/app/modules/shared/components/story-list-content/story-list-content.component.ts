@@ -6,6 +6,7 @@ import { ProjectRole } from "@config/roles.config";
 import { BehaviorSubject, take } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { getValueSymbolOfDeclaration } from "@angular/core/schematics/utils/typescript/symbol";
+import { RejectStoryDialogComponent } from "@shared/components/reject-story-dialog/reject-story-dialog.component";
 
 @Component({
     selector: "sc-story-list-content",
@@ -109,63 +110,14 @@ export class StoryListContentComponent implements OnInit {
     }
     
     public rejectStory(story: ExtendedStory) {
-        const message = `Are you sure you want to reject story '${story.title}'?`;
-        this.modalService.openConfirmDialog("Are you sure?", message, {
-            onConfirm: ref => {
-                story.inActiveSprint = false;
-                story.assignedSprintId = null;
-                this.storyService.updateStoryStatus(story.id, { storyStatus: "REJECTED", rejectComment: "Test test" })
-                    .pipe(take(1))
-                    .subscribe({
-                        next: () => {
-                            this.whenUpdated.emit();
-                            this.toastrService.success("Story rejected!", "Success!");
-                        },
-                        error: () => {
-                            this.toastrService.error("Error rejecting story!", "Error!");
-                        },
-                        complete: () => {
-                            ref.hide();
-                        },
-                    });
-            }
-        }, {
-            confirm: {
-                clazz: "btn-danger",
+        this.modalService.openModal(RejectStoryDialogComponent, {
+            initialState: {
+                story,
+                onReject: () => {
+                    this.whenUpdated.emit();
+                },
             },
-            decline: {
-                clazz: "btn-outline-secondary",
-            }
         });
-        
     }
     
-    // public derealizeStory(story: Story){
-    //     const message = `Are you sure you want to diapprove story '${story.title}'?`;
-    //     this.modalService.openConfirmDialog("Are you sure?", message, {
-    //         onConfirm: ref => {
-    //             story.realized = false;
-    //             this.storyService.realizeStoryOne(story.id, story).pipe(take(1)).subscribe({
-    //                 next: () => {
-    //                     this.whenUpdated.emit();
-    //                     this.toastrService.success("Story disapproved!", "Success!");
-    //                 },
-    //                 error: () => {
-    //                     this.toastrService.error("Error realizing story!", "Error!");
-    //                 },
-    //                 complete: () => {
-    //                     ref.hide();
-    //                 },
-    //             });
-    //         }
-    //     }, {
-    //         confirm: {
-    //             clazz: "btn-danger",
-    //         },
-    //         decline: {
-    //             clazz: "btn-outline-secondary",
-    //         }
-    //     });
-    //
-    // }
 }

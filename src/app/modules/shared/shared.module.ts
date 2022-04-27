@@ -17,6 +17,7 @@ import { StoryTasksDialogComponent } from "./components/story-tasks-dialog/story
 import { TaskListRowComponent } from "./components/story-tasks-dialog/task-list-row/task-list-row.component";
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { FriendlyDatePipe } from './pipes/friendly-date.pipe';
+import { RejectStoryDialogComponent } from './components/reject-story-dialog/reject-story-dialog.component';
 
 @NgModule({
     imports: [
@@ -59,6 +60,7 @@ import { FriendlyDatePipe } from './pipes/friendly-date.pipe';
         TaskListRowComponent,
         NumbersOnlyDirective,
         FriendlyDatePipe,
+        RejectStoryDialogComponent,
     ]
 })
 export class SharedModule {

@@ -1,11 +1,1 @@
 @import "src/styles/variables";
-
-.hour-row {
-    .data-col {
-        padding: 0.5rem 0.5rem;
-        border-bottom: 1px solid $grey-100;
-    }
-    &:hover {
-        background-color: $grey-25;
-    }
-}

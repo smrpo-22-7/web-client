@@ -76,3 +76,21 @@ textarea.form-control.is-warned {
         }
     }
 }
+
+.table-like {
+    .table-hd {
+        border-bottom: 2px solid black;
+        strong {
+            padding: 0.5rem 0.5rem;
+        }
+    }
+    .table-tr {
+        .table-td {
+            padding: 0.5rem 0.5rem;
+            border-bottom: 1px solid $grey-100;
+        }
+        &:hover {
+            background-color: $grey-25;
+        }
+    }
+}

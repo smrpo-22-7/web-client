@@ -1,14 +1,14 @@
-<div class="row hour-row">
-    <div class="col-2 data-col">
+<div class="row table-tr">
+    <div class="col-2 table-td">
         {{taskHour.workDate | date: "dd.MM.YYYY"}}
     </div>
-    <div class="col-1 data-col">
+    <div class="col-1 table-td">
         {{taskHour.amount | friendlyTime}}
     </div>
-    <div class="col-8 data-col">
+    <div class="col-8 table-td">
         {{taskHour.task.taskDescription}}
     </div>
-    <div class="col-1 data-col">
+    <div class="col-1 table-td">
         #{{taskHour.task.storyNumberId}}
     </div>
 </div>

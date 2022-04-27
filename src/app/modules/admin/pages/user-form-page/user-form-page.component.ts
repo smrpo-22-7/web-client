@@ -65,7 +65,6 @@ export class UserFormPageComponent extends FormBaseComponent implements OnInit, 
         if (isUserRegisterRequest(formValue)) {
             this.userService.createUser(formValue).pipe(take(1)).subscribe({
                 next: () => {
-                    console.log("created!");
                     this.toastrService.success("New user was added!", "Success!");
                     this.userForm.reset();
                     this.router.navigate(["/admin/users"]);

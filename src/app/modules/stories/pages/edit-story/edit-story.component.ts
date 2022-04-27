@@ -87,7 +87,6 @@ export class EditStoryComponent extends FormBaseComponent implements OnInit, OnD
 
                 this.sysTestsCtrl.clear();
                 story.tests.forEach(role => {
-                    console.log(role.result);
                     this.sysTestsCtrl.push(this.fb.control(role.result));
                 });
             }),

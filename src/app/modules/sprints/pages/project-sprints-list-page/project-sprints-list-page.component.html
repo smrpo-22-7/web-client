@@ -26,6 +26,14 @@
             <ng-container *ngIf="sprints.futureSprints && sprints.futureSprints.length > 0; else noFuture">
                 <div *ngFor="let sprint of sprints.futureSprints">
                     <sc-sprint-row [sprint]="sprint"></sc-sprint-row>
+                    <button class="btn btn-sm btn-secondary" (click)="openDeletePrompt(sprint)" style="margin-left: 0.5%">
+                        Remove
+                    </button>
+                    <a class="action-btn" [routerLink]="[sprint.id,'edit']"  style="margin-left: 0.5%">
+                        <button class="btn btn-sm btn-secondary" style="margin-left: 0.5%">
+                            Edit
+                        </button>
+                    </a>
                 </div>
             </ng-container>
             <ng-template #noFuture>

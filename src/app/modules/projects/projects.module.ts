@@ -10,6 +10,7 @@ import {
     WallPostDetailsComponent
 } from "./pages/project-details-page/project-wall/wall-post-details/wall-post-details.component";
 import { ProjectHoursPageComponent } from './pages/project-hours-page/project-hours-page.component';
+import { HourRowComponent } from './components/hour-row/hour-row.component';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { ProjectHoursPageComponent } from './pages/project-hours-page/project-ho
       ProjectWallComponent,
       WallPostFormComponent,
       WallPostDetailsComponent,
-      ProjectHoursPageComponent
+      ProjectHoursPageComponent,
+      HourRowComponent
     ]
 })
 export class ProjectsModule {

@@ -1,0 +1,11 @@
+@import "src/styles/variables";
+
+.hours-container {
+    .header-row {
+        border-bottom: 2px solid black;
+
+        strong {
+            padding: 0.5rem 0.5rem;
+        }
+    }
+}

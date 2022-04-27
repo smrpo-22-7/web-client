@@ -1,31 +1,22 @@
-<div>
+<div class="hours-container">
+
+    <div class="mt-4 mb-4">
+        <h1>Logged hours</h1>
+    </div>
 
     <ng-container *ngIf="hours$ | async as hours">
-
         <ng-container *ngIf="hours.entities.length > 0; else noHours">
-            <table class="table table-responsive table-hover">
-                <thead>
-                    <tr>
-                        <th class="col-2">Date</th>
-                        <th class="col-8">Task</th>
-                        <th class="col-2">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let hour of hours.entities">
-                        <td class="col-2">
-                            {{hour.workDate | date: "dd.MM.YYYY"}}
-                        </td>
-                        <td class="col-8">
-                            {{hour.task.taskDescription}}
-                        </td>
-                        <td class="col-2">
-                            {{hour.amount}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
+            <div>
+                <div class="row header-row">
+                    <strong class="col-2">Date</strong>
+                    <strong class="col-1">Amount</strong>
+                    <strong class="col-8">Task</strong>
+                    <strong class="col-1">Story ID</strong>
+                </div>
+                <sc-hour-row *ngFor="let hour of hours.entities"
+                    [taskHour]="hour">
+                </sc-hour-row>
+            </div>
             <div class="pagination-container">
                 <pagination
                     [itemsPerPage]="limit$.value"

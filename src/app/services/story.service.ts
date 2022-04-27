@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of, throwError } from "rxjs";
 import {
-    ConflictError,
+    ConflictError, ExtendedTask,
     NameCheckRequest,
     Story,
     StoryRegisterRequest, StoryState,
@@ -65,10 +65,10 @@ export class StoryService {
         );
     }
     
-    public getStoryTasks(storyId: string): Observable<Task[]> {
+    public getStoryTasks(storyId: string): Observable<ExtendedTask[]> {
         const url = `${this.apiUrl}/stories/${storyId}/tasks`;
         return this.http.get(url).pipe(
-            mapToType<Task[]>(),
+            mapToType<ExtendedTask[]>(),
             catchHttpError(),
         );
     }

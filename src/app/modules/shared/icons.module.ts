@@ -32,7 +32,7 @@ import {
     faPersonCircleMinus,
     faCertificate,
     faPen,
-    faLeftLong, faPeopleArrowsLeftRight,
+    faLeftLong, faPeopleArrowsLeftRight, faPlay, faStop,
 } from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
@@ -82,6 +82,8 @@ export class IconsModule {
             faLeftLong,
             faPeopleArrowsLeftRight,
             faComment,
+            faPlay,
+            faStop,
         );
     }
 }

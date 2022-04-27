@@ -15,7 +15,7 @@ import {
 import {
     AuthState,
     AuthStateStatus,
-    ExtendedStory,
+    ExtendedStory, ExtendedTask,
     FieldUpdateEvent,
     FieldValidators,
     Task,
@@ -42,10 +42,13 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     public story: ExtendedStory;
     
     @Input()
+    public hasActiveTask: boolean;
+    
+    @Input()
     public projectId: string;
     
     @Input()
-    public task: Task;
+    public task: ExtendedTask;
     
     @Output()
     public whenUpdated = new EventEmitter<void>();
@@ -159,6 +162,34 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
                 });
             }
         }
+    }
+    
+    public startWorkingOnTask(task: ExtendedTask) {
+        if (!this.hasActiveTask) {
+            this.taskService.startWorkingOnTask(task.id).pipe(
+                take(1),
+            ).subscribe({
+                next: () => {
+                    this.whenUpdated.emit();
+                },
+                error: err => {
+                    console.error(err);
+                },
+            });
+        }
+    }
+    
+    public stopWorkingOnTask(task: ExtendedTask) {
+        this.taskService.stopWorkingOnTask().pipe(
+            take(1),
+        ).subscribe({
+            next: () => {
+                this.whenUpdated.emit();
+            },
+            error: err => {
+                console.error(err);
+            },
+        });
     }
     
     private registerUpdateHandler() {

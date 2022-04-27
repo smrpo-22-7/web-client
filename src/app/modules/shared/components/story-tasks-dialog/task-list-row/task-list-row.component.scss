@@ -24,37 +24,18 @@
             margin-left: 5px;
         }
 
-        .assignee-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 8px;
-
+        .emph {
+            font-style: italic;
+        }
+        .assignee-button {
             fa-icon {
                 font-size: 1.25rem;
-            }
-            &:hover {
-                cursor: pointer;
-            }
-            &:first-child {
-                margin-left: 0;
             }
         }
         .assign-user-btn {
             color: $primary-color;
             &:hover {
                 cursor: pointer;
-            }
-        }
-    }
-    .delete-btn {
-        &:hover {
-            cursor: pointer;
-        }
-        &.disabled {
-            color: $light-grey;
-            &:hover {
-                cursor: default;
             }
         }
     }
@@ -67,4 +48,6 @@
         display: inline-block;
         width: 100%;
     }
+
+
 }

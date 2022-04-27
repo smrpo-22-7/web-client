@@ -34,7 +34,7 @@
                     (ngModelChange)="updateTask($event, 'estimate')"/>
             </span>
         </div>
-        <div class="col-3 assignment">
+        <div class="col-2 assignment">
             <ng-container *ngIf="task.assignment && task.assignment.assignee; else noAssignee">
                 <span class="assignee-section">
                     <sc-user-initials-icon [name]="task.assignment.assignee.firstName + ' ' + task.assignment.assignee.lastName"
@@ -48,21 +48,21 @@
                 <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
                     <ng-container *ngIf="auth.userId === task.assignment.assigneeId && allowEdit">
                         <span *ngIf="task.assignment.pending" (click)="acceptTask()"
-                            tooltip="Accept" class="assignee-btn">
+                            tooltip="Accept" class="action-button assignee-button">
                             <fa-icon [icon]="['fas', 'check']"></fa-icon>
                         </span>
                         <span *ngIf="task.assignment.pending" (click)="declineTask()"
-                            tooltip="Decline" class="assignee-btn">
+                            tooltip="Decline" class="action-button assignee-button">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
                         <span *ngIf="!task.assignment.pending"
-                            tooltip="Cancel" class="assignee-btn" (click)="clearAssignee()">
+                            tooltip="Cancel" class="action-button assignee-button" (click)="clearAssignee()">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="task.assignment.pending && allowEdit">
-                    <span tooltip="Clear assignee" class="assignee-btn" (click)="clearAssignee()">
+                    <span tooltip="Clear assignee" class="action-button assignee-button" (click)="clearAssignee()">
                         <fa-icon [icon]="['fas', 'person-circle-minus']"></fa-icon>
                     </span>
                 </ng-container>
@@ -70,7 +70,7 @@
 
             <ng-template #noAssignee>
                 <ng-container *ngIf="!edits.assignee && allowEdit">
-                    Assign:&#160;
+                    <span class="emph">Assign:</span>&#160;
                     <span class="assign-user-btn" (click)="toggleEdits('assignee')">user</span>
                     <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
                         &#160;|&#160;<span class="assign-user-btn" (click)="assignUser(auth.userId)">yourself</span>
@@ -99,9 +99,28 @@
             </ng-template>
         </div>
         <div class="col-1">
+            <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
+                <ng-container *ngIf="auth.userId === task.assignment.assigneeId">
+                    <ng-container *ngIf="!task.active; else activeTask">
+                        <span class="action-button"
+                            [class.disabled]="hasActiveTask"
+                            [isDisabled]="hasActiveTask"
+                            tooltip="Start task" (click)="startWorkingOnTask(task)">
+                            <fa-icon [icon]="['fas', 'play']"></fa-icon>
+                        </span>
+                    </ng-container>
+                    <ng-template #activeTask>
+                        <span class="action-button" tooltip="End task" (click)="stopWorkingOnTask(task)">
+                            <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                        </span>
+                    </ng-template>
+                </ng-container>
+            </ng-container>
+        </div>
+        <div class="half-col">
             <span
                 [class.disabled]="!allowDelete"
-                class="delete-btn" (click)="openDeleteDialog()" tooltip="Remove task"
+                class="action-button" (click)="openDeleteDialog()" tooltip="Remove task"
                 [isDisabled]="!allowDelete">
                 <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
             </span>

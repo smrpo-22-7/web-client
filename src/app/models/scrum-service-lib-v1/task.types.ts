@@ -15,6 +15,10 @@ export interface Task extends BaseType {
     assignment: TaskAssignment;
 }
 
+export interface ExtendedTask extends Task {
+    active: boolean;
+}
+
 export interface TaskWorkSpent extends BaseType {
     workDate: Date;
     amount: number;
@@ -28,5 +32,7 @@ export namespace TaskWorkSpent {
         taskDescription: string;
         projectId: string;
         projectTitle: string;
+        storyId: string;
+        storyNumberId: number;
     }
 }

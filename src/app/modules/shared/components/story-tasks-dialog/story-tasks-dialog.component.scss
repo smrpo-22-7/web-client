@@ -48,3 +48,8 @@
     flex: 0 0 auto;
     width: 4%;
 }
+.modal-body {
+    .container {
+        max-width: 1600px;
+    }
+}

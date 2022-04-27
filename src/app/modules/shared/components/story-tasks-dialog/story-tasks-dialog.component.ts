@@ -11,10 +11,10 @@ import {
     Subject,
     switchMap,
     take,
-    takeUntil,
+    takeUntil, tap,
 } from "rxjs";
 import { ProjectService, StoryService } from "@services";
-import { ExtendedStory, Task, UserProfile } from "@lib";
+import { ExtendedStory, ExtendedTask, Task, UserProfile } from "@lib";
 import { initialName } from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 
@@ -31,8 +31,9 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     public projectId: string;
     public storyNumberId: number;
     public allowTaskEdit: boolean;
+    public hasActiveTask: boolean = false;
     
-    public tasks$: Observable<Task[]>;
+    public tasks$: Observable<ExtendedTask[]>;
     public members$: Observable<UserProfile[]>;
     public refresh$ = new BehaviorSubject<void>(undefined);
     private destroy$ = new Subject<boolean>();
@@ -52,6 +53,9 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
         this.tasks$ = this.refresh$.pipe(
             switchMap(() => {
                 return this.storyService.getStoryTasks(this.storyId)
+            }),
+            tap((tasks: ExtendedTask[]) => {
+                this.hasActiveTask = tasks.some(task => task.active);
             }),
             takeUntil(this.destroy$),
         );

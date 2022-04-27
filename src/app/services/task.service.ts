@@ -55,6 +55,22 @@ export class TaskService {
         );
     }
     
+    public startWorkingOnTask(taskId: string): Observable<void> {
+        const url = `${this.apiUrl}/tasks/${taskId}/start-work`;
+        return this.http.post(url, null).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public stopWorkingOnTask(): Observable<void> {
+        const url = `${this.apiUrl}/tasks/end-active-task`;
+        return this.http.post(url, null).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
     public getUserTaskHours(projectId: string, limit: number, offset: number): Observable<EntityList<TaskWorkSpent>> {
         const url = `${this.apiUrl}/projects/${projectId}/hours`;
         const params = {

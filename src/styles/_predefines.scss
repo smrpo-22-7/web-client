@@ -55,3 +55,24 @@ textarea.form-control.is-warned {
     border-color: $warning-border-color;
     box-shadow: 0 0 0 0.25rem rgba(234, 179, 63, 0.25);
 }
+
+.action-button {
+    fa-icon {
+        font-size: 1.1rem;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+    &.padded-button {
+        margin-right: 15px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    &.disabled {
+        color: $light-grey;
+        &:hover {
+            cursor: default;
+        }
+    }
+}

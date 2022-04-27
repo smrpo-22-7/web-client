@@ -10,7 +10,7 @@ import {
     tap,
     combineLatest
 } from "rxjs";
-import { ExtendedStory, NavState, SortOrder, SprintStatus } from "@lib";
+import { ExtendedStory, NavState, SortOrder, SprintStatus, Story } from "@lib";
 import { EntityList } from "@mjamsek/prog-utils";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { ProjectService, SprintService } from "@services";
@@ -86,6 +86,10 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
     
     ngOnDestroy() {
         this.destroy$.next(true);
+    }
+    
+    public getStoryId(index: number, item: Story): string {
+        return item.id;
     }
     
 }

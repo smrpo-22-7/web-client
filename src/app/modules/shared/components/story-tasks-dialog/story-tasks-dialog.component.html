@@ -28,7 +28,7 @@
                         </strong>
                     </div>
 
-                    <sc-task-list-row *ngFor="let task of tasks" [storyId]="storyId" [story]="story"
+                    <sc-task-list-row *ngFor="let task of tasks; trackBy: getTaskId" [storyId]="storyId" [story]="story"
                         [projectId]="projectId" [task]="task"
                         [hasActiveTask]="hasActiveTask"
                         (whenUpdated)="refreshData()"

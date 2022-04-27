@@ -49,4 +49,8 @@ export class ProjectHoursPageComponent implements OnInit, OnDestroy {
         this.destroy$.next(true);
     }
     
+    public getHourId(index: number, task: TaskWorkSpent): string {
+        return task.id;
+    }
+    
 }

@@ -140,4 +140,8 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     public get assigneeNameCtrl(): FormControl {
         return this.taskForm.get("assignment.assigneeName") as FormControl;
     }
+    
+    public getTaskId(index: number, task: ExtendedTask): string {
+        return task.id;
+    }
 }

@@ -7,7 +7,7 @@ import { HasErroredDirective } from "./directives/has-errored.directive";
 import { BootstrapModule } from "./bootstrap.module";
 import { IconsModule } from "./icons.module";
 import { ConfirmDialogComponent } from "./components/confirm-dialog/confirm-dialog.component";
-import { NgForTrackByIdDirective } from "./directives/base-type-track-by.directive";
+import { NgForTrackByIdDirective, NgForTrackByPropDirective } from "./directives/base-type-track-by.directive";
 import { SafeHtmlPipe } from "./pipes/safe-html.pipe";
 import { PrettifyArrayPipe } from "./pipes/prettify-array.pipe";
 import { UserInitialsIconComponent } from "./components/user-initials-icon/user-initials-icon.component";
@@ -37,6 +37,7 @@ import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
         BootstrapModule,
         IconsModule,
         NgForTrackByIdDirective,
+        NgForTrackByPropDirective,
         SafeHtmlPipe,
         PrettifyArrayPipe,
         UserInitialsIconComponent,
@@ -53,6 +54,7 @@ import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
         HasErroredDirective,
         ConfirmDialogComponent,
         NgForTrackByIdDirective,
+        NgForTrackByPropDirective,
         SafeHtmlPipe,
         PrettifyArrayPipe,
         UserInitialsIconComponent,

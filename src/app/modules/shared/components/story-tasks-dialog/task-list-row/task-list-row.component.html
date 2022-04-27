@@ -48,21 +48,21 @@
                 <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
                     <ng-container *ngIf="auth.userId === task.assignment.assigneeId && allowEdit">
                         <span *ngIf="task.assignment.pending" (click)="acceptTask()"
-                            tooltip="Accept" class="action-button assignee-button">
+                            tooltip="Accept" class="action-button padded-button assignee-button">
                             <fa-icon [icon]="['fas', 'check']"></fa-icon>
                         </span>
                         <span *ngIf="task.assignment.pending" (click)="declineTask()"
-                            tooltip="Decline" class="action-button assignee-button">
+                            tooltip="Decline" class="action-button padded-button assignee-button">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
                         <span *ngIf="!task.assignment.pending"
-                            tooltip="Cancel" class="action-button assignee-button" (click)="clearAssignee()">
+                            tooltip="Cancel" class="action-button padded-button assignee-button" (click)="clearAssignee()">
                             <fa-icon [icon]="['fas', 'times']"></fa-icon>
                         </span>
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="task.assignment.pending && allowEdit">
-                    <span tooltip="Clear assignee" class="action-button assignee-button" (click)="clearAssignee()">
+                    <span tooltip="Clear assignee" class="action-button padded-button assignee-button" (click)="clearAssignee()">
                         <fa-icon [icon]="['fas', 'person-circle-minus']"></fa-icon>
                     </span>
                 </ng-container>
@@ -100,7 +100,7 @@
         </div>
         <div class="col-1">
             <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
-                <ng-container *ngIf="auth.userId === task.assignment.assigneeId">
+                <ng-container *ngIf="auth.userId === task.assignment.assigneeId && !task.assignment.pending">
                     <ng-container *ngIf="!task.active; else activeTask">
                         <span class="action-button"
                             [class.disabled]="hasActiveTask"

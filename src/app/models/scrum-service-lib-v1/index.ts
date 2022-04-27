@@ -43,4 +43,4 @@ export {
     ProjectDocumentation,
 } from "./docs.types";
 export { ProjectWallPost, ProjectWallComment } from "./project-wall.types";
-export { Task, TaskAssignment } from "./task.types";
+export { Task, TaskAssignment, TaskWorkSpent } from "./task.types";

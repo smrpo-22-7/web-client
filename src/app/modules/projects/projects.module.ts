@@ -9,6 +9,7 @@ import { WallPostFormComponent } from './pages/project-details-page/project-wall
 import {
     WallPostDetailsComponent
 } from "./pages/project-details-page/project-wall/wall-post-details/wall-post-details.component";
+import { ProjectHoursPageComponent } from './pages/project-hours-page/project-hours-page.component';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import {
       ProjectMembersListComponent,
       ProjectWallComponent,
       WallPostFormComponent,
-      WallPostDetailsComponent
+      WallPostDetailsComponent,
+      ProjectHoursPageComponent
     ]
 })
 export class ProjectsModule {

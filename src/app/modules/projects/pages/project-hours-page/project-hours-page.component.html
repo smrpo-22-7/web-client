@@ -1,0 +1,42 @@
+<div>
+
+    <ng-container *ngIf="hours$ | async as hours">
+
+        <ng-container *ngIf="hours.entities.length > 0; else noHours">
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th class="col-2">Date</th>
+                        <th class="col-8">Task</th>
+                        <th class="col-2">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let hour of hours.entities">
+                        <td class="col-2">
+                            {{hour.workDate | date: "dd.MM.YYYY"}}
+                        </td>
+                        <td class="col-8">
+                            {{hour.task.taskDescription}}
+                        </td>
+                        <td class="col-2">
+                            {{hour.amount}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination-container">
+                <pagination
+                    [itemsPerPage]="limit$.value"
+                    [totalItems]="hours.count"
+                    (pageChanged)="newPage($event)"
+                ></pagination>
+            </div>
+        </ng-container>
+        <ng-template #noHours>
+            <p>No hours yet!</p>
+        </ng-template>
+    </ng-container>
+
+</div>

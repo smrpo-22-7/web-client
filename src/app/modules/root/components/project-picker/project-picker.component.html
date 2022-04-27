@@ -38,6 +38,12 @@
                                 </a>
                             </div>
 
+                            <div class="nav-link">
+                                <a [routerLink]="['/projects', nav.projectId, 'hours']">
+                                    Hours
+                                </a>
+                            </div>
+
                             <ng-container *ngIf="nav.projectRole.roleId === projectRoles.SCRUM_MASTER">
                                 <div class="nav-link">
                                     <a [routerLink]="['/projects', nav.projectId, 'manage', 'edit']">

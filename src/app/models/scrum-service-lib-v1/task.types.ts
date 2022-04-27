@@ -14,3 +14,19 @@ export interface Task extends BaseType {
     status: SimpleStatus;
     assignment: TaskAssignment;
 }
+
+export interface TaskWorkSpent extends BaseType {
+    workDate: Date;
+    amount: number;
+    task: TaskWorkSpent.ProjectTask;
+    userId: string;
+}
+
+export namespace TaskWorkSpent {
+    export interface ProjectTask {
+        taskId: string;
+        taskDescription: string;
+        projectId: string;
+        projectTitle: string;
+    }
+}

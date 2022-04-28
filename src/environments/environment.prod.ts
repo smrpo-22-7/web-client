@@ -5,6 +5,6 @@ export const environment: AppEnvironment = {
     service: {
         apiUrl: "https://smrpo.mjamsek.com/v1",
         authUrl: "https://smrpo.mjamsek.com",
-        wsUrl: "https://smrpo.mjamsek.com/ws/sync",
+        wsUrl: "wss://smrpo.mjamsek.com/ws/sync",
     }
 };

@@ -1,4 +1,4 @@
-import { BaseType, SimpleStatus, UserProfile } from "@lib";
+import { BaseType, SimpleStatus, Story, UserProfile } from "@lib";
 
 export interface TaskAssignment {
     pending: boolean;
@@ -17,6 +17,7 @@ export interface Task extends BaseType {
 
 export interface ExtendedTask extends Task {
     active: boolean;
+    story: Story;
 }
 
 export interface TaskWorkSpent extends BaseType {

@@ -1,0 +1,43 @@
+<div *ngIf="nav$ | async as nav">
+    <ng-container *ngIf="projectId$ | async as projectId">
+
+        <div class="row mt-3">
+            <strong class="half-col"></strong>
+            <strong class="col">
+                Task
+            </strong>
+            <strong class="col-2">
+                Estimate
+            </strong>
+            <strong class="col-2">
+                Assignee
+            </strong>
+            <strong class="col-1">
+                Hours
+            </strong>
+            <strong class="half-col">
+                Actions
+            </strong>
+        </div>
+        <ng-container *ngIf="tasks$ | async as tasks">
+            <ng-container *ngIf="tasks.entities.length > 0; else noTasks">
+                <div>
+                    <sc-task-list-row *ngFor="let task of tasks.entities"
+                        [storyId]="task.story.id"
+                        [story]="$any(task.story)" [projectId]="projectId" [task]="task">
+                    </sc-task-list-row>
+                </div>
+                <div class="pagination-container">
+                    <pagination
+                        [itemsPerPage]="limit$.value"
+                        [totalItems]="tasks.count"
+                        (pageChanged)="newPage($event)"
+                    ></pagination>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-template #noTasks>
+            <p>Sprint has no assigned tasks!</p>
+        </ng-template>
+    </ng-container>
+</div>

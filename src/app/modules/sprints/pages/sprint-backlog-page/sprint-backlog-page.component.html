@@ -18,44 +18,51 @@
                     <p>Assigned points / Velocity: {{sprint.assignedPoints}} / {{sprint.expectedSpeed}}</p>
                 </div>
                 <div>
-                    <ng-container *ngIf="stories$ | async as stories">
-                        <ng-container *ngIf="stories.entities.length > 0; else noStories">
-                            <div>
-                                <accordion [isAnimated]="true">
-                                    <accordion-group *ngFor="let story of stories.entities; trackByProp: 'id'"
-                                            panelClass="story-row">
-                                        <div accordion-heading class="detail-header">
-                                            <sc-story-list-header
-                                                [nav]="nav"
-                                                [story]="story"
-                                                [allowSelection]="false"
-                                                [showInSprintBadge]="false"
-                                                [showRejectedBadge]="false"
-                                            >
-                                            </sc-story-list-header>
-                                        </div>
-                                        <div>
-                                            <sc-story-list-content
-                                                [nav]="nav"
-                                                [story]="story"
-                                                (whenUpdated)="updateData()"
-                                            ></sc-story-list-content>
-                                        </div>
-                                    </accordion-group>
-                                </accordion>
-                            </div>
-                            <div class="pagination-container">
-                                <pagination
-                                    [itemsPerPage]="limit$.value"
-                                    [totalItems]="stories.count"
-                                    (pageChanged)="newPage($event)"
-                                ></pagination>
-                            </div>
-                        </ng-container>
-                    </ng-container>
-                    <ng-template #noStories>
-                        <p>Sprint has no assigned stories!</p>
-                    </ng-template>
+                    <tabset>
+                        <tab heading="Stories">
+                            <ng-container *ngIf="stories$ | async as stories">
+                                <ng-container *ngIf="stories.entities.length > 0; else noStories">
+                                    <div>
+                                        <accordion [isAnimated]="true">
+                                            <accordion-group *ngFor="let story of stories.entities; trackByProp: 'id'"
+                                                panelClass="story-row">
+                                                <div accordion-heading class="detail-header">
+                                                    <sc-story-list-header
+                                                        [nav]="nav"
+                                                        [story]="story"
+                                                        [allowSelection]="false"
+                                                        [showInSprintBadge]="false"
+                                                        [showRejectedBadge]="false"
+                                                    >
+                                                    </sc-story-list-header>
+                                                </div>
+                                                <div>
+                                                    <sc-story-list-content
+                                                        [nav]="nav"
+                                                        [story]="story"
+                                                        (whenUpdated)="updateData()"
+                                                    ></sc-story-list-content>
+                                                </div>
+                                            </accordion-group>
+                                        </accordion>
+                                    </div>
+                                    <div class="pagination-container">
+                                        <pagination
+                                            [itemsPerPage]="limit$.value"
+                                            [totalItems]="stories.count"
+                                            (pageChanged)="newPage($event)"
+                                        ></pagination>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <ng-template #noStories>
+                                <p>Sprint has no assigned stories!</p>
+                            </ng-template>
+                        </tab>
+                        <tab heading="Tasks" >
+                            <sc-sprint-tasks></sc-sprint-tasks>
+                        </tab>
+                    </tabset>
                 </div>
             </ng-container>
             <ng-template #noActiveSprint>

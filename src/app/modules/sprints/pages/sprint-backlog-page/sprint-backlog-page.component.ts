@@ -13,7 +13,7 @@ import {
 import { ExtendedStory, NavState, SortOrder, SprintStatus, Story } from "@lib";
 import { EntityList } from "@mjamsek/prog-utils";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { ProjectService, SprintService } from "@services";
+import { ProjectService, SprintService, TaskService } from "@services";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { NavContext } from "@context";
 
@@ -39,6 +39,7 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute,
                 private projectService: ProjectService,
                 private sprintService: SprintService,
+                private taskService: TaskService,
                 private nav: NavContext,) {
     }
     

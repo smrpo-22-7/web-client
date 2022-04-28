@@ -29,6 +29,9 @@
             <ng-container *ngIf="story.storyStatus === 'REALIZED'">
                 <span class="badge bg-success">Realized</span>
             </ng-container>
+            <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.completed">
+                <span class="badge bg-success">Completed</span>
+            </ng-container>
             <ng-container *ngIf="story.storyStatus === 'REJECTED' && story.rejectComment">
                 <span class="badge bg-danger" [tooltip]="story.rejectComment">Rejected</span>
             </ng-container>

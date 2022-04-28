@@ -180,7 +180,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public allowStartWorkingTask(): boolean {
-        return !this.hasActiveTask && this.story.storyStatus !== "REALIZED" && this.task.completed;
+        return !this.hasActiveTask && this.story.storyStatus !== "REALIZED" && !this.task.completed;
     }
     
     public stopWorkingOnTask() {

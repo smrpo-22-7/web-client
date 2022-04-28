@@ -24,6 +24,11 @@ export const API_URL = new InjectionToken<string>("apiUrl", {
     factory: () => environment.service.apiUrl
 });
 
+export const WS_URL = new InjectionToken<string>("wsUrl", {
+    providedIn: "root",
+    factory: () => environment.service.wsUrl
+});
+
 export const SCHEMA_URL = new InjectionToken<string>("schemaUrl", {
     providedIn: "root",
     factory: () => {

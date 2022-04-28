@@ -39,6 +39,13 @@ header {
         align-items: center;
         justify-content: flex-end;
 
+        .timer {
+            color: $white;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
         .nav-link {
             margin-left: 15px;
 

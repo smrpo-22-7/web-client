@@ -19,6 +19,8 @@ import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { FriendlyDatePipe } from './pipes/friendly-date.pipe';
 import { RejectStoryDialogComponent } from './components/reject-story-dialog/reject-story-dialog.component';
 import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
+import { FriendlySecondsPipe } from './pipes/friendly-seconds.pipe';
+import { ShortStringPipe } from './pipes/short-string.pipe';
 
 @NgModule({
     imports: [
@@ -48,6 +50,8 @@ import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
         NumbersOnlyDirective,
         FriendlyDatePipe,
         FriendlyTimePipe,
+        FriendlySecondsPipe,
+        ShortStringPipe,
     ],
     declarations: [
         ValidationErrorComponent,
@@ -66,6 +70,8 @@ import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
         FriendlyDatePipe,
         RejectStoryDialogComponent,
         FriendlyTimePipe,
+        FriendlySecondsPipe,
+        ShortStringPipe,
     ]
 })
 export class SharedModule {

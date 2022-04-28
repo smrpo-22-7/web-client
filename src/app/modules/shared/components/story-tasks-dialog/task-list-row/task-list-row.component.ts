@@ -180,7 +180,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     }
     
     public stopWorkingOnTask(task: ExtendedTask) {
-        this.taskService.stopWorkingOnTask().pipe(
+        this.taskService.stopWorkingOnTask(this.projectId).pipe(
             take(1),
         ).subscribe({
             next: () => {

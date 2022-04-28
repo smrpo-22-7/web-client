@@ -13,6 +13,19 @@
         <ng-container *ngIf="auth$ | async as auth; else noAuth">
             <ng-container *ngIf="auth.status === authStates.AUTHENTICATED; else noAuth">
 
+                <ng-container *ngIf="timer$ | async as timer; else endTimer">
+                    <ng-container *ngIf="timer && timer.diff">
+                        <span class="timer" (click)="stopWorkingOnTask()"
+                            [tooltip]="timerTooltip">{{(timer.diff / 1000) | friendlySeconds}}</span>
+                    </ng-container>
+                    <ng-template #timerTooltip>
+                        #{{timer.story}} {{timer.task | shortString}} (click to stop task)
+                    </ng-template>
+                </ng-container>
+                <ng-template #endTimer>
+                    <span></span>
+                </ng-template>
+
                 <ng-container *ngIf="auth.parsedAccessToken.roles.includes('admin')">
                     <div class="nav-link" tooltip="Admin dashboard" placement="bottom">
                         <a routerLink="/admin" class="admin-btn">

@@ -26,6 +26,17 @@ export interface TaskWorkSpent extends BaseType {
     userId: string;
 }
 
+export interface TaskHour {
+    startDate: Date;
+    endDate: Date;
+    amount: number;
+    userId: string;
+    taskId: string;
+    taskName: string;
+    storyNumberId: number;
+    storyId: string;
+}
+
 export namespace TaskWorkSpent {
     export interface ProjectTask {
         taskId: string;

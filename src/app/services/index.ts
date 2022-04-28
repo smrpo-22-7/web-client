@@ -16,3 +16,4 @@ export { SprintService } from "./sprint.service";
 export { ModalService } from "./modal.service";
 export { DocsService } from "./docs.service";
 export { TaskService } from "./task.service";
+export { SocketService } from "./socket.service";

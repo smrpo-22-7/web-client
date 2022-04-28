@@ -1,5 +1,5 @@
 <ng-container *ngIf="auth$ | async as auth">
-    <div class="row task-row align-items-center">
+    <div class="row task-row align-items-center" [class.active-task]="task.active">
         <div class="half-col">
             <input class="form-check-input"
                 type="checkbox" [checked]="task.completed"
@@ -11,7 +11,10 @@
         </div>
         <div class="col" (click)="toggleDescriptionEdit(task)">
             <span *ngIf="!edits.description" (click)="toggleEdits('description')"
-                class="editable row-content">{{task.description}}</span>
+                class="editable row-content">
+                {{task.description}}
+                <strong *ngIf="task.active">(ACTIVE)</strong>
+            </span>
             <span *ngIf="edits.description">
                 <input [(ngModel)]="task.description" type="text"
                     (click)="markClicked()"

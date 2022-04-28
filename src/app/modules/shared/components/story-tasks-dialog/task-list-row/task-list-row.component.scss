@@ -1,7 +1,11 @@
-@import "../../../../../../styles/variables";
+@import "src/styles/variables";
 
 .task-row {
     height: 50px;
+
+    &.active-task {
+        background-color: $blue-100;
+    }
 
     .half-col {
         flex: 0 0 auto;

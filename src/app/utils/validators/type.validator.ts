@@ -1,5 +1,7 @@
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 
+export const NON_SPACE_REGEX = /.*\S.*/;
+
 export function validateInt(formControl: AbstractControl): ValidationErrors | null {
     if (formControl.value === undefined) {
         return null;

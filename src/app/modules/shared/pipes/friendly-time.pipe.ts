@@ -7,7 +7,7 @@ export class FriendlyTimePipe implements PipeTransform {
     
     transform(value: number): string {
         if (value === 0) {
-            return `${value}`;
+            return `${value}h`;
         }
         const decimal = (value % 1) * 60;
         const integer = Math.trunc(value);

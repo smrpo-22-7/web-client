@@ -3,7 +3,20 @@
         {{taskHour.workDate | date: "dd.MM.YYYY"}}
     </div>
     <div class="col-1 table-td">
-        {{taskHour.amount | friendlyTime}}
+        <span *ngIf="!editRow; else editAmount" class="amount" (click)="toggleEditRow()">
+            {{taskHour.amount | friendlyTime}}
+        </span>
+        <ng-template #editAmount>
+            <input [(ngModel)]="taskHour.amount"
+                (click)="markClicked()"
+                (ngModelChange)="onAmountUpdate($event)"
+                class="form-control"
+                min="0"
+                required
+                [class.is-invalid]="!taskHour.amount || taskHour.amount < 0"
+                step="0.25"
+                type="number"/>
+        </ng-template>
     </div>
     <div class="col-8 table-td">
         {{taskHour.task.taskDescription}}

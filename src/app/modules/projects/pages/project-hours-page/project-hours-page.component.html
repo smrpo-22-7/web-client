@@ -14,6 +14,7 @@
                     <strong class="col-1">Story ID</strong>
                 </div>
                 <sc-hour-row *ngFor="let hour of hours.entities; trackBy: getHourId"
+                    (whenUpdated)="onHoursUpdate()"
                     [taskHour]="hour">
                 </sc-hour-row>
             </div>

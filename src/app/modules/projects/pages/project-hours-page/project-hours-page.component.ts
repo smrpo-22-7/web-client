@@ -14,6 +14,7 @@ import { PageChangedEvent } from "ngx-bootstrap/pagination";
 })
 export class ProjectHoursPageComponent implements OnInit, OnDestroy {
     
+    public refresh$ = new BehaviorSubject<void>(undefined);
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
     public hours$: Observable<EntityList<TaskWorkSpent>>;
@@ -32,13 +33,17 @@ export class ProjectHoursPageComponent implements OnInit, OnDestroy {
             })
         );
         
-        this.hours$ = combineLatest([this.projectId$, this.limit$, this.offset$]).pipe(
-            switchMap((params: [string, number, number]) => {
+        this.hours$ = combineLatest([this.projectId$, this.limit$, this.offset$, this.refresh$]).pipe(
+            switchMap((params: [string, number, number, void]) => {
                 const [projectId, limit, offset] = params;
                 return this.taskService.getUserTaskHours(projectId, limit, offset);
             }),
             takeUntil(this.destroy$),
         );
+    }
+    
+    public onHoursUpdate() {
+        this.refresh$.next();
     }
     
     public newPage($event: PageChangedEvent): void {

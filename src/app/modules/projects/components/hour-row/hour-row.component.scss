@@ -1,1 +1,7 @@
 @import "src/styles/variables";
+
+.amount {
+    &:hover {
+        cursor: pointer;
+    }
+}

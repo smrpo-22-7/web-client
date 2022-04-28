@@ -102,4 +102,23 @@ export class TaskService {
             catchHttpError(),
         );
     }
+    
+    public updateTaskHours(hours: number, hourId: string): Observable<void> {
+        const url = `${this.apiUrl}/hours/${hourId}`;
+        const payload: Partial<TaskWorkSpent> = {
+            amount: hours,
+        };
+        return this.http.patch(url, payload).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public deleteTaskHours(hourId: string): Observable<void> {
+        const url = `${this.apiUrl}/hours/${hourId}`;
+        return this.http.delete(url).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
 }

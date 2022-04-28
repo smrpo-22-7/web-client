@@ -3,6 +3,7 @@ export interface AppEnvironment {
     service: {
         apiUrl: string;
         authUrl: string;
+        wsUrl: string;
     };
     options?: {
         refreshTokenSecondsBefore?: number;

@@ -11,6 +11,7 @@ export const environment: AppEnvironment = {
         apiUrl: "https://smrpo.mjamsek.com/v1",
         //authUrl: "http://localhost:8080",
         authUrl: "https://smrpo.mjamsek.com",
+        wsUrl: "https://smrpo.mjamsek.com/ws/sync",
     }
 };
 

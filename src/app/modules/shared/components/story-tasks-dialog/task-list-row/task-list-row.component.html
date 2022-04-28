@@ -106,8 +106,8 @@
                 <ng-container *ngIf="auth.userId === task.assignment.assigneeId && !task.assignment.pending">
                     <ng-container *ngIf="!task.active; else activeTask">
                         <span class="action-button"
-                            [class.disabled]="allowStartWorkingTask()"
-                            [isDisabled]="allowStartWorkingTask()"
+                            [class.disabled]="!allowStartWorkingTask()"
+                            [isDisabled]="!allowStartWorkingTask()"
                             tooltip="Start task" (click)="startWorkingOnTask()">
                             <fa-icon [icon]="['fas', 'play']"></fa-icon>
                         </span>

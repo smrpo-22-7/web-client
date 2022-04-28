@@ -164,9 +164,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         }
     }
     
-    public startWorkingOnTask(task: ExtendedTask) {
-        if (!this.hasActiveTask) {
-            this.taskService.startWorkingOnTask(task.id).pipe(
+    public startWorkingOnTask() {
+        if (this.allowStartWorkingTask()) {
+            this.taskService.startWorkingOnTask(this.task.id).pipe(
                 take(1),
             ).subscribe({
                 next: () => {
@@ -179,7 +179,11 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
         }
     }
     
-    public stopWorkingOnTask(task: ExtendedTask) {
+    public allowStartWorkingTask(): boolean {
+        return !this.hasActiveTask && this.story.storyStatus !== "REALIZED" && this.task.completed;
+    }
+    
+    public stopWorkingOnTask() {
         this.taskService.stopWorkingOnTask(this.projectId).pipe(
             take(1),
         ).subscribe({

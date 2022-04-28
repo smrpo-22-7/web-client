@@ -158,7 +158,7 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
                 this.update$.next({
                     field,
                     item: newValue,
-                    requestRefresh: false,
+                    requestRefresh: field === "completed",
                 });
             }
         }

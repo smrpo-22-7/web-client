@@ -17,6 +17,7 @@ import { ProjectService, StoryService } from "@services";
 import { ExtendedStory, ExtendedTask, Task, UserProfile } from "@lib";
 import { initialName } from "@utils";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
+import { VoidFunc } from "@mjamsek/prog-utils";
 
 
 @Component({
@@ -32,6 +33,7 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
     public storyNumberId: number;
     public allowTaskEdit: boolean;
     public hasActiveTask: boolean = false;
+    public onUpdate: VoidFunc;
     
     public tasks$: Observable<ExtendedTask[]>;
     public members$: Observable<UserProfile[]>;
@@ -117,12 +119,14 @@ export class StoryTasksDialogComponent extends FormBaseComponent implements OnIn
             next: () => {
                 this.refresh$.next();
                 this.taskForm.reset();
+                this.onUpdate();
             }
         });
     }
     
     public refreshData() {
         this.refresh$.next();
+        this.onUpdate();
     }
     
     ngOnDestroy() {

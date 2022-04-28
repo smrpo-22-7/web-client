@@ -32,6 +32,7 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
     public stories$: Observable<EntityList<ExtendedStory>>;
     public limit$ = new BehaviorSubject<number>(10);
     public offset$ = new BehaviorSubject<number>(0);
+    public refresh$ = new BehaviorSubject<void>(undefined);
     public sort$ = new BehaviorSubject<SortOrder>(SortOrder.ASC);
     private destroy$ = new Subject<boolean>();
     
@@ -65,8 +66,8 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
         );
         
-        this.stories$ = combineLatest([this.projectId$, this.sort$, this.offset$, this.limit$]).pipe(
-            switchMap((values: [string, SortOrder, number, number]) => {
+        this.stories$ = combineLatest([this.projectId$, this.sort$, this.offset$, this.limit$, this.refresh$]).pipe(
+            switchMap((values: [string, SortOrder, number, number, void]) => {
                 const [projectId, sort, offset, limit] = values;
                 return this.projectService.getProjectStoriesExtended(projectId, {
                     limit: limit,
@@ -86,6 +87,10 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
     
     ngOnDestroy() {
         this.destroy$.next(true);
+    }
+    
+    public updateData() {
+        this.refresh$.next();
     }
     
     public getStoryId(index: number, item: Story): string {

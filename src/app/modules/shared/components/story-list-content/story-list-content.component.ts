@@ -47,6 +47,9 @@ export class StoryListContentComponent implements OnInit {
             projectId: this.story.projectId,
             storyNumberId: this.story.numberId,
             allowTaskEdit: this.allowTaskEdit,
+            onUpdate: () => {
+                this.whenUpdated.emit();
+            },
         };
         this.modalService.openModal(StoryTasksDialogComponent, {
             initialState,

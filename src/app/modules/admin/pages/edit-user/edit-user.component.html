@@ -13,13 +13,13 @@
                         <div>
                             <label for="username" class="form-label">Username:</label>
                             <input id="username" class="form-control" formControlName="username"
-                                [class.is-invalid]="hasError(editUserForm.get('username'))"
+                                [class.is-invalid]="hasError(editUserForm.get('username')) || hasError(editUserForm)"
                                 placeholder="e.g. NewUser"/>
                             <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('username'), 'required')">
                                 Username is required!
                             </div>
                             <div class="invalid-feedback"
-                                *ngIf="hasError(editUserForm.get('username'), 'usernameExists')">
+                                *ngIf="hasError(editUserForm, 'usernameExists')">
                                 Username already exists!
                             </div>
                         </div>

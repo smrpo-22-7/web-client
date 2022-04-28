@@ -4,4 +4,7 @@
     &:hover {
         cursor: pointer;
     }
+    &.completed-task:hover {
+        cursor: not-allowed;
+    }
 }

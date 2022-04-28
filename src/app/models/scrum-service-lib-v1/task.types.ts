@@ -22,6 +22,7 @@ export interface ExtendedTask extends Task {
 export interface TaskWorkSpent extends BaseType {
     workDate: Date;
     amount: number;
+    remainingAmount: number;
     task: TaskWorkSpent.ProjectTask;
     userId: string;
 }
@@ -45,5 +46,6 @@ export namespace TaskWorkSpent {
         projectTitle: string;
         storyId: string;
         storyNumberId: number;
+        completed: boolean;
     }
 }

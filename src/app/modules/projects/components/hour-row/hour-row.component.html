@@ -3,13 +3,17 @@
         {{taskHour.workDate | date: "dd.MM.YYYY"}}
     </div>
     <div class="col-1 table-td">
-        <span *ngIf="!editRow; else editAmount" class="amount" (click)="toggleEditRow()">
+        <span *ngIf="!edits.amount; else editAmount" class="amount"
+            [class.completed-task]="!allowEdit"
+            tooltip="Task is already completed!"
+            [isDisabled]="allowEdit"
+            (click)="toggleEditRow('amount')">
             {{taskHour.amount | friendlyTime}}
         </span>
         <ng-template #editAmount>
             <input [(ngModel)]="taskHour.amount"
                 (click)="markClicked()"
-                (ngModelChange)="onAmountUpdate($event)"
+                (ngModelChange)="onAmountUpdate($event, 'amount')"
                 class="form-control"
                 min="0"
                 required
@@ -18,7 +22,27 @@
                 type="number"/>
         </ng-template>
     </div>
-    <div class="col-8 table-td">
+    <div class="col-1 table-td">
+        <span *ngIf="!edits.remainingAmount; else editRemainAmount" class="amount"
+            [class.completed-task]="!allowEdit"
+            tooltip="Task is already completed!"
+            [isDisabled]="allowEdit"
+            (click)="toggleEditRow('remainingAmount')">
+            {{taskHour.remainingAmount | friendlyTime}}
+        </span>
+        <ng-template #editRemainAmount>
+            <input [(ngModel)]="taskHour.remainingAmount"
+                (click)="markClicked()"
+                (ngModelChange)="onAmountUpdate($event, 'remainingAmount')"
+                class="form-control"
+                min="0"
+                required
+                [class.is-invalid]="!taskHour.remainingAmount || taskHour.remainingAmount < 0"
+                step="0.25"
+                type="number"/>
+        </ng-template>
+    </div>
+    <div class="col-7 table-td">
         {{taskHour.task.taskDescription}}
     </div>
     <div class="col-1 table-td">

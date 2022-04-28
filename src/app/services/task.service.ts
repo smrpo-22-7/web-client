@@ -103,12 +103,9 @@ export class TaskService {
         );
     }
     
-    public updateTaskHours(hours: number, hourId: string): Observable<void> {
+    public updateTaskHours(hourId: string, task: Partial<TaskWorkSpent>): Observable<void> {
         const url = `${this.apiUrl}/hours/${hourId}`;
-        const payload: Partial<TaskWorkSpent> = {
-            amount: hours,
-        };
-        return this.http.patch(url, payload).pipe(
+        return this.http.patch(url, task).pipe(
             mapToVoid(),
             catchHttpError(),
         );

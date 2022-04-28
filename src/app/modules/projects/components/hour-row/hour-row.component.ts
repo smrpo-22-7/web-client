@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { FieldType, FieldUpdateEvent, TaskWorkSpent, ValidationError } from "@lib";
+import { FieldUpdateEvent, FieldValidators, TaskWorkSpent, ValidationError } from "@lib";
 import { validateField } from "@utils";
 import { TaskService } from "@services";
 import { catchError, debounceTime, map, of, Subject, switchMap, takeUntil, tap, throwError } from "rxjs";
@@ -22,14 +22,25 @@ export class HourRowComponent implements OnInit, OnDestroy {
     private update$ = new Subject<FieldUpdateEvent<number>>();
     private destroy$ = new Subject<boolean>();
     
-    public editRow: boolean = false;
-    private _clickedInside = false;
-    private amountValidator: FieldType = {
-        type: "number",
-        min: 0,
-        subtype: "float",
-        required: true,
+    public edits = {
+        amount: false,
+        remainingAmount: false,
     };
+    private _clickedInside = false;
+    private validators: FieldValidators = {
+        amount: {
+            type: "number",
+            min: 0,
+            subtype: "float",
+            required: true,
+        },
+        remainingAmount: {
+            type: "number",
+            min: 0,
+            subtype: "float",
+            required: true,
+        }
+    }
     
     constructor(private taskService: TaskService,
                 private toastrService: ToastrService) {
@@ -42,16 +53,24 @@ export class HourRowComponent implements OnInit, OnDestroy {
     @HostListener("document:click", ["$event"])
     public onDocumentClick($event: Event) {
         if (!this._clickedInside) {
-            if (this.taskHour.amount && this.taskHour.amount >= 0) {
-                this.editRow = false;
-            }
+            Object.keys(this.edits).forEach((key) => {
+                (this.edits as any)[key] = false;
+            });
         }
         this._clickedInside = false;
     }
     
-    public toggleEditRow() {
+    public toggleEditRow(field: string) {
         this._clickedInside = true;
-        this.editRow = true;
+        if (this.allowEdit) {
+            Object.keys(this.edits).forEach((key) => {
+                if (key === field) {
+                    (this.edits as any)[key] = true;
+                } else {
+                    (this.edits as any)[key] = false;
+                }
+            });
+        }
     }
     
     public markClicked() {
@@ -62,7 +81,10 @@ export class HourRowComponent implements OnInit, OnDestroy {
         this.update$.pipe(
             debounceTime(500),
             switchMap(($event: FieldUpdateEvent<number>) => {
-                return this.taskService.updateTaskHours($event.item, this.taskHour.id).pipe(
+                let payload = {
+                    [$event.field]: $event.item,
+                };
+                return this.taskService.updateTaskHours(this.taskHour.id, payload).pipe(
                     catchError((err: BaseError) => {
                         if (err instanceof ValidationError) {
                             return of(undefined);
@@ -76,7 +98,6 @@ export class HourRowComponent implements OnInit, OnDestroy {
                         if (refresh) {
                             this.whenUpdated.next();
                         }
-                        this.editRow = false;
                     }),
                 );
             }),
@@ -84,11 +105,11 @@ export class HourRowComponent implements OnInit, OnDestroy {
         ).subscribe();
     }
     
-    public onAmountUpdate(newValue: number): void {
-        const errors = validateField("", newValue, this.amountValidator);
+    public onAmountUpdate(newValue: number, field: string): void {
+        const errors = validateField(field, newValue, this.validators[field]);
         if (errors === null) {
             this.update$.next({
-                field: "amount",
+                field,
                 item: newValue,
                 requestRefresh: true,
             });
@@ -97,5 +118,9 @@ export class HourRowComponent implements OnInit, OnDestroy {
     
     ngOnDestroy() {
         this.destroy$.next(true);
+    }
+    
+    public get allowEdit(): boolean {
+        return !this.taskHour.task.completed;
     }
 }

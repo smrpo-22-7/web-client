@@ -58,8 +58,8 @@
                         <div class="form-group">
                             <label>Phone number</label>
                             <input class="form-control" formControlName="phoneNumber"
-                                [class.is-invalid]="hasError(editUserForm.get('phoneNumber'))"/>
-                            <div class="invalid-feedback" *ngIf="hasError(editUserForm.get('phoneNumber'), 'pattern')">
+                                [class.is-invalid]="hasErrorNoTouch(editUserForm.get('phoneNumber'))"/>
+                            <div class="invalid-feedback" *ngIf="hasErrorNoTouch(editUserForm.get('phoneNumber'), 'pattern')">
                                 Invalid phone number!
                             </div>
                         </div>

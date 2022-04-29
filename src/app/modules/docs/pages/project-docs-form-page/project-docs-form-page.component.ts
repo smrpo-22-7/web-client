@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { filter, map, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
+import { filter, Subject, switchMap, take, takeUntil } from "rxjs";
 import { DocsService } from "@services";
 import { ProjectDocumentation } from "@lib";
 import SimpleMDE from "simplemde";
 import { ToastrService } from "ngx-toastr";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-project-docs-form-page",
@@ -35,11 +36,7 @@ export class ProjectDocsFormPageComponent implements OnInit, AfterViewInit, OnDe
             markdownContent: this.fb.control(""),
             projectId: this.fb.control(""),
         });
-        this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
+        routeParam<string>("projectId", this.route).pipe(
             switchMap((projectId: string) => {
                 return this.docsService.getDocumentation(projectId);
             }),
@@ -54,7 +51,7 @@ export class ProjectDocsFormPageComponent implements OnInit, AfterViewInit, OnDe
     ngAfterViewInit() {
         this.editorInstance = new SimpleMDE({ element: this.editorRef.nativeElement });
         this.editorInstance.codemirror.on("change", () => {
-            this.markdownContentCtrl.setValue(this.editorInstance.value(), {emitEvent: false});
+            this.markdownContentCtrl.setValue(this.editorInstance.value(), { emitEvent: false });
         })
         this.markdownContentCtrl.valueChanges.pipe(
             filter(value => value && value.length > 0),

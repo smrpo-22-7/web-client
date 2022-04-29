@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { SprintService } from "@services";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { Observable, Subject, switchMap, takeUntil } from "rxjs";
 import { NavState, NavStateStatus, SprintListResponse } from "@lib";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-project-sprints-list-page",
@@ -26,11 +27,7 @@ export class ProjectSprintsListPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.sprints$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
+        this.sprints$ = routeParam("projectId", this.route).pipe(
             switchMap((projectId: string) => {
                 return this.sprintService.getProjectSprints(projectId, true, true, true);
             }),

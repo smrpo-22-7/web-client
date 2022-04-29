@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
     filter,
     forkJoin,
-    map,
     Observable,
     startWith,
     Subject,
@@ -15,8 +14,8 @@ import { isProjectRegisterRequest, Project, ProjectMember, ProjectRole, User } f
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ModalService, ProjectService, RoleService, UserService } from "@services";
 import { ToastrService } from "ngx-toastr";
-import { mapToType, validateProject, validateUsersAndRoles } from "@utils";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { mapToType, routeParam, validateProject, validateUsersAndRoles } from "@utils";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole as ProjectRoleConfig } from "@config/roles.config";
 import { NavContext } from "@context";
@@ -81,12 +80,7 @@ export class ProjectEditFormPageComponent extends FormBaseComponent implements O
             takeUntil(this.destroy$)
         );
         
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.initializeForm();
     }

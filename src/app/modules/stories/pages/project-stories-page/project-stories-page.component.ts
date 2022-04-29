@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import {
     BehaviorSubject,
     combineLatest,
     map,
     Observable,
-    startWith,
     Subject,
     switchMap,
     take,
@@ -29,7 +28,7 @@ import { ProjectService, SprintService, StoryService } from "@services";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { ProjectRole } from "@config/roles.config";
 import { NavContext } from "@context";
-import { capitalize } from "@utils";
+import { capitalize, routeParam } from "@utils";
 
 
 @Component({
@@ -75,12 +74,7 @@ export class ProjectStoriesPageComponent extends FormBaseComponent implements On
             takeUntil(this.destroy$),
         );
         
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId")!;
-            })
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.registerActiveSprint();
         this.registerPaginatedList();

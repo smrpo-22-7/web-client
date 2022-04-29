@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { map, Observable, startWith, Subject, switchMap, takeUntil, combineLatest, BehaviorSubject } from "rxjs";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Observable, Subject, switchMap, takeUntil, combineLatest, BehaviorSubject } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 import { TaskService } from "@services";
 import { EntityList } from "@mjamsek/prog-utils";
 import { TaskWorkSpent } from "@lib";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { routeParam } from "@utils";
 
 
 @Component({
@@ -26,12 +27,7 @@ export class ProjectHoursPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            })
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.hours$ = combineLatest([this.projectId$, this.limit$, this.offset$, this.refresh$]).pipe(
             switchMap((params: [string, number, number, void]) => {

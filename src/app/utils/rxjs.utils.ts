@@ -1,4 +1,4 @@
-import { catchError, map, Observable, throwError } from "rxjs";
+import { catchError, filter, map, Observable, pipe, startWith, throwError } from "rxjs";
 import { HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { EntityList, UnknownError } from "@mjamsek/prog-utils";
 import {
@@ -9,9 +9,10 @@ import {
     UnauthorizedError,
     ValidationError
 } from "@lib";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 export function mapToType<T>() {
-    return function<I>(source: Observable<I>): Observable<T> {
+    return function <I>(source: Observable<I>): Observable<T> {
         return source.pipe(
             map(val => val as unknown as T)
         );
@@ -63,9 +64,19 @@ export function mapHttpError(err: HttpErrorResponse) {
 }
 
 export function catchHttpError() {
-    return function<I>(source: Observable<I>): Observable<I> {
+    return function <I>(source: Observable<I>): Observable<I> {
         return source.pipe(
             catchError(mapHttpError),
         );
     }
+}
+
+export function routeParam<T = string>(paramName: string, route: ActivatedRoute): Observable<T> {
+    return route.paramMap.pipe(
+        startWith(route.snapshot.paramMap),
+        filter((paramMap: ParamMap) => paramMap.has(paramName)),
+        map((paramMap: ParamMap) => {
+            return paramMap.get(paramName) as unknown as T;
+        }),
+    );
 }

@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
     BehaviorSubject,
-    map,
     Observable,
-    startWith,
     Subject,
     switchMap,
     takeUntil,
@@ -12,10 +10,11 @@ import {
 } from "rxjs";
 import { ExtendedStory, NavState, SortOrder, SprintStatus, Story } from "@lib";
 import { EntityList } from "@mjamsek/prog-utils";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { ProjectService, SprintService, TaskService } from "@services";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { NavContext } from "@context";
+import { routeParam } from "@utils";
 
 
 @Component({
@@ -48,12 +47,7 @@ export class SprintBacklogPageComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
         );
         
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.sprint$ = this.projectId$.pipe(
             switchMap((projectId: string) => {

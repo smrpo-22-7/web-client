@@ -7,14 +7,15 @@ import {
     NavStateStatus,
     StoryRegisterRequest,
 } from "@lib";
-import { map, Observable, startWith, Subject, switchMap, take, takeUntil, tap } from "rxjs";
+import { Observable, Subject, switchMap, take, takeUntil, tap } from "rxjs";
 import { StoryPriorityLabel } from "@config/enums.config";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CodebookService, StoryService } from "@services";
 import { ToastrService } from "ngx-toastr";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NavContext } from "@context";
 import { validateUniqueStoryTitleOne } from "../story-form-page/validators";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-edit-story",
@@ -67,19 +68,9 @@ export class EditStoryComponent extends FormBaseComponent implements OnInit, OnD
             takeUntil(this.destroy$)
         );
         
-        this.storyId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("storyId") as string;
-            }),
-        );
+        this.storyId$ = routeParam("storyId", this.route);
     
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.storyId$.pipe(
             switchMap((storyId: string) => {

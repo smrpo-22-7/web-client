@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
-import { Project, ProjectMember } from "@lib";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Observable, Subject, switchMap, takeUntil } from "rxjs";
+import { Project } from "@lib";
+import { ActivatedRoute } from "@angular/router";
 import { ProjectService } from "@services";
-import { EntityList } from "@mjamsek/prog-utils";
-import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-project-details-page",
@@ -22,13 +21,7 @@ export class ProjectDetailsPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
-        );
-        
+        this.projectId$ = routeParam<string>("projectId", this.route);
         this.project$ = this.projectId$.pipe(
             switchMap((projectId: string) => {
                 return this.projectService.getProject(projectId);

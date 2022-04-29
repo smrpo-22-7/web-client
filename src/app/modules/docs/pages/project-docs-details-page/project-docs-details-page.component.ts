@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { filter, map, Observable, share, startWith, Subject, switchMap, take, takeUntil } from "rxjs";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { filter, Observable, share, Subject, switchMap, take, takeUntil } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 import { DocsService } from "@services";
-import { mapToType } from "@utils";
+import { mapToType, routeParam } from "@utils";
 
 @Component({
     selector: "sc-project-docs-details-page",
@@ -21,12 +21,7 @@ export class ProjectDocsDetailsPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            })
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         this.docs$ = this.projectId$.pipe(
             switchMap((projectId: string) => {
                 return this.docsService.getDocumentationContent(projectId, true, true);

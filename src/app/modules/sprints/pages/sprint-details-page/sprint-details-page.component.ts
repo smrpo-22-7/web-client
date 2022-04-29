@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { SprintService } from "@services";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { BehaviorSubject, combineLatest, Observable, Subject, switchMap, takeUntil } from "rxjs";
 import { Sprint, Story } from "@lib";
 import { EntityList } from "@mjamsek/prog-utils";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-sprint-details-page",
@@ -25,12 +26,8 @@ export class SprintDetailsPageComponent implements OnInit, OnDestroy {
     }
     
     ngOnInit(): void {
-        this.sprintId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("sprintId") as string;
-            }),
-        );
+        this.sprintId$ = routeParam<string>("sprintId", this.route);
+        
         this.sprint$ = this.sprintId$.pipe(
             switchMap((sprintId: string) => {
                 return this.sprintService.getSprint(sprintId);

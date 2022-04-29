@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, combineLatest, map, Observable, startWith, Subject, switchMap, takeUntil } from "rxjs";
+import { BehaviorSubject, combineLatest, Observable, Subject, switchMap, takeUntil } from "rxjs";
 import { EntityList } from "@mjamsek/prog-utils";
-import { ExtendedStory, ExtendedTask, NavState, SortOrder } from "@lib";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ExtendedTask, NavState } from "@lib";
+import { ActivatedRoute } from "@angular/router";
 import { ProjectService, SprintService, TaskService } from "@services";
 import { NavContext } from "@context";
 import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { routeParam } from "@utils";
 
 @Component({
     selector: "sc-sprint-tasks",
@@ -35,11 +36,7 @@ export class SprintTasksComponent implements OnInit, OnDestroy {
             takeUntil(this.destroy$),
         );
         
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
+        this.projectId$ = routeParam("projectId", this.route).pipe(
             takeUntil(this.destroy$),
         );
     

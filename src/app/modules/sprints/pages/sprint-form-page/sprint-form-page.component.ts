@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
-import { filter, map, Observable, startWith, Subject, switchMap, take, takeUntil, tap } from "rxjs";
+import { Observable, Subject, switchMap, take, takeUntil, tap } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 
 import {
@@ -19,7 +19,7 @@ import {
     validateSprintDateConflicts
 } from "./sprint.validators";
 import { NavContext } from "@context";
-import { getDaysFromDate } from "@utils";
+import { getDaysFromDate, routeParam } from "@utils";
 
 
 @Component({
@@ -53,13 +53,7 @@ export class SprintFormPageComponent extends FormBaseComponent implements OnInit
     }
     
     ngOnInit() {
-        this.projectId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            filter((paramMap: ParamMap) => paramMap.has("projectId")),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("projectId") as string;
-            }),
-        );
+        this.projectId$ = routeParam("projectId", this.route);
         
         this.sprintForm = this.fb.group({
             title: this.fb.control("", [Validators.required]),

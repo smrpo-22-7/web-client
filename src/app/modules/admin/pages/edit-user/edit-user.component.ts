@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { map, Observable, startWith, Subject, switchMap, take, takeUntil, tap } from "rxjs";
+import { Observable, Subject, switchMap, take, takeUntil, tap } from "rxjs";
 import { isUserProfile, SysRole, UnauthorizedError, UserProfile, ValidationError } from "@lib";
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService, RoleService, UserService } from "@services";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { PHONE_NUMBER_REGEX } from "@utils";
+import { PHONE_NUMBER_REGEX, routeParam } from "@utils";
 import { validateUserRoles } from "../user-form-page/validators";
 import { FormBaseComponent } from "@shared/components/form-base/form-base.component";
 import { validatePasswords } from "../../../user-profile/pages/user-profile-page/password.validators";
@@ -58,12 +58,7 @@ export class EditUserComponent extends FormBaseComponent implements OnInit, OnDe
             takeUntil(this.destroy$)
         );
         
-        this.userId$ = this.route.paramMap.pipe(
-            startWith(this.route.snapshot.paramMap),
-            map((paramMap: ParamMap) => {
-                return paramMap.get("userId") as string;
-            }),
-        );
+        this.userId$ = routeParam("userId", this.route);
         
         this.userId$.pipe(
             switchMap((userId: string) => {

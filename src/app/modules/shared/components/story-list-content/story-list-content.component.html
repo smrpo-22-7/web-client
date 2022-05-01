@@ -72,4 +72,8 @@
             </div>
         </div>
     </div>
+    <div *ngIf="story.storyStatus === 'REJECTED'">
+        <h5>Reject reasons:</h5>
+        <div class="alert alert-danger" [innerHTML]="story.rejectComment"></div>
+    </div>
 </div>

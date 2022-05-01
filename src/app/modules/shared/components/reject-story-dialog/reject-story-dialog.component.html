@@ -7,11 +7,16 @@
     <form [formGroup]="rejectForm">
         <div class="form-group">
             <label>Reason:</label>
-            <input formControlName="rejectComment" type="text" class="form-control"/>
+            <textarea formControlName="markdownContent" #mdEditor></textarea>
+            <div class="invalid-feedback force-invalid-feedback" *ngIf="hasError(rejectForm.get('rejectComment'), 'required')">
+                Reason is required!
+            </div>
         </div>
     </form>
 </div>
 <div class="modal-footer justify-content-center">
     <button type="button" class="btn btn-outline-primary" (click)="closeDialog()">Decline</button>
-    <button type="button" class="btn btn-danger" (click)="rejectStory()">Confirm</button>
+    <button type="button" class="btn btn-danger"
+        [disabled]="isInvalid(rejectForm)"
+        (click)="rejectStory()">Confirm</button>
 </div>

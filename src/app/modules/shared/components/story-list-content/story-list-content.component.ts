@@ -120,6 +120,7 @@ export class StoryListContentComponent implements OnInit {
                     this.whenUpdated.emit();
                 },
             },
+            class: "modal-lg",
         });
     }
     

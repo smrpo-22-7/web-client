@@ -6,12 +6,14 @@
             <table class="table table-responsive table-hover">
                 <thead>
                     <tr>
+                        <th class="num-col">No.</th>
                         <th>User</th>
                         <th class="role-col">Role</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let member of members.entities">
+                    <tr *ngFor="let member of members.entities; let i = index; trackByProp: 'userId'">
+                        <td class="num-col">{{offset$.value + i + 1}}.</td>
                         <td>{{member?.user?.lastName}} {{member?.user?.firstName}}</td>
                         <td class="role-col">{{member?.projectRole?.name}}</td>
                     </tr>

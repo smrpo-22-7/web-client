@@ -1,6 +1,9 @@
 <ng-container *ngIf="auth$ | async as auth">
     <div class="row task-row align-items-center" [class.active-task]="task.active">
         <div class="half-col">
+            {{index + 1}}.
+        </div>
+        <div class="half-col">
             <input class="form-check-input"
                 type="checkbox" [checked]="task.completed"
                 tooltip="Completed"

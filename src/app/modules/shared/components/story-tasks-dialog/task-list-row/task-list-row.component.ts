@@ -36,6 +36,9 @@ import { validateField } from "@utils";
 export class TaskListRowComponent implements OnInit, OnDestroy {
     
     @Input()
+    public index: number;
+    
+    @Input()
     public storyId: string;
     
     @Input()

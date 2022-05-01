@@ -10,7 +10,7 @@
             <ng-container *ngIf="tasks$ | async as tasks">
                 <ng-container *ngIf="tasks.length > 0; else noTasks">
                     <div class="row">
-                        <strong class="half-col"></strong>
+                        <strong class="half-col">No.</strong>
                         <strong class="col">
                             Task
                         </strong>
@@ -28,8 +28,9 @@
                         </strong>
                     </div>
 
-                    <sc-task-list-row *ngFor="let task of tasks; trackBy: getTaskId" [storyId]="storyId" [story]="story"
+                    <sc-task-list-row *ngFor="let task of tasks; let i = index; trackBy: getTaskId" [storyId]="storyId" [story]="story"
                         [projectId]="projectId" [task]="task"
+                        [index]="i"
                         [hasActiveTask]="hasActiveTask"
                         (whenUpdated)="refreshData()"
                     ></sc-task-list-row>

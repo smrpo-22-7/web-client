@@ -1,5 +1,7 @@
 <ng-container *ngIf="auth$ | async as auth">
-    <div class="row task-row align-items-center" [class.active-task]="task.active">
+    <div class="row task-row align-items-center"
+        [class.completed-task]="task.completed"
+        [class.active-task]="task.active">
         <div class="half-col">
             {{index + 1}}.
         </div>
@@ -14,7 +16,7 @@
         </div>
         <div class="col" (click)="toggleDescriptionEdit(task)">
             <span *ngIf="!edits.description" (click)="toggleEdits('description')"
-                class="editable row-content">
+                class="editable row-content shorten-text" [title]="task.description">
                 {{task.description}}
                 <strong *ngIf="task.active">(ACTIVE)</strong>
             </span>
@@ -27,7 +29,7 @@
                     (ngModelChange)="updateTask($event, 'description')"/>
             </span>
         </div>
-        <div class="col-2">
+        <div class="col-1">
             <span *ngIf="!edits.estimate" (click)="toggleEdits('estimate')"
                 class="editable row-content">{{task.estimate}} h</span>
             <span *ngIf="edits.estimate">
@@ -39,6 +41,12 @@
                     min="0.5" step="0.1"
                     (ngModelChange)="updateTask($event, 'estimate')"/>
             </span>
+        </div>
+        <div class="col-1">
+            <span>{{task.amountWorked | friendlyTime}}</span>
+        </div>
+        <div class="col-1">
+            <span>{{task.amountRemaining | friendlyTime}}</span>
         </div>
         <div class="col-2 assignment">
             <ng-container *ngIf="task.assignment && task.assignment.assignee; else noAssignee">
@@ -108,7 +116,7 @@
             <ng-container *ngIf="auth.status === authStates.AUTHENTICATED">
                 <ng-container *ngIf="auth.userId === task.assignment.assigneeId && !task.assignment.pending">
                     <ng-container *ngIf="!task.active; else activeTask">
-                        <span class="action-button"
+                        <span class="action-button padded-button "
                             [class.disabled]="!allowStartWorkingTask()"
                             [isDisabled]="!allowStartWorkingTask()"
                             tooltip="Start task" (click)="startWorkingOnTask()">
@@ -116,10 +124,16 @@
                         </span>
                     </ng-container>
                     <ng-template #activeTask>
-                        <span class="action-button" tooltip="End task" (click)="stopWorkingOnTask()">
+                        <span class="action-button padded-button"
+                            tooltip="End task" (click)="stopWorkingOnTask()">
                             <fa-icon [icon]="['fas', 'stop']"></fa-icon>
                         </span>
                     </ng-template>
+
+                    <span class="action-button" tooltip="Hours table"
+                        (click)="openHoursDialog()">
+                        <fa-icon [icon]="['far', 'calendar-days']"></fa-icon>
+                    </span>
                 </ng-container>
             </ng-container>
         </div>

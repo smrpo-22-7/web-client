@@ -1,18 +1,26 @@
 <div>
-    <div class="story-actions">
-        <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
-            <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.PRODUCT_OWNER && allowTaskEdit">
-                <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
-                    Tasks
-                </button>
-            </ng-container>
-            <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.MEMBER">
-                <ng-container *ngIf="story.storyStatus !== 'REALIZED' && !story.inActiveSprint">
+    <div class="story-content-header">
+        <div class="badge bg-danger"
+            [class.bg-danger]="story.priority === storyPriorities.MUST_HAVE"
+            [class.bg-info]="story.priority === storyPriorities.SHOULD_HAVE"
+            [class.bg-success]="story.priority === storyPriorities.COULD_HAVE"
+            [class.bg-black]="story.priority === storyPriorities.WONT_HAVE_THIS_TIME"
+        >{{storyPriorityLabels[story.priority]}}</div>
 
-                <!-- DELETE naredi button kot tam-->
-                <button class="btn btn-sm btn-secondary" (click)="openDeletePrompt(story)" style="margin-left: 0.5%">
-                        Remove
-                </button>
+        <div class="story-actions">
+            <ng-container *ngIf="nav.status === navStates.IN_CONTEXT">
+                <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.PRODUCT_OWNER && allowTaskEdit">
+                    <button class="btn btn-sm btn-secondary" (click)="openTasksDialog()">
+                        Tasks
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="nav.projectRole.roleId !== projectRoles.MEMBER">
+                    <ng-container *ngIf="story.storyStatus !== 'REALIZED' && !story.inActiveSprint">
+
+                        <!-- DELETE naredi button kot tam-->
+                        <button class="btn btn-sm btn-secondary" (click)="openDeletePrompt(story)" style="margin-left: 0.5%">
+                            Remove
+                        </button>
 
                         <a class="action-btn" [routerLink]="[story.id,'edit']"  style="margin-left: 0.5%">
                             <button class="btn btn-sm btn-secondary" style="margin-left: 0.5%">
@@ -20,47 +28,31 @@
                             </button>
                         </a>
 
-                <!-- link do komponente edit-story naredi novo komponento-->
+                        <!-- link do komponente edit-story naredi novo komponento-->
+                    </ng-container>
                 </ng-container>
-            </ng-container>
 
-            <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
-                <ng-container *ngIf="story.storyStatus === 'WAITING' && story.inActiveSprint">
-                    <button class="btn btn-sm btn-outline-danger" (click)="rejectStory(story)">
-                        Reject
-                    </button>
-                </ng-container>
-                <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
-                    <span tooltip="Not all tasks are completed yet!" [tooltipEnable]="!story.completed">
-                        <button class="btn btn-sm btn-secondary"
-                            [disabled]="!story.completed"
-                            (click)="realizeStory(story)" style="margin-left: 0.5%">
-                            Approve
+                <ng-container *ngIf="nav.projectRole.roleId === projectRoles.PRODUCT_OWNER">
+                    <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
+                        <button class="btn btn-sm btn-outline-danger" (click)="rejectStory(story)">
+                            Reject
                         </button>
-                    </span>
+                    </ng-container>
+                    <ng-container *ngIf="story.storyStatus !== 'REALIZED' && story.inActiveSprint">
+                        <span tooltip="Not all tasks are completed yet!" [tooltipEnable]="!story.completed">
+                            <button class="btn btn-sm btn-secondary"
+                                [disabled]="!story.completed"
+                                (click)="realizeStory(story)" style="margin-left: 0.5%">
+                                Approve
+                            </button>
+                        </span>
+                    </ng-container>
                 </ng-container>
-                <!-- zavrnjene zgodbe so tiste zgodbe ki se niso bile realizirane in so v aktivnem sprintu in (niso zakljucene ali ne dosegajo testov) - ko jih zavrnes jih vrni
-                  v product log (torej niso vec v aktivnem sprintu) in lahko dodas komentar-->
-<!--                <ng-container *ngIf="!story.realized && story.inActiveSprint && !tests(story)">-->
 
-<!--                    &lt;!&ndash; DELETE naredi button kot tam&ndash;&gt;-->
-<!--                    <button class="btn btn-sm btn-secondary" (click)="rejectStory(story)" style="margin-left: 0.5%; background-color: green">-->
-<!--                        Approve-->
-<!--                    </button>-->
-
-<!--                </ng-container>-->
-<!--                <ng-container *ngIf="story.realized && story.inActiveSprint">-->
-
-<!--                    &lt;!&ndash; DELETE naredi button kot tam&ndash;&gt;-->
-<!--                    <button class="btn btn-sm btn-secondary" (click)="derealizeStory(story)" style="margin-left: 0.5%; background-color: green">-->
-<!--                        disApprove-->
-<!--                    </button>-->
-
-<!--                </ng-container>-->
             </ng-container>
-
-        </ng-container>
+        </div>
     </div>
+
     <div>
         <p>{{story.description}}</p>
         <div *ngIf="story.tests && story.tests.length > 0">

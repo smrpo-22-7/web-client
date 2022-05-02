@@ -75,7 +75,7 @@
                                         [class.is-invalid]="hasError(storyForm.get('priority'))">
                                         <option value="" disabled selected>Select one...</option>
                                         <option *ngFor="let priority of priorities" [value]="priority">
-                                            {{priorityLabels[priority]}}
+                                            {{$any(priorityLabels)[priority]}}
                                         </option>
                                     </select>
                                     <div class="invalid-feedback"

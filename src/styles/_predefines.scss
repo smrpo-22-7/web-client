@@ -98,3 +98,9 @@ textarea.form-control.is-warned {
 .num-col {
     width: 75px;
 }
+
+.shorten-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

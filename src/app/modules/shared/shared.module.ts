@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { ValidationErrorComponent } from "./components/validation-error/validation-error.component";
@@ -21,6 +21,7 @@ import { RejectStoryDialogComponent } from './components/reject-story-dialog/rej
 import { FriendlyTimePipe } from './pipes/friendly-time.pipe';
 import { FriendlySecondsPipe } from './pipes/friendly-seconds.pipe';
 import { ShortStringPipe } from './pipes/short-string.pipe';
+import { TaskHoursDialogComponent } from './components/task-hours-dialog/task-hours-dialog.component';
 
 @NgModule({
     imports: [
@@ -72,6 +73,10 @@ import { ShortStringPipe } from './pipes/short-string.pipe';
         FriendlyTimePipe,
         FriendlySecondsPipe,
         ShortStringPipe,
+        TaskHoursDialogComponent,
+    ],
+    providers: [
+        DatePipe,
     ]
 })
 export class SharedModule {

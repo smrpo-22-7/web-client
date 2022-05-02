@@ -121,9 +121,25 @@ export class TaskService {
         );
     }
     
+    public getTaskHours(taskId: string): Observable<TaskWorkSpent[]> {
+        const url = `${this.apiUrl}/tasks/${taskId}/hours`;
+        return this.http.get(url).pipe(
+            mapToType<TaskWorkSpent[]>(),
+            catchHttpError(),
+        );
+    }
+    
     public updateTaskHours(hourId: string, task: Partial<TaskWorkSpent>): Observable<void> {
         const url = `${this.apiUrl}/hours/${hourId}`;
         return this.http.patch(url, task).pipe(
+            mapToVoid(),
+            catchHttpError(),
+        );
+    }
+    
+    public updateTaskHoursByDate(taskId: string, taskWork: Partial<TaskWorkSpent>): Observable<void> {
+        const url = `${this.apiUrl}/tasks/${taskId}/hours`;
+        return this.http.patch(url, taskWork).pipe(
             mapToVoid(),
             catchHttpError(),
         );

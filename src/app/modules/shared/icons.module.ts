@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { FaIconLibrary, FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { faClock, faComment, faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import { faCalendarDays, faClock, faComment, faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import {
     faBalanceScaleRight,
     faBookOpen,
@@ -84,6 +84,7 @@ export class IconsModule {
             faComment,
             faPlay,
             faStop,
+            faCalendarDays
         );
     }
 }

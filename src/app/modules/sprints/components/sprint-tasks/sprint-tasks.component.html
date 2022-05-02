@@ -6,8 +6,14 @@
             <strong class="col">
                 Task
             </strong>
-            <strong class="col-2">
+            <strong class="col-1">
                 Estimate
+            </strong>
+            <strong class="col-1">
+                Time worked
+            </strong>
+            <strong class="col-1">
+                Time remaining
             </strong>
             <strong class="col-2">
                 Assignee
@@ -22,8 +28,9 @@
         <ng-container *ngIf="tasks$ | async as tasks">
             <ng-container *ngIf="tasks.entities.length > 0; else noTasks">
                 <div>
-                    <sc-task-list-row *ngFor="let task of tasks.entities"
+                    <sc-task-list-row *ngFor="let task of tasks.entities; let i = index; trackById"
                         [storyId]="task.story.id"
+                        [index]="offset$.value + i"
                         [story]="$any(task.story)" [projectId]="projectId" [task]="task">
                     </sc-task-list-row>
                 </div>

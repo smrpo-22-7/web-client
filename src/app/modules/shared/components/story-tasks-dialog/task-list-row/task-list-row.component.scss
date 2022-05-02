@@ -5,6 +5,15 @@
 
     &.active-task {
         background-color: $blue-100;
+        &:hover {
+            background-color: $blue-100;
+        }
+    }
+    &.completed-task {
+        background-color: $green-50;
+        &:hover {
+            background-color: $green-50;
+        }
     }
 
     .half-col {
@@ -50,7 +59,7 @@
     }
     .row-content {
         display: inline-block;
-        width: 100%;
+        max-width: 550px;
     }
 
 

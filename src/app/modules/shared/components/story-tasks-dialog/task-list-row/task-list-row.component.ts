@@ -26,6 +26,7 @@ import { AuthService, ModalService, ProjectService, TaskService } from "@service
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { BaseError } from "@mjamsek/prog-utils";
 import { validateField } from "@utils";
+import { TaskHoursDialogComponent } from "@shared/components/task-hours-dialog/task-hours-dialog.component";
 
 
 @Component({
@@ -46,6 +47,9 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
     
     @Input()
     public hasActiveTask: boolean;
+    
+    @Input()
+    public showStoryInfo: boolean = false;
     
     @Input()
     public projectId: string;
@@ -196,6 +200,19 @@ export class TaskListRowComponent implements OnInit, OnDestroy {
             error: err => {
                 console.error(err);
             },
+        });
+    }
+    
+    public openHoursDialog(): void {
+        this.modalService.openModal(TaskHoursDialogComponent, {
+            initialState: {
+                task: this.task,
+                projectId: this.projectId,
+                onUpdate: () => {
+                    this.whenUpdated.emit();
+                }
+            },
+            class: "modal-xl tasks-dialog"
         });
     }
     

@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <h4 class="modal-title">Naslov</h4>
+    <button class="btn-close close" aria-label="Close" type="button" (click)="close()"></button>
+</div>
+<div class="modal-body">
+    <p class="text-center">Tekst</p>
+
+    <div class="container-fluid table-like" [formGroup]="hoursForm">
+        <div class="row table-hd">
+            <strong class="col-2">Date</strong>
+            <strong class="col-2">Hours worked</strong>
+            <strong class="col-2">Hours remaining</strong>
+        </div>
+        <ng-container *ngIf="hours$ | async as hours">
+            <div *ngFor="let item of itemsCtrl.controls; let i = index" class="row table-tr">
+                <div class="col-2 table-td">
+                    {{item.get("hoursDate")?.value | date: "dd.MM.yyyy"}}
+                </div>
+                <div class="col-2 table-td">
+                    <div class="form-group">
+                        <input type="number" class="form-control"
+                            [value]="item.get('hours')!.value"
+                            (input)="updateHours('', $any($event.target).value, 'amount', item.get('hoursDate')?.value)"
+                        />
+                    </div>
+                </div>
+                <div class="col-2 table-td">
+                    <div class="form-group">
+                        <input type="number" class="form-control" [value]="item.get('hoursRemaining')?.value"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <strong class="col-2"></strong>
+                <strong class="col-2">Total: {{hoursSum.amount | friendlyTime}}</strong>
+                <strong class="col-2">Total: {{hoursSum.amountRemaining | friendlyTime}}</strong>
+            </div>
+        </ng-container>
+    </div>
+
+</div>
+<div class="modal-footer justify-content-center">
+    <button type="button" class="btn btn-outline-primary" (click)="close()">Close</button>
+</div>

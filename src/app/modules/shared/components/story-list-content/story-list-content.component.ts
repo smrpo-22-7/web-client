@@ -7,6 +7,7 @@ import { BehaviorSubject, take } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { getValueSymbolOfDeclaration } from "@angular/core/schematics/utils/typescript/symbol";
 import { RejectStoryDialogComponent } from "@shared/components/reject-story-dialog/reject-story-dialog.component";
+import { StoryPriorityLabel } from "@config/enums.config";
 
 @Component({
     selector: "sc-story-list-content",
@@ -27,7 +28,8 @@ export class StoryListContentComponent implements OnInit {
     @Output()
     public whenUpdated = new EventEmitter<void>();
     
-    
+    public storyPriorityLabels = StoryPriorityLabel;
+    public storyPriorities = Story.Priority;
     public projectRoles = ProjectRole;
     public navStates = NavStateStatus;
     

@@ -1,11 +1,19 @@
 @import "src/styles/variables";
 
-.story-actions {
+.story-content-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 
-    button, span {
-        margin-left: 15px;
+
+    .story-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        button, span {
+            margin-left: 15px;
+        }
     }
+
 }

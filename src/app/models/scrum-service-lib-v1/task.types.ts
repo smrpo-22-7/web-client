@@ -18,6 +18,8 @@ export interface Task extends BaseType {
 export interface ExtendedTask extends Task {
     active: boolean;
     story: Story;
+    amountWorked: number;
+    amountRemaining: number;
 }
 
 export interface TaskWorkSpent extends BaseType {
